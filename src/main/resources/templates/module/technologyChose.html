@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+
+	<form class="form-horizontal m" id="form-product-add"
+		target="hidden_frame" th:object="${technology1}">
+		 
+		<!--<input
+			type="hidden" id="url" th:value="${url}"> 
+		<input
+			type="hidden" id="tbloptag" th:field="*{optag}">
+		<input
+			type="hidden" id="tblstatus" th:field="*{status}">
+	    <input
+			type="hidden" id="tblobject" th:object="${technology1}">
+			<input
+			type="hidden" id="tbldispatchOptag" th:value="${dispatchOptag}"> 
+			<input
+			type="hidden" id="dispatchID" th:value="${dispatchID}">  -->
+	
+		<div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">调度单号：</label>
+				<div class="col-sm-9">
+					<input id="dispatchid" name="dispatchid" class="form-control"
+						type="text" th:field="*{dispatchid}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">品名：</label>
+				<div class="col-sm-9">
+					<input id="pdname" name="pdname" class="form-control" type="text"
+						th:field="*{pdname}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">客户：</label>
+				<div class="col-sm-9">
+					<input id="customer" name="customer" class="form-control" type="text"
+						th:field="*{customer}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">生产线：</label>
+				<div class="col-sm-9">
+					<input id="pdlineid" name="pdlineid" class="form-control" type="text"
+						th:field="*{pdlineid}">
+				</div>
+			</div>
+			<!--  <div class="form-group">	
+				<label class="col-sm-2 control-label" style="text-align:right;">客户：</label>
+				<div class="col-sm-8">
+					<input id="optime" name="optime" class="form-control" type="text" th:field="*{pdlineid}">
+				</div>
+			</div> -->
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">客户质量标准ID：</label>
+				<div class="col-sm-9">
+					<input id="qulityid" name="qulityid" class="form-control" type="text"
+						th:field="*{qulityid}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">客户质量要求：</label>
+				<div class="col-sm-9">
+					<!-- <input id="optime" name="optime" class="form-control" type="text" th:field="*{qulity}"> -->
+					<textarea id="qulity" name="qulity" class="form-control" rows="5"
+						th:field="*{qulity}"></textarea>
+				</div>
+			</div>
+
+			<div>
+				<div class="form-group" id=falseression style="display: none;">
+					<label class="col-sm-2 control-label" style="text-align: right;">退审原因：</label>
+					<div class="col-sm-9">
+						<!-- <input id="ression" name="ression" class="form-control" type="text" th:field="*{ression}"> -->
+						<textarea id="auditcomment" name="auditcomment"
+							class="form-control" rows="5" th:field="*{auditcomment}"></textarea>
+					</div>
+				</div>
+			</div>
+
+</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">开清工艺编号：</label>
+				<div class="col-sm-9">
+					<input id="opensn" name="opensn" class="form-control" type="text"
+						th:field="*{opensn}">
+				</div>
+				<!-- <button id="confirmButton" onclick="submitOpen();"
+					class=" col-sm-1 btn btn-primary">详情</button> -->
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="visibility: hidden;">xxxx</label>
+				<div class="col-sm-9">
+					<div class="select-info">
+						<table id="bootstrap-table-opensn" class="table table-bordered"
+							data-mobile-responsive="true" data-height="300"></table>
+					</div>
+				</div>
+				<!-- <label class="col-sm-2 control-label" style="visibility: hidden;">xxxx</label> -->
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">梳理工艺编号：</label>
+				<div class="col-sm-9">
+					<input id="combsn" name="combsn" class="form-control" type="text"
+						th:field="*{combsn}">
+				</div>
+				<!-- <button id="confirmButton" onclick="submitComb();"
+					class=" col-sm-1 btn btn-primary">详情</button> -->
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="visibility: hidden;">xxxx</label>
+				<div class="col-sm-9">
+					<div class="select-info">
+						<table id="bootstrap-table-combsn" class="table table-bordered"
+							data-mobile-responsive="true" data-height="300"></table>
+					</div>
+				</div>
+				<!-- <label class="col-sm-2 control-label" style="visibility: hidden;">xxxx</label> -->
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">水刺工艺编号：</label>
+				<div class="col-sm-9">
+					<input id="spunlacesn" name="spunlacesn" class="form-control"
+						type="text" th:field="*{spunlacesn}">
+				</div>
+				<!-- <button id="confirmButton" onclick="submitSpunlace();"
+					class=" col-sm-1 btn btn-primary">详情</button> -->
+
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="visibility: hidden;">xxxx</label>
+				<div class="col-sm-9">
+					<div class="select-info">
+						<table id="bootstrap-table-spunlacesn"
+							class="table table-bordered" data-mobile-responsive="true"
+							data-height="300"></table>
+					</div>
+				</div>
+				<!-- <label class="col-sm-2 control-label" style="visibility: hidden;">xxxx</label> -->
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">卷绕工艺编号：</label>
+				<div class="col-sm-9">
+					<input id="windsn" name="windsn" class="form-control" type="text"
+						th:field="*{windsn}">
+				</div>
+			<!-- 	<button id="confirmButton" onclick="submitWind();"
+					class=" col-sm-1 btn btn-primary">详情</button> -->
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label" style="visibility: hidden;">xxxx</label>
+				<div class="col-sm-9">
+					<div class="select-info">
+						<table id="bootstrap-table-windsn" class="table table-bordered"
+							data-mobile-responsive="true" data-height="300"></table>
+					</div>
+				</div>
+				<!-- <label class="col-sm-2 control-label" style="visibility: hidden;">xxxx</label> -->
+			</div>
+			
+			
+			<!-- <div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">修改内容记录：</label>
+				<div class="col-sm-8">
+					<input id="optime" name="optime" class="form-control" type="text" th:field="*{chgcomment}">
+					<textarea id="chgcomment" name="chgcomment" class="form-control" rows="5"></textarea>
+				</div>
+			</div> -->
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button id="confirmButton" onclick="submitRession();"
+						class="btn btn-primary">确认匹配</button>
+					<button onclick="$.modal.close()" class="btn btn-danger"
+						type="button">关闭</button>
+				</div>
+			</div>
+	</form>
+	 <form class="form-horizontal m" id="form-technology-hidden" th:object="${technology1}" style="display:none">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产调度单号：</label>
+                <div class="col-sm-8">
+                    <input id="dispatchid1" name="dispatchid" th:field="*{dispatchid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产线号：</label>
+                <div class="col-sm-8">
+                    <input id="pdlineid1" name="pdlineid" th:field="*{pdlineid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">品名：</label>
+                <div class="col-sm-8">
+                    <input id="pdname1" name="pdname" th:field="*{pdname}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产重量KG：</label>
+                <div class="col-sm-8">
+                    <input id="actualweight1" name="actualweight" th:field="*{actualweight}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产卷数：</label>
+                <div class="col-sm-8">
+                    <input id="actualreel1" name="actualreel" th:field="*{actualreel}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">卷长：</label>
+                <div class="col-sm-8">
+                    <input id="pdlength1" name="pdlength" th:field="*{pdlength}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">卷径：</label>
+                <div class="col-sm-8">
+                    <input id="pddiameter1" name="pddiameter" th:field="*{pddiameter}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">总幅宽：</label>
+                <div class="col-sm-8">
+                    <input id="totalwidth1" name="totalwidth" th:field="*{totalwidth}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">操作标记：</label>
+                <div class="col-sm-8">
+                    <input id="optag1" name="optag" th:field="*{optag}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">关联生产订单号：</label>
+                <div class="col-sm-8">
+                    <input id="boundpdorderid1" name="boundpdorderid" th:field="*{boundpdorderid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">排序序号：</label>
+                <div class="col-sm-8">
+                    <input id="sortnum1" name="sortnum" th:field="*{sortnum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">调度单单号：</label>
+                <div class="col-sm-8">
+                    <input id="sortid1" name="sortid" th:field="*{sortid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">订单类别：</label>
+                <div class="col-sm-8">
+                    <input id="distype1" name="distype" th:field="*{distype}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">计划开始时间：</label>
+                <div class="col-sm-8">
+                    <input id="begintime1" name="begintime" th:field="*{begintime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">计划结束时间：</label>
+                <div class="col-sm-8">
+                    <input id="endtime1" name="endtime" th:field="*{endtime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产时间：</label>
+                <div class="col-sm-8">
+                    <input id="pdperiod1" name="pdperiod" th:field="*{pdperiod}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">停车开始时间：</label>
+                <div class="col-sm-8">
+                    <input id="stopbegintime1" name="stopbegintime" th:field="*{stopbegintime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">停车结束时间：</label>
+                <div class="col-sm-8">
+                    <input id="stopendtime1" name="stopendtime" th:field="*{stopendtime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">预计停车时间：</label>
+                <div class="col-sm-8">
+                    <input id="planstoptime1" name="planstoptime" th:field="*{planstoptime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">审核状态：</label>
+                <div class="col-sm-8">
+                    <input id="auditflag1" name="auditflag" th:field="*{auditflag}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">退审理由：</label>
+                <div class="col-sm-8">
+                    <input id="ression1" name="ression" th:field="*{ression}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产进度状态：</label>
+                <div class="col-sm-8">
+                    <input id="pdstatus1" name="pdstatus" th:field="*{pdstatus}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产进度%：</label>
+                <div class="col-sm-8">
+                    <input id="pdrate1" name="pdrate" th:field="*{pdrate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">开清编号：</label>
+                <div class="col-sm-8">
+                    <input id="opensn1" name="opensn" th:field="*{opensn}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">梳理编号：</label>
+                <div class="col-sm-8">
+                    <input id="combsn1" name="combsn" th:field="*{combsn}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">水刺编号：</label>
+                <div class="col-sm-8">
+                    <input id="spunlacesn1" name="spunlacesn" th:field="*{spunlacesn}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">卷绕编号：</label>
+                <div class="col-sm-8">
+                    <input id="windsn1" name="windsn" th:field="*{windsn}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">质量编号：</label>
+                <div class="col-sm-8">
+                    <input id="qualitysn1" name="qualitysn" th:field="*{qualitysn}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">制表人：</label>
+                <div class="col-sm-8">
+                    <input id="creator1" name="creator" th:field="*{creator}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">制表时间：</label>
+                <div class="col-sm-8">
+                    <input id="crttime1" name="crttime" th:field="*{crttime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">修改人：</label>
+                <div class="col-sm-8">
+                    <input id="changer1" name="changer" th:field="*{changer}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">修改时间：</label>
+                <div class="col-sm-8">
+                    <input id="chgtime1" name="chgtime" th:field="*{chgtime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">修改意见：</label>
+                <div class="col-sm-8">
+                    <input id="chgcomment1" name="chgcomment" th:field="*{chgcomment}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">审核人：</label>
+                <div class="col-sm-8">
+                    <input id="auditor1" name="auditor" th:field="*{auditor}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">审核时间：</label>
+                <div class="col-sm-8">
+                    <input id="audittime1" name="audittime" th:field="*{audittime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">审核意见：</label>
+                <div class="col-sm-8">
+                    <input id="auditcomment1" name="auditcomment" th:field="*{auditcomment}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <input id="status1" name="status" th:field="*{status}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="remark1" name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <input id="transflag1" name="transflag" th:field="*{transflag}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">：</label>
+                <div class="col-sm-8">
+                    <input id="qulityid1" name="qulityid" th:field="*{qulityid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">：</label>
+                <div class="col-sm-8">
+                    <input id="qulity1" name="qulity" th:field="*{qulity}" class="form-control" type="text">
+                </div>
+            </div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+	<div th:include="include::footer"></div>
+	<iframe name='hidden_frame' id="hidden_frame" style="display: none"></iframe>
+	<script type="text/javascript">
+	function check()
+	{
+		var aa = document.getElementById("chgcomment").value;		
+		if (aa=="")
+		{
+			return true;
+		}else{
+			return false;
+		}
+    }
+		if ($('#tblId').val() == 0) {
+
+			document.getElementById("confirmButton").style.display = "none";
+		}
+
+		if ($('#tbloptag').val() == 3 && $('#tblstatus').val() == 6) {
+
+			document.getElementById("falseression").style.display = "block";
+		}
+
+		function submitQuality() {
+			var id = document.getElementById('qualitysn').value;
+
+			var url2 = ctx + "module/technology" + "/submitQuality/" + id;
+
+			openTechnologyDetail("工艺质量详情", url2, 800, 800);
+
+		}
+		function submitOpen() {
+			var id = document.getElementById('opensn').value;
+			var url2 = ctx + "module/technology" + "/submitOpen/" + id;
+
+			openTechnologyDetail("开清工艺详情", url2, 800, 800);
+
+		}
+		function submitComb() {
+			var id = document.getElementById('combsn').value;
+			var url2 = ctx + "module/technology" + "/submitComb/" + id;
+
+			openTechnologyDetail("梳理工艺详情", url2, 800, 800);
+
+		}
+		function submitSpunlace() {
+			var id = document.getElementById('spunlacesn').value;
+			var url2 = ctx + "module/technology" + "/submitSpunlace/" + id;
+
+			openTechnologyDetail("水刺工艺详情", url2, 800, 800);
+
+		}
+		function submitWind() {
+			var id = document.getElementById('windsn').value;
+			var url2 = ctx + "module/technology" + "/submitWind/" + id;
+
+			openTechnologyDetail("卷绕工艺详情", url2, 800, 800);
+
+		}
+		function openTechnologyDetail(title, url, width, height) {
+
+			layer.open({
+				id : 'addMacode1',
+				type : 2,
+				area : [ width + "px", height + "px" ],
+				fix : false,
+				maxmin : true,
+				shade : 0.3,
+				title : title,
+				content : url,
+				end : function() {//layer.open关闭事件关闭事件
+
+					//alert("页面关闭");
+					// var	param={};
+					//  param["status"] = 4;
+					//  _bootstrap_search_tablename("#bootstrap-table",param);
+				}
+			})
+		}
+
+		function submitRession() {
+			
+			
+			
+				/* var qualitysn = $('#qualitysn').val();
+				var opensn = $('#opensn').val();
+				var combsn = $('#combsn').val();
+				var spunlacesn = $('#spunlacesn').val();
+				var windsn = $('#windsn').val();
+				var dispatchid = $('#dispatchid').val();
+				var technology = $('#tblobject');
+	            var dispatchOptag = $('#tbldispatchOptag').val();  
+	            var dispatchID = $('#dispatchID').val()
+	            
+	            var chgcomment = $('#chgcomment').val();   */
+	           
+				$.modal.confirm("确认提交工艺匹配结果？",
+						function() {
+							var url = ctx + "module/technology" + "/confirmMatch";
+							$.ajax({
+							    type: 'post',
+							    url: url,
+							    data: $('#form-technology-hidden').serialize(),
+							   
+							    success: function(data) {
+							       
+					                      parent.location.reload(); 
+					                      $.modal.close();
+			                 
+							        
+							    }
+							
+							});
+							
+						})	
+						
+																							
+			}
+			
+			
+		
+
+		function adjax_post(url, data, type) {
+			var config = {
+				url : url,
+				type : type,
+				dataType : "json",
+				data : data,
+				async : false,
+				success : function(result) {
+					simpleSuccess(result);
+				}
+			};
+			$.ajax(config)
+		};
+		/** 返回结果处理 */
+		function simpleSuccess(result) {
+			if (result.code == web_status.SUCCESS) {
+				$.modal.alert(result.msg, modal_status.SUCCESS);
+				$.modal.close();
+			} else {
+				$.modal.alert(result.msg, modal_status.FAIL);
+			}
+		}
+	</script>
+	
+	<script>
+		$(function() {
+			var prefix = ctx + "module/technology";
+			var qureyOpeningOptions = {
+				url : prefix + "/qureyOpening",
+				modalName : "开清工艺",
+				search : false,
+				showRefresh : false,
+				download : false,
+				showExport : false,
+				showToggle : false,
+				showColumns : false,
+				columns : [
+
+						{
+							field : 'id',
+							title : '编号',
+							visible : false
+						},
+						{
+							field : 'opensn',
+							title : '开清编号'
+						},
+						{
+							field : 'customer',
+							title : '客户名称'
+						},
+						{
+							field : 'pdname',
+							title : '品名'
+						},
+						{
+							field : 'qulityid',
+							title : '质量标准ID',
+							visible : false
+						},
+	                    {
+	                        field : 'windspeed',
+	                        title : '卷绕速度m/min'
+	                    },
+						/* {
+						field : 'raw1', 
+						title : '1#称量机原料' 
+						},
+						{
+						field : 'rate1', 
+						title : '1#称量机比例' 
+						},
+						{
+						field : 'weight1', 
+						title : '1#称量机设定重量' 
+						},
+						{
+						field : 'raw2', 
+						title : '2#称量机原料' 
+						},
+						{
+						field : 'rate2', 
+						title : '2#称量机比例' 
+						},
+						{
+						field : 'weight2', 
+						title : '2#称量机设定重量' 
+						},
+						{
+						field : 'raw3', 
+						title : '3#称量机原料' 
+						},
+						{
+						field : 'rate3', 
+						title : '3#称量机比例' 
+						},
+						{
+						field : 'weight3', 
+						title : '3#称量机设定重量' 
+						},
+						{
+						field : 'cottonhz', 
+						title : '输棉帘频率(HZ)' 
+						},
+						{
+						field : 'cottondistance', 
+						title : '输棉帘运行距离(M)' 
+						},
+						{
+						field : 'fun4251', 
+						title : 'TW205-425风机频率(HZ)' 
+						},
+						{
+						field : 'rightfun', 
+						title : '右风机(HZ)' 
+						},
+						{
+						field : 'leftfun', 
+						title : '左风机(HZ)' 
+						},
+						{
+						field : 'dustcage1', 
+						title : '尘笼1(HZ)' 
+						},
+						{
+						field : 'laura1', 
+						title : '罗拉1(HZ)' 
+						},
+						{
+						field : 'dustcage2', 
+						title : '尘笼2(HZ)' 
+						},
+						{
+						field : 'laura2', 
+						title : '罗拉2(HZ)' 
+						},
+						{
+						field : 'dustcage3', 
+						title : '尘笼3(HZ)' 
+						},
+						{
+						field : 'laura3', 
+						title : '罗拉3(HZ)' 
+						},
+						{
+						field : 'cottoncurtain', 
+						title : '输棉帘(HZ)' 
+						},
+						{
+						field : 'bradcurtain', 
+						title : '角钉帘(HZ)' 
+						},
+						{
+						field : 'fun4252', 
+						title : '1#TW205-425(HZ)' 
+						},
+						{
+						field : 'upcotton1', 
+						title : '上给棉(HZ)' 
+						},
+						{
+						field : 'downcotton1', 
+						title : '下给棉(HZ)' 
+						},
+						{
+						field : 'fun4253', 
+						title : '1#TW205-425(HZ)' 
+						},
+						{
+						field : 'fun4254', 
+						title : '1#TW205-425(HZ)' 
+						},
+						{
+						field : 'upcotton2', 
+						title : '上给棉(HZ)' 
+						},
+						{
+						field : 'downcotton2', 
+						title : '下给棉(HZ)' 
+						},
+						{
+						field : 'fun4255', 
+						title : '1#TW205-425(HZ)' 
+						}, */
+						{
+							field : 'creator',
+							title : '制表人',
+							visible : false
+						},
+						{
+							field : 'crttime',
+							title : '制表时间',
+							visible : false
+						},
+						{
+							field : 'changer',
+							title : '修改人',
+							visible : false
+						},
+						{
+							field : 'chgtime',
+							title : '修改时间',
+							visible : false
+						},
+						{
+							field : 'chgcomment',
+							title : '修改原因',
+							visible : false
+						},
+						{
+							field : 'auditor',
+							title : '审核人',
+							visible : false
+						},
+						{
+							field : 'audittime',
+							title : '审核时间',
+							visible : false
+						},
+						{
+							field : 'auditcomment',
+							title : '审核意见',
+							visible : false
+						},
+						{
+							field : 'status',
+							title : '状态',
+							visible : false
+						},
+						{
+							field : 'remark',
+							title : '备注',
+							visible : false
+						},
+						{
+							field : 'transflag',
+							title : '传输标志',
+							visible : false
+						},
+						{
+							title : '操作',
+							align : 'center',
+							formatter : function(value, row, index) {
+								var actions = [];
+								actions
+										.push('<a class="btn btn-success btn-xs"  onclick="detail(\''
+												+ row.id
+												+ "_开清"
+												+ '\')"><i class="fa fa-edit"></i>详情</a> ');
+								actions
+										.push('<a class="btn btn-success btn-xs"  onclick="useOpenTechnology(\''
+												+ row.opensn
+												+ '\')"><i class="fa fa-edit"></i>使用</a> ');
+								actions
+								.push('<a class="btn btn-success btn-xs"  onclick="updateTechnology(\''
+										+ row.id
+										+ "_开清"
+										+ '\')"><i class="fa fa-edit"></i>修改</a> ');
+								return actions.join('');
+								
+							}
+						} ]
+			};
+			//$.table.init(options);
+			
+			_bootstrap_show(qureyOpeningOptions, "bootstrap-table-opensn");
+			var param = {};
+            param["status"] = 6;
+            param["pdname"] = document.getElementById("pdname").value;
+            param["customer"] = document.getElementById("customer").value;
+            param["qulityid"] = document.getElementById("qulityid").value;
+            _bootstrap_search_tablename("#bootstrap-table-opensn", param);
+		});
+	</script>
+
+	<script>
+		$(function() {
+			var prefix = ctx + "module/technology";
+			var qureyCombOptions = {
+				url : prefix + "/qureyComb",
+				modalName : "梳理工艺",
+				search : false,
+				showRefresh : false,
+				download : false,
+				showExport : false,
+				showToggle : false,
+				showColumns : false,
+				columns : [
+
+						{
+							field : 'id',
+							title : '编号',
+							visible : false
+						},
+						{
+							field : 'combsn',
+							title : '梳理工艺编号'
+						},
+						{
+							field : 'customer',
+							title : '客户名称'
+						},
+						{
+							field : 'pdname',
+							title : '品名'
+						},
+						{
+							field : 'qulityid',
+							title : '质量标准ID',
+							visible : false
+						},
+	                    {
+	                        field : 'windspeed',
+	                        title : '卷绕速度m/min'
+	                    },
+						/* {
+							field : 'lowcottonpress',
+							title : '棉道压力'
+						},
+						{
+							field : 'lowhopperpress',
+							title : '棉箱压力'
+						},
+						{
+							field : 'lowhopperfan',
+							title : '棉箱风机'
+						},
+						{
+							field : 'lowcottonfan',
+							title : '输棉风机'
+						},
+						{
+							field : 'lowgivecotton',
+							title : 'ZGB048给棉'
+						},
+						{
+							field : 'lowgivecurtain',
+							title : '喂棉帘子'
+						},
+						{
+							field : 'lowgivelaura',
+							title : '喂棉罗拉'
+						},
+						{
+							field : 'lowmainroller',
+							title : '主剥取辊'
+						},
+						{
+							field : 'lowmaincylinder',
+							title : '主锡林'
+						},
+						{
+							field : 'lowmainroll',
+							title : '主工作辊'
+						},
+						{
+							field : 'lowchestroll',
+							title : '胸工作辊'
+						},
+						{
+							field : 'lowchestcylinder',
+							title : '胸锡林'
+						},
+						{
+							field : 'lowupdoffer',
+							title : '上道夫'
+						},
+						{
+							field : 'lowdowndoffer',
+							title : '下道夫'
+						},
+						{
+							field : 'lowupon1',
+							title : '上凝聚1'
+						},
+						{
+							field : 'lowdownon1',
+							title : '下凝聚1'
+						},
+						{
+							field : 'lowupon2',
+							title : '上凝聚2'
+						},
+						{
+							field : 'lowdownon2',
+							title : '下凝聚2'
+						},
+						{
+							field : 'lowupcotton',
+							title : '上剥棉'
+						},
+						{
+							field : 'lowdowncotton',
+							title : '下剥棉'
+						},
+						{
+							field : 'lowupnet',
+							title : '上出网'
+						},
+						{
+							field : 'lowdownnet',
+							title : '下出网'
+						},
+						{
+							field : 'carpositiona',
+							title : 'A小车位置'
+						},
+						{
+							field : 'carpositionb',
+							title : 'B小车位置'
+						},
+						{
+							field : 'carspeeda',
+							title : 'A小车速度'
+						},
+						{
+							field : 'carspeedb',
+							title : 'B小车速度'
+						},
+						{
+							field : 'frontcurtain',
+							title : '前碳帘速度'
+						},
+						{
+							field : 'backcurtain',
+							title : '后碳帘速度'
+						},
+						{
+							field : 'frontspeed',
+							title : '进网匀速前速度'
+						},
+						{
+							field : 'backspeed',
+							title : '进网匀速后速度'
+						},
+						{
+							field : 'outspeed',
+							title : '出网帘速度'
+						},
+						{
+							field : 'highcottonpress',
+							title : '棉道压力'
+						},
+						{
+							field : 'highhopperpress',
+							title : '棉箱压力'
+						},
+						{
+							field : 'highhopperfan',
+							title : '棉箱风机'
+						},
+						{
+							field : 'highcottonfan',
+							title : '输棉风机'
+						},
+						{
+							field : 'highgivecotton',
+							title : 'ZGB048给棉'
+						},
+						{
+							field : 'highgivecurtain',
+							title : '喂棉帘子'
+						},
+						{
+							field : 'highgivelaura',
+							title : '喂棉罗拉'
+						},
+						{
+							field : 'highmainroller',
+							title : '主剥取辊M/MIN'
+						},
+						{
+							field : 'highmaincylinder',
+							title : '主锡林M/MIN'
+						},
+						{
+							field : 'highmainroll',
+							title : '主工作辊M/MIN'
+						},
+						{
+							field : 'highchestroll',
+							title : '胸工作辊M/MIN'
+						},
+						{
+							field : 'highchestcylinder',
+							title : '胸锡林M/MIN'
+						},
+						{
+							field : 'highupdoffer',
+							title : '上道夫M/MIN'
+						},
+						{
+							field : 'highdowndoffer',
+							title : '下道夫M/MIN'
+						},
+						{
+							field : 'highupon1',
+							title : '上凝聚1M/MIN'
+						},
+						{
+							field : 'highdownon1',
+							title : '下凝聚1M/MIN'
+						},
+						{
+							field : 'highupon2',
+							title : '上凝聚2M/MIN'
+						},
+						{
+							field : 'highdownon2',
+							title : '下凝聚2M/MIN'
+						},
+						{
+							field : 'highupcotton',
+							title : '上剥棉M/MIN'
+						},
+						{
+							field : 'highdowncotton',
+							title : '下剥棉M/MIN'
+						},
+						{
+							field : 'highupnet',
+							title : '上出网'
+						},
+						{
+							field : 'highdownnet',
+							title : '下出网M/MIN'
+						},
+						{
+							field : 'creator',
+							title : '制表人'
+						},
+						{
+							field : 'crttime',
+							title : '制表时间'
+						},
+						{
+							field : 'changer',
+							title : '修改人'
+						},
+						{
+							field : 'chgtime',
+							title : '修改时间'
+						},
+						{
+							field : 'chgcomment',
+							title : '修改意见'
+						},
+						{
+							field : 'auditor',
+							title : '审核人'
+						},
+						{
+							field : 'audittime',
+							title : '审核时间'
+						},
+						{
+							field : 'auditcomment',
+							title : '审核意见'
+						},
+						{
+							field : 'status',
+							title : '状态'
+						},
+						{
+							field : 'remark',
+							title : '备注'
+						},
+						{
+							field : 'transflag',
+							title : '传输标志',
+							visible : false
+						}, */
+						{
+							title : '操作',
+							align : 'center',
+							formatter : function(value, row, index) {
+								var actions = [];
+								actions
+										.push('<a class="btn btn-success btn-xs"  onclick="detail(\''
+												+ row.id
+												+ "_梳理"
+												+ '\')"><i class="fa fa-edit"></i>详情</a> ');
+								actions
+										.push('<a class="btn btn-success btn-xs"  onclick="useCombTechnology(\''
+												+ row.combsn
+												+ '\')"><i class="fa fa-edit"></i>使用</a> ');
+								actions
+								.push('<a class="btn btn-success btn-xs"  onclick="updateTechnology(\''
+										+ row.id
+										+ "_梳理"
+										+ '\')"><i class="fa fa-edit"></i>修改</a> ');
+								return actions.join('');
+							}
+						} ]
+			};
+			//$.table.init(options);
+			_bootstrap_show(qureyCombOptions, "bootstrap-table-combsn");
+			var param = {};
+            param["status"] = 6;
+            param["pdname"] = document.getElementById("pdname").value;
+            param["customer"] = document.getElementById("customer").value;
+            param["qulityid"] = document.getElementById("qulityid").value;
+            _bootstrap_search_tablename("#bootstrap-table-combsn", param);
+		});
+	</script>
+
+	<script>
+		$(function() {
+			var prefix = ctx + "module/technology";
+			var qureySpunlaceOptions = {
+				url : prefix + "/qureySpunlace",
+				modalName : "水刺工艺",
+				search : false,
+				showRefresh : false,
+				download : false,
+				showExport : false,
+				showToggle : false,
+				showColumns : false,
+				columns : [
+
+						{
+							field : 'id',
+							title : '编号',
+							visible : false
+						},
+						{
+							field : 'spunlacesn',
+							title : '水刺编号'
+						},
+						{
+							field : 'customer',
+							title : '客户名称'
+						},
+						{
+							field : 'pdname',
+							title : '品名'
+						},
+						{
+							field : 'qulityid',
+							title : '质量标准ID',
+							visible : false
+						},
+	                    {
+	                        field : 'windspeed',
+	                        title : '卷绕速度m/min'
+	                    },
+						/* {
+							field : 'uppump',
+							title : '起网泵'
+						},
+						{
+							field : 'preprick',
+							title : '预刺针板型号'
+						},
+						{
+							field : 'pressure1',
+							title : '一号水刺头压力'
+						},
+						{
+							field : 'plate1',
+							title : '一号水刺头针板型号'
+						},
+						{
+							field : 'pressure2',
+							title : '二号水刺头压力'
+						},
+						{
+							field : 'plate2',
+							title : '二号水刺头针板型号'
+						},
+						{
+							field : 'pressure3',
+							title : '三号水刺头压力'
+						},
+						{
+							field : 'plate3',
+							title : '三号水刺头针板型号'
+						},
+						{
+							field : 'pressure4',
+							title : '四号水刺头压力'
+						},
+						{
+							field : 'plate4',
+							title : '四号水刺头针板型号'
+						},
+						{
+							field : 'pressure5',
+							title : '五号水刺头压力'
+						},
+						{
+							field : 'plate5',
+							title : '五号水刺头针板型号'
+						},
+						{
+							field : 'pressure6',
+							title : '六号水刺头压力'
+						},
+						{
+							field : 'plate6',
+							title : '六号水刺头针板型号'
+						},
+						{
+							field : 'pressure7',
+							title : '七号水刺头压力'
+						},
+						{
+							field : 'plate7',
+							title : '七号水刺头针板型号'
+						},
+						{
+							field : 'net1',
+							title : '托网1'
+						},
+						{
+							field : 'roller1',
+							title : '辊筒1'
+						},
+						{
+							field : 'roller2',
+							title : '辊筒2'
+						},
+						{
+							field : 'roller3',
+							title : '辊筒3'
+						},
+						{
+							field : 'net2',
+							title : '托网2'
+						},
+						{
+							field : 'vacuum1',
+							title : '真空1'
+						},
+						{
+							field : 'vacuum2',
+							title : '真空2'
+						},
+						{
+							field : 'upnet',
+							title : '上烘网'
+						},
+						{
+							field : 'downnet',
+							title : '下烘网'
+						},
+						{
+							field : 'upfan',
+							title : '上循环风机'
+						},
+						{
+							field : 'downfan',
+							title : '下循环风机'
+						},
+						{
+							field : 'exffan',
+							title : '排湿风机EXF'
+						},
+						{
+							field : 'draft1',
+							title : '牵伸1'
+						},
+						{
+							field : 'draft2',
+							title : '牵伸2'
+						},
+						{
+							field : 'draft3',
+							title : '牵伸3'
+						},
+						{
+							field : 'draft4',
+							title : '牵伸4'
+						},
+						{
+							field : 'draft5',
+							title : '牵伸5'
+						},
+						{
+							field : 'draft6',
+							title : '牵伸6'
+						},
+						{
+							field : 'draft7',
+							title : '牵伸7'
+						},
+						{
+							field : 'draft8',
+							title : '牵伸8'
+						},
+						{
+							field : 'draft9',
+							title : '牵伸9'
+						},
+						{
+							field : 'draft10',
+							title : '牵伸10'
+						},
+						{
+							field : 'draft11',
+							title : '牵伸11'
+						},
+						{
+							field : 'draft12',
+							title : '牵伸12'
+						},
+						{
+							field : 'draft13',
+							title : '牵伸13'
+						},
+						{
+							field : 'draft14',
+							title : '牵伸14'
+						},
+						{
+							field : 'draft15',
+							title : '牵伸15'
+						},
+						{
+							field : 'totaldraft',
+							title : '总牵伸'
+						},
+						{
+							field : 'trimming',
+							title : '切边'
+						},
+						{
+							field : 'curtain',
+							title : '斜帘'
+						},
+						{
+							field : 'flatcurtain',
+							title : '平帘'
+						},
+						{
+							field : 'cutter',
+							title : '切刀'
+						},
+						{
+							field : 'roller',
+							title : '压辊'
+						},
+						{
+							field : 'creator',
+							title : '制表人'
+						},
+						{
+							field : 'crttime',
+							title : '制表时间'
+						},
+						{
+							field : 'changer',
+							title : '修改人'
+						},
+						{
+							field : 'chgtime',
+							title : '修改时间'
+						},
+						{
+							field : 'chgcomment',
+							title : '修改意见'
+						},
+						{
+							field : 'auditor',
+							title : '审核人'
+						},
+						{
+							field : 'audittime',
+							title : '审核时间'
+						},
+						{
+							field : 'auditcomment',
+							title : '审核意见'
+						},
+						{
+							field : 'status',
+							title : '状态'
+						},
+						{
+							field : 'remark',
+							title : '备注'
+						},
+						{
+							field : 'transflag',
+							title : '传输标志',
+							visible : false
+						}, */
+						{
+							title : '操作',
+							align : 'center',
+							formatter : function(value, row, index) {
+								var actions = [];
+								actions
+										.push('<a class="btn btn-success btn-xs"  onclick="detail(\''
+												+ row.id
+												+ "_水刺"
+												+ '\')"><i class="fa fa-edit"></i>详情</a> ');
+								actions
+										.push('<a class="btn btn-success btn-xs" onclick="useSpunlaceTechnology(\''
+												+ row.spunlacesn
+												+ '\')"><i class="fa fa-edit"></i>使用</a> ');
+								actions
+								.push('<a class="btn btn-success btn-xs"  onclick="updateTechnology(\''
+										+ row.id
+										+ "_水刺"
+										+ '\')"><i class="fa fa-edit"></i>修改</a> ');
+								return actions.join('');
+							}
+						} ]
+			};
+			//$.table.init(options);
+			_bootstrap_show(qureySpunlaceOptions, "bootstrap-table-spunlacesn");
+			var param = {};
+            param["status"] = 6;
+            param["pdname"] = document.getElementById("pdname").value;
+            param["customer"] = document.getElementById("customer").value;
+            param["qulityid"] = document.getElementById("qulityid").value;
+            _bootstrap_search_tablename("#bootstrap-table-spunlacesn", param);
+		});
+	</script>
+	<script>
+		$(function() {
+			var prefix = ctx + "module/technology";
+			var qureyWindOptions = {
+				url : prefix + "/qureyWind",
+				modalName : "卷绕工艺",
+				search : false,
+				showRefresh : false,
+				download : false,
+				showExport : false,
+				showToggle : false,
+				showColumns : false,
+				columns : [
+						{
+							field : 'id',
+							title : '编号',
+							visible : false
+						},
+						{
+							field : 'windsn',
+							title : '卷绕工艺编号'
+						},
+						{
+							field : 'customer',
+							title : '客户名称'
+						},
+						{
+							field : 'pdname',
+							title : '品名'
+						},
+						{
+							field : 'qulityid',
+							title : '质量标准ID',
+							visible : false
+						},
+	                    {
+	                        field : 'windspeed',
+	                        title : '卷绕速度m/min'
+	                    },
+						/* {
+							field : 'pressure', 
+							title : '次臂压力' 
+						},
+						{
+							field : 'coildiameter', 
+							title : '卷直径' 
+						},
+						{
+							field : 'meterlong', 
+							title : '计长' 
+						},
+						{
+							field : 'widepitch', 
+							title : '宽调比' 
+						},
+						{
+							field : 'width', 
+							title : '幅宽' 
+						},
+						{
+							field : 'tensionrate', 
+							title : '张比' 
+						},
+						{
+							field : 'tension', 
+							title : '张力' 
+						},
+						{
+							field : 'begintension', 
+							title : '初±张力' 
+						},
+						{
+							field : 'endtension', 
+							title : '末±张力' 
+						},
+						{
+							field : 'spindle', 
+							title : '发射芯轴' 
+						},
+						{
+							field : 'curly', 
+							title : '卷曲' 
+						},
+						{
+							field : 'roll', 
+							title : 'S辊' 
+						},
+						{
+							field : 'adjustment', 
+							title : '统调' 
+						},
+						{
+							field : 'creator', 
+							title : '制表人' 
+						},
+						{
+							field : 'crttime', 
+							title : '制表时间' 
+						},
+						{
+							field : 'changer', 
+							title : '修改人' 
+						},
+						{
+							field : 'chgtime', 
+							title : '修改时间' 
+						},
+						{
+							field : 'chgcomment', 
+							title : '修改意见' 
+						},
+						{
+							field : 'auditor', 
+							title : '审核人' 
+						},
+						{
+							field : 'audittime', 
+							title : '审核时间' 
+						},
+						{
+							field : 'auditcomment', 
+							title : '审核意见' 
+						},
+						{
+							field : 'status', 
+							title : '状态' 
+						},
+						{
+							field : 'remark', 
+							title : '备注' 
+						},
+						{
+							field : 'transflag', 
+							title : '传输标志',
+						    visible : false  
+						}, */
+						{
+							title : '操作',
+							align : 'center',
+							formatter : function(value, row, index) {
+								var actions = [];
+								actions
+										.push('<a class="btn btn-success btn-xs" onclick="detail(\''
+												+ row.id
+												+ "_卷绕"
+												+ '\')"><i class="fa fa-edit"></i>详情</a> ');
+								actions
+										.push('<a class="btn btn-success btn-xs"  onclick="useWindTechnology(\''
+												+ row.windsn
+												+ '\')"><i class="fa fa-edit"></i>使用</a> ');
+					
+								actions
+								.push('<a class="btn btn-success btn-xs" onclick="updateTechnology(\''
+										+ row.id
+										+ "_卷绕"
+										+ '\')"><i class="fa fa-edit"></i>修改</a> ');
+								return actions.join('');
+							}
+						} ]
+			};
+			//$.table.init(options);
+			_bootstrap_show(qureyWindOptions, "bootstrap-table-windsn");
+			var param = {};
+            param["status"] = 6;
+            param["pdname"] = document.getElementById("pdname").value;
+            param["customer"] = document.getElementById("customer").value;
+            param["qulityid"] = document.getElementById("qulityid").value;
+            _bootstrap_search_tablename("#bootstrap-table-windsn", param);
+
+		});
+
+		/* 	useOpenTechnology
+			useCombTechnology
+			useSpunlaceTechnology
+			useWindTechnology */
+		/* var qualitysn = $('#qualitysn').val();
+		var opensn = $('#opensn').val();
+		var combsn = $('#combsn').val();
+		var spunlacesn = $('#spunlacesn').val();
+		var windsn = $('#windsn').val();
+		var dispatchid = $('#dispatchid').val();
+		var technology = $('#tblobject'); */
+
+		function detail(id) {
+			var strs = new Array();
+			strs = id.split("_");
+			id = strs[0];
+			if (strs[1] == "质量") {
+				var url2 = ctx + "module/techquality" + "/detail/" + id;
+
+				openTechnologyDetail("工艺质量详情", url2, 800, 800);
+			}
+			if (strs[1] == "水刺") {
+				var url2 = ctx + "module/spunlace" + "/detail/" + id;
+
+				openTechnologyDetail("水刺工艺详情", url2, 800, 800);
+			}
+			if (strs[1] == "开清") {
+				var url2 = ctx + "module/opening" + "/detail/" + id;
+
+				openTechnologyDetail("开清工艺详情", url2, 800, 800);
+			}
+			if (strs[1] == "梳理") {
+				var url2 = ctx + "module/comb" + "/detail/" + id;
+
+				openTechnologyDetail("梳理工艺详情", url2, 800, 800);
+			}
+			if (strs[1] == "卷绕") {
+				var url2 = ctx + "module/wind" + "/detail/" + id;
+
+				openTechnologyDetail("卷绕工艺详情", url2, 800, 800);
+			}
+
+		}
+		function useQualityTechnology(qualitysn) {
+			$.modal.confirm("是否使用所选择的工艺？", function() {
+				$('#qualitysn').val(qualitysn);
+
+			})
+		}
+		function useOpenTechnology(opensn) {
+			$.modal.confirm("是否使用所选择的工艺？", function() {
+				$('#opensn').val(opensn);
+				$('#opensn1').val(opensn);
+
+			})
+		}
+		function useSpunlaceTechnology(spunlacesn) {
+			$.modal.confirm("是否使用所选择的工艺？", function() {
+				$('#spunlacesn').val(spunlacesn);
+				$('#spunlacesn1').val(spunlacesn);
+			})
+		}
+		function useCombTechnology(combsn) {
+			$.modal.confirm("是否使用所选择的工艺？", function() {
+				$('#combsn').val(combsn);
+				$('#combsn1').val(combsn);
+			})
+		}
+		function useWindTechnology(windsn) {
+			$.modal.confirm("是否使用所选择的工艺？", function() {
+				$('#windsn').val(windsn);
+				$('#windsn1').val(windsn);
+			})
+		}
+		function updateTechnology(id) {
+			$.modal.confirm("是否在此工艺基础上，修改数据，并新增一条工艺数据？", function() {
+				var strs = new Array();
+				strs = id.split("_");
+				id = strs[0];
+				if (strs[1] == "水刺") {
+					var url2 = ctx + "module/spunlace" + "/updateTechnology/" + id;
+
+					openTechnologyDetail("新增水刺工艺", url2, 800, 800);
+				}
+				if (strs[1] == "开清") {
+					var url2 = ctx + "module/opening" + "/updateTechnology/" + id;
+
+					openTechnologyDetail("新增开清工艺", url2, 800, 800);
+				}
+				if (strs[1] == "梳理") {
+					var url2 = ctx + "module/comb" + "/updateTechnology/" + id;
+
+					openTechnologyDetail("新增梳理工艺", url2, 800, 800);
+				}
+				if (strs[1] == "卷绕") {
+					var url2 = ctx + "module/wind" + "/updateTechnology/" + id;
+
+					openTechnologyDetail("新增卷绕工艺", url2, 800, 800);
+				}
+
+			})
+		}
+		
+		function openTechnologyDetail(title, url, width, height) {
+
+			layer.open({
+				id : 'addMacode',
+				type : 2,
+				area : [ width + "px", height + "px" ],
+				fix : false,
+				maxmin : true,
+				shade : 0.3,
+				title : title,
+				content : url,
+				end : function() {
+					//layer.open关闭事件关闭事件
+
+				}
+			})
+		}
+	</script>
+</body>
+</html>

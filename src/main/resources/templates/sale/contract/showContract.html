@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('合同列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>合同名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>合同编号：</p>
+                                <input type="text" name="codeid"/>
+                            </li>
+
+                            <li class="select-time">
+                                <p>签订时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                            </li>
+                            <li>
+                                <p>合同类型：</p>
+                                <select name="type" th:with="type=${@dict.getType('tbl_contracttype')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>合同类别：</p>
+                                <select name="category" th:with="type=${@dict.getType('tbl_contractclass')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status" th:with="type=${@dict.getType('tbl_contractstatus')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" ></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+		var detailFlag = [[${@permission.hasPermi('sale:contract:detail')}]];
+        var editFlag = [[${@permission.hasPermi('sale:contract:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('sale:contract:remove')}]];
+        var prefix = ctx + "sale/contract";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+    			detailUrl: prefix + "/detail/{id}",
+                modalName: "合同",
+                columns: [{
+                    checkbox: true
+                },
+				{
+					field : 'id', 
+					title : '序号',
+					sortable:true
+				},
+				{
+					field : 'name', 
+					title : '合同名称' 
+				},
+				{
+					field : 'codeid', 
+					title : '合同编号',
+	                sortable:true
+				},
+				{
+					field : 'firstparty', 
+					title : '买方' ,
+	                sortable:true,
+				},
+				{
+					field : 'secondparty', 
+					title : '卖方' ,
+	                sortable:true,
+				},
+				{
+					field : 'optime', 
+					title : '签订时间' ,
+	                sortable:true,
+				},
+				{
+					field : 'position', 
+					title : '签订地点' 
+				},
+				{
+					field : 'type', 
+					title : '合同类型:' ,
+					formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_contracttype')}]];
+		            	return $.table.selectDictLabel(datas, row.type);
+					 } 
+				},
+				{
+					field : 'category', 
+					title : '合同类别:' ,
+					formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_contractclass')}]];
+		            	return $.table.selectDictLabel(datas, row.category);
+					 } 
+				},
+				{
+					field : 'status', 
+					title : '状态',
+					//visible: false1:新建2:未签3:已签 ,
+					formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_contractstatus')}]];
+		            	return $.table.selectDictLabel(datas, row.status);
+					} 
+				},
+				{
+					field : 'firstaddress', 
+					title : '买方地址',
+					visible : false 
+				},
+				{
+					field : 'secondaddress', 
+					title : '卖方地址',
+					visible : false 
+				},
+				{
+					field : 'productid', 
+					title : '产品编码',
+					visible : false 
+				},
+				{
+					field : 'standard', 
+					title : '规格' ,
+					visible : false
+				},
+				{
+					field : 'cnt', 
+					title : '数量',
+					visible : false 
+				},
+				{
+					field : 'unit', 
+					title : '单位',
+					visible : false,
+					formatter: function(value, row, index) {
+						 //var a = _ajax_dict('tbl_contract_unit',value); 
+						 //return a;
+					 } 
+				},
+				{
+					field : 'price', 
+					title : '单价（元/千克）',
+					visible : false 
+				},
+				{
+					field : 'amount', 
+					title : '总价（元）',
+					visible : false 
+				},
+				{
+					field : 'quality', 
+					title : '质量标准',
+					visible : false 
+				},
+				{
+					field : 'perform', 
+					title : '履行地点及方式',
+					visible : false 
+				},
+				{
+					field : 'confirm', 
+					title : '验收标准及异议期限',
+					visible : false 
+				},
+				{
+					field : 'payterm', 
+					title : '汇款条件' ,
+					visible : false
+				},
+				{
+					field : 'legal1', 
+					title : '买方法人' ,
+					visible : false
+				},
+				{
+					field : 'client', 
+					title : '买方委托人' ,
+					visible : false
+				},
+				{
+					field : 'bankname1', 
+					title : '买方开户行' ,
+					visible : false
+				},
+				{
+					field : 'phone1', 
+					title : '买方电话' ,
+					visible : false
+				},
+				{
+					field : 'fax1', 
+					title : '买方传真',
+					visible : false 
+				},
+				{
+					field : 'account1', 
+					title : '买方银行账号' ,
+					visible : false
+				},
+				{
+					field : 'taxcode1', 
+					title : '买方税号' ,
+					visible : false
+				},
+				{
+					field : 'zipcode1', 
+					title : '买方邮编' ,
+					visible : false
+				},
+				{
+					field : 'legal2', 
+					title : '卖方法人',
+					visible : false 
+				},
+				{
+					field : 'column32', 
+					title : '卖方委托人',
+					visible : false 
+				},
+				{
+					field : 'bankname2', 
+					title : '卖方开户行',
+					visible : false 
+				},
+				{
+					field : 'phone2', 
+					title : '卖方电话' ,
+					visible : false
+				},
+				{
+					field : 'fax2', 
+					title : '卖方传真' ,
+					visible : false
+				},
+				{
+					field : 'account2', 
+					title : '卖方银行账号',
+					visible : false 
+				},
+				{
+					field : 'taxcode2', 
+					title : '卖方税号' ,
+					visible : false
+				},
+				{
+					field : 'zipcode2', 
+					title : '卖方邮编' ,
+					visible : false
+				},
+				{
+					field : 'other', 
+					title : '其他' ,
+					visible : false
+				},
+				{
+					field : 'filename', 
+					title : '合同文件' ,
+					visible : false
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				},
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="#" onclick="addToOrder(\'' + row.codeid +'\',\'' + row.optime+'\',\'' + row.firstparty+'\)"><i class="fa fa-plus"></i>选择</a>');
+                       return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

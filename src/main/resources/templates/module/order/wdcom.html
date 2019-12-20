@@ -1,0 +1,1047 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="col-sm-12 container-div height:0px padding-bottom:50%">
+	<!-- --------------------------------------------------------------- -->
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="col-sm-6 select-info">
+				<label class="h4">已核减订单</label><br/>
+				<span style="color:gray">*注：1.该表单中数据为已核减订单，单击需拼接订单进行第2步</span>
+				<form id="operlog-form">
+					<div class="select-list gd">
+						<ul>
+							<li class="col-sm-3">客户名称：<input style="width: 55%;"
+															 type="text" name="customer" />
+							</li>
+							<li class="col-sm-3">产品品名：<input style="width: 55%;"
+															 type="text" name="pdname" />
+							</li>
+							<li class="col-sm-3">生产线：<input style="width: 55%;"
+															type="text" name="pdlineid" /> <!-- th:with="type=${@dictService.selectDictData('tbl_order_status')}">
+									<option value="">所有</option>
+									<option th:each="e : ${type}" th:text="${e['dictLabel']}"
+										th:value="${e['dictValue']}"></option>
+							</select> -->
+							</li>
+							<!--
+                                                     <li><a class="btn btn-primary btn-rounded btn-sm"
+                        onclick="$.table.search($('form').attr('id'))"><i
+                            class="fa fa-search"></i>&nbsp;搜索</a></li>
+                            -->
+
+
+							<!-- <div class="pull-right"> -->
+							<li class="col-sm-3" style="display:none;">订单状态：<input style="width: 55%;"
+																				   type="text" name="optag" value="1"/>
+							</li>
+							<li class="col-sm-1"><a
+									class="btn btn-primary btn-rounded btn-sm"
+									onclick="$.table.search($('form').attr('id'))"><i
+									class="fa fa-search" id="searchByOrder"></i>查询订单</a></li>
+							<!-- </div> -->
+						</ul>
+					</div>
+				</form>
+
+			</div>
+			<!-- --------------------------------------------------------------- -->
+			<div class="col-sm-6 select-info" style="height: 360px;">
+				<!-- <input type="hidden" id="oldpdorderid"> <input type="hidden"
+                id="tagid"> <input type="hidden" id="line"> <input
+                type="hidden" id="fullname"> <input type="hidden"
+                id="qualityid"> <input type="hidden" id="rolength">
+            <input type="hidden" id="bagdia"> -->
+				<table id="bootstrap-table" class="table table-striped col-sm-6" data-height="300"
+					   data-mobile-responsive="true">
+				</table>
+			</div>
+
+
+
+		</div>
+
+		<!-- ================================================style="height: 1050px;"====style="height: 85px;"====style="height: 950px;"====== -->
+		<div class="col-sm-6" >
+
+			<div class="col-sm-6 select-info" >
+				<label class="h4">可拼幅宽订单</label><br/>
+				<span style="color:gray">*注：2.该表单中数据为符合规则的可拼订单，多选后确认无误点击确定按钮保存拼接信息</span>
+				<div class="form-group">
+					<a class="btn btn-danger btn-rounded btn-sm pull-right"
+					   onclick="confirmJoint()">确认拼接</a>
+
+
+
+				</div>
+
+			</div>
+			<div class="col-sm-6 select-info " >
+
+
+				<table border="1" width="30%">
+					<caption align="center">颜色与状态对照表</caption>
+					<tr>
+						<td bgcolor="#bfbfff">&nbsp;</td>
+						<td bgcolor="#df90ff">&nbsp;</td>
+						<td bgcolor="#d28476">&nbsp;</td>
+						<!--<td bgcolor="#edba34">&nbsp;</td>
+                        <td bgcolor="#00ff00">&nbsp;</td>
+                        <td bgcolor="#faf50b">&nbsp;</td>
+                        <td bgcolor="#31b0d5">&nbsp;</td> -->
+					</tr>
+					<tr>
+						<td align="center">幅宽&gt; </td>
+						<td align="center">幅宽= </td>
+						<td align="center">幅宽&lt; </td>
+						<!--<td align="center">已调度</td>
+                        <td align="center">已排产</td>
+                        <td align="center">已撤单</td>
+                        <td align="center">已选择</td> -->
+					</tr>
+				</table>
+
+				<table id="bootstrap-table-canwdcom" data-height="300"
+					   class="table table-striped col-sm-6" data-mobile-responsive="true">
+
+				</table>
+			</div>
+
+		</div>
+		<!-- ================================================style="height: 820px;"===style="height: 85px;"===style="height: 700px;"======== -->
+
+
+
+		<div class="col-sm-12" >
+
+			<div class="col-sm-12 select-info" >
+				<label class="h4">已完成拼幅宽的订单</label><br/>
+				<span style="color:gray">*注：3.该表单中数据为拼接后订单信息，已关联号为一组，可单击不合格信息点击取消按钮取消拼幅宽，分切数与重量可调控（但不可超出），调控后数据不可取消，选择需要生产调度单的信息确认后点击生产调度单完成生成，</span>
+				<div class="form-group">
+
+					<a class="btn btn-danger btn-rounded btn-sm pull-right"
+					   onclick="cancelJoint()">取消拼接</a> <a
+						class="btn btn-info btn-rounded btn-sm pull-right"
+						onclick="createDispatch()">完成拼幅宽</a>
+				</div>
+			</div>
+			<div class="col-sm-12 select-info " >
+
+				<table id="bootstrap-table-finishedWdcom"
+					   class="table table-striped col-sm-12" data-height="300"
+					   data-mobile-responsive="true">
+
+				</table>
+			</div>
+
+		</div>
+
+
+
+	</div>
+
+
+
+	<input type="hidden" id="pdlength"> <input type="hidden"
+											   id="pddiameter"> <input type="hidden" id="qualityid">
+	<input type="hidden" id="customer">
+
+</div>
+
+
+
+
+<div th:include="include :: footer"></div>
+
+
+
+<script th:inline="javascript">
+    //核减订单--li
+    var orderID, pdWidth,pdLineID, rowData, selectDataFlag,finishSelectDataFlag;////选中标志位
+    selectDataFlag = 0;
+    finishSelectDataFlag = 0;
+    var prefix = ctx + "module/cutstore"
+
+    function queryParams(params) {
+        var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+            // limit: params.limit,   //页面大小
+            offset : params.offset, //页码
+            pageSize : this.pageSize,
+            pageNumber : this.pageNumber,
+            projectId : $("#projectId").val(),
+            requirement_Id : $("#requirement_Id").val(),
+            length : 6
+
+        };
+        return temp;
+    };
+    var barOptions;
+    $(function() {
+        barOptions = {
+            url : prefix + "/list",
+            createUrl : prefix + "/add",
+            updateUrl : prefix + "/edit/{id}",
+            removeUrl : prefix + "/remove",
+            modalName : "订单",
+            queryParams : queryParams,
+            search : false,
+            columns : [ {
+                checkbox : false,
+                visible : false
+            }, {
+                field : 'id',
+                title : '序号',
+                visible : false
+            }, {
+                field : 'newpdorderid',
+                title : '生产订单号'
+            }, {
+                field : 'oldpdorderid',
+                title : '库存生产订单号',
+                visible : false
+            }, {
+                field : 'pdlineid',
+                title : '生产线号',
+                visible : false
+            },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述'
+                },
+				{
+                field : 'customer',
+                title : '客 户'
+            }, {
+                field : 'pdname',
+                title : '---品 名---'
+            }, {
+                field : 'pdlength',
+                title : '卷长m'
+            }, {
+                field : 'pddiameter',
+                title : '卷径cm'
+            }, {
+                field : 'pdwidth',
+                title : '幅宽cm'
+            }, {
+                field : 'pdgsm',
+                title : '克重g',
+                visible : false
+            }, {
+                field : 'qualityid',
+                title : '客户质量ID'
+            }, {
+                field : 'tagid',
+                title : '标签ID',
+                visible : false
+            }, {
+                field : 'cutweight',
+                title : '订单重量'
+            }, {
+                field : 'cutbaleno',
+                title : '订单包数',
+                visible : false
+            }, {
+                field : 'optag',
+                title : '操作标记',
+                formatter : function(value, row, index) {
+                    var a = _ajax_dict('tbl_cutstore_optag', value);
+                    return a;
+                }
+            }, {
+                field : 'remark',
+                title : '----备 注----'
+            }, {
+                field : 'transflag',
+                title : '传输标志',
+                visible : false
+            } ]
+        };
+
+        $.table.init(barOptions);
+        var param = {};
+
+        param["optag"] = 1;//未拼幅宽
+
+        _bootstrap_search_tablename("#bootstrap-table", param);
+    });
+
+    $("#bootstrap-table-canwdcom").on('load-success.bs.table',
+        function(data) {
+            getTdValue();
+        });
+
+    //将已批准的数据改变背景颜色
+    function getTdValue() {
+        var tableId = document.getElementById("bootstrap-table-canwdcom");
+        if (tableId.rows[1].cells.length > 1) {
+            for (var i = 1; i < tableId.rows.length; i++) {
+                if (tableId.rows[i].cells[9].innerHTML > pdWidth) {
+                    //幅宽大于
+                    tableId.rows[i].setAttribute("style",
+                        "background: #bfbfff;");
+
+                    //alert(tableId.rows[i].cells[9].innerHTML);
+
+                }
+                else if (tableId.rows[i].cells[9].innerHTML == pdWidth) {
+                    //幅宽等于
+                    tableId.rows[i].setAttribute("style",
+                        "background: #df90ff;");
+
+                }
+                else if (tableId.rows[i].cells[9].innerHTML < pdWidth) {
+                    //幅宽小于
+                    tableId.rows[i].setAttribute("style",
+                        "background: #d28476;");
+
+
+                }
+                //alert(tableId.rows[i].cells[9].innerHTML);
+            }
+        }
+    }
+
+    $("#bootstrap-table").on(
+        "click-row.bs.table",
+        function(e, row, $element) {
+
+            //alert("生产线:"+row.pdlineid+" 产品名:"+row.pdname);
+            $('.changeColor').removeClass('changeColor');
+            $($element).addClass('changeColor');
+            rowData = row;
+            orderID = row.id;
+            selectDataFlag = 1;
+            pdWidth = row.pdwidth;
+            pdLineID = row.pdlineid;
+            //搜索条件赋值
+            var param = {};
+            param["pdlineid"] = row.pdlineid;//生产线
+            param["pdname"] = row.pdname;//产品名
+            param["newpdorderid"] = row.newpdorderid;
+            param["pdwidth"] = row.pdwidth;
+            param["optag"] = 1;//未拼幅宽
+            //_bootstrap_show(canwdcomOptions,"bootstrap-table-canwdcom");
+            _bootstrap_search_tablename("#bootstrap-table-canwdcom",
+                param);
+
+            $('#pdlength').val(row.pdlength);
+            $('#pddiameter').val(row.pddiameter);
+            $('#qualityid').val(row.qualityid);
+            $('#customer').val(row.customer);
+
+        });
+
+    //确认拼接...li
+    function confirmJoint() {
+        //alert("Confirm joint.oderID:"+ orderID);
+        var rows = $.common.isEmpty(barOptions.id) ? _bootstrap_selectFirstColumns("bootstrap-table-canwdcom")
+            : _bootstrap_selectColumns("bootstrap-table-canwdcom",
+                barOptions.id);
+
+        if (selectDataFlag == 1) {
+
+            $.modal.confirm("确认要拼接选中的订单吗?", function() {
+
+                // alert("cancel/confirm");
+                var url = finishedWdcomfix + "/wdcom";
+                var orderid = orderID;
+                var data = {
+                    "ids" : rows.join(),
+                    "orderid" : orderid,
+                    "pdlineid": pdLineID
+
+                };
+                _ajax(url, data, "post");
+
+                var param2 = {};
+                param2["optag"] = 1;//未拼幅宽
+                _bootstrap_search_tablename("#bootstrap-table", param2);
+
+                //搜索条件赋值
+                var param = {};
+                param["optag"] = -1;//未拼幅宽
+                _bootstrap_search_tablename("#bootstrap-table-canwdcom",
+                    param);
+
+                var param1 = {};
+                param1["status"] = "0";//未生成调度单
+
+
+                _bootstrap_search_tablename(
+                    "#bootstrap-table-finishedWdcom", param1);
+
+            })
+            selectDataFlag = 0;
+        } else {
+            $.modal.alertWarning("请选择一条已核减订单");
+        }
+
+    }
+    var boundNumber = 0;
+    var finishedOrderID = "0";
+    $("#bootstrap-table-finishedWdcom").on("click-row.bs.table",
+        function(e, row, $element) {
+
+            //alert("生产线:"+row.pdlineid+" 产品名:"+row.pdname);
+            $('.changeColorBlack').removeClass('changeColorBlack');
+            $($element).addClass('changeColorBlack');
+            boundNumber = row.boundnumber;
+            pdLineID = row.pdlineid;
+            finishSelectDataFlag = 1;
+            finishedOrderID = row.pdorderid;
+
+        });
+    //取消拼接...li
+    function cancelJoint() {
+        if (finishSelectDataFlag == 1) {
+            $.modal.confirm("确认要取消拼接调度号为" + boundNumber + "的所有订单吗?",
+                function() {
+                    // alert("cancel/confirm");
+                    var url = finishedWdcomfix + "/cancelJointWidth";
+                    var data = {
+                        "boundNumber" : boundNumber
+                    };
+                    _ajax(url, data, "post");
+                    //搜索条件赋值
+                    var param = {};
+                    param["optag"] = 1;//未拼幅宽
+                    _bootstrap_search_tablename("#bootstrap-table", param);
+                    param["optag"] = -1;
+                    _bootstrap_search_tablename(
+                        "#bootstrap-table-canwdcom", param);
+
+                    var param1 = {};
+                    param1["status"] = "0";
+                    _bootstrap_search_tablename(
+                        "#bootstrap-table-finishedWdcom", param1);
+
+                })
+            finishSelectDataFlag = 0;
+        }else{
+            $.modal.alertWarning("请选择一条已拼幅宽订单");
+        }
+    }
+
+    //生成调度单--li
+    function createDispatch() {
+        if (finishSelectDataFlag == 1) {
+        	var isZeroData = isSlitnoZero();
+/*        	alert("isZeroData:"+isZeroData);*/
+        	if(isZeroData == 0){
+        		$.modal.confirm("分切数不可设置为0！");
+        		return;
+        	}
+            var bbb = compareWeightValue();
+            if(bbb > 0)
+            {
+                console.log('cancell生成调度单！');
+
+            }else{
+                console.log('成功生成调度单！');
+                $.modal.confirm("确定要完成拼幅宽操作，进入下一步吗?",
+                    function() {
+                        // alert("cancel/confirm");
+                        var url = finishedWdcomfix + "/createDispatch";
+                        var data = {
+                            "boundNumber" : boundNumber
+                        };
+                        _ajax(url, data, "post");
+                        //搜索条件赋值
+                        var param1 = {};
+                        param1["status"] = "0";
+                        _bootstrap_search_tablename(
+                            "#bootstrap-table-finishedWdcom", param1);
+                        var param2 = {};
+                        param2["optag"] = 1;//未拼幅宽
+                        _bootstrap_search_tablename("#bootstrap-table", param2);
+
+                    })
+            }
+            /*  $.modal.confirm("确认要生成相应的调度单吗?",
+                 function() {
+                     // alert("cancel/confirm");
+                     var url = finishedWdcomfix + "/createDispatch";
+                     var data = {
+                         "boundNumber" : boundNumber
+                     };
+                     _ajax(url, data, "post");
+                     //搜索条件赋值
+                     var param1 = {};
+                     param1["status"] = "0";
+                     _bootstrap_search_tablename(
+                         "#bootstrap-table-finishedWdcom", param1);
+
+                 }) */
+
+            finishSelectDataFlag = 0;
+        }else{
+            $.modal.alertWarning("请选择一条已拼幅宽订单");
+        }
+    }
+
+    function isSlitnoZero()
+    {
+    	  var tableId = document.getElementById("bootstrap-table-finishedWdcom");
+          if (tableId.rows[1].cells.length > 1) {
+              var cancllStatus = 0;
+              for (var i = 1; i < tableId.rows.length; i++) {
+                  if (tableId.rows[i].cells[2].innerHTML == boundNumber) {
+
+                      var isSlitnoZeroData = $(tableId.rows[i].cells[9].innerHTML).val();
+                      if(isSlitnoZeroData == 0)
+                      {
+                    	  return isSlitnoZeroData;
+                      }
+                     
+                  }
+              }
+          }
+    	
+    }
+    function compareWeightValue() {
+        var tableId = document.getElementById("bootstrap-table-finishedWdcom");
+        if (tableId.rows[1].cells.length > 1) {
+            var cancllStatus = 0;
+            for (var i = 1; i < tableId.rows.length; i++) {
+                if (tableId.rows[i].cells[2].innerHTML == boundNumber) {
+
+                    /* if(tableId.rows[i].cells[3].innerHTML != finishedOrderID)
+                    { */
+                    //var pdwidthValue =tableId.rows[i].cells[8].innerHTML;
+
+
+                    var originweight = tableId.rows[i].cells[10].innerHTML;
+                    var wdcomweight = $(tableId.rows[i].cells[11].innerHTML).val();
+                    //alert("originweight:"+originweight+"--wdcomweight:"+wdcomweight);
+                    if(originweight-wdcomweight>=200)
+                    {
+                        //$.modal.alertWarning(tableId.rows[i].cells[3].innerHTML+"订单，拆分订单，超出200kg部分生成新订单");
+                        /* $.modal.confirm(tableId.rows[i].cells[3].innerHTML+"订单，拆分订单，超出200kg部分生成新订单？",
+                                function() {
+
+
+
+                                }); */
+                        //alert(tableId.rows[i].cells[3].innerHTML+"订单，拆分订单，超出200kg部分生成新订单？");
+
+                        if (window.confirm(tableId.rows[i].cells[3].innerHTML+"订单，订单重量已超出拼幅宽产量"+(originweight-wdcomweight)+"kg,是否生成新订单？")) {
+                            console.log('confirm');
+                        } else {
+                            console.log('cancell');
+                            cancllStatus++;
+                        }
+
+
+                    }else if(originweight-wdcomweight < -200)
+                    {
+                        var a = originweight-wdcomweight;
+                        //$.modal.alertWarning(tableId.rows[i].cells[3].innerHTML+"订单，拼幅宽产量超出原订单重量，会产生"+a+"kg库存");
+                        /* $.modal.confirm(tableId.rows[i].cells[3].innerHTML+"订单，拼幅宽产量超出原订单重量，会产生"+a+"kg库存,是否继续？",
+                               function() {
+
+
+
+                               }); */
+                        //alert(tableId.rows[i].cells[3].innerHTML+"订单，拼幅宽产量超出原订单重量，会产生"+a+"kg库存,是否继续？");
+                        if (window.confirm(tableId.rows[i].cells[3].innerHTML+"订单，拼幅宽产量超出订单重量，将会产生"+-a+"kg库存,是否继续？")) {
+                            console.log('confirm');
+
+                        } else {
+                            console.log('cancell');
+                            cancllStatus++;
+                        }
+                    }
+                    console.log('other:'+wdcomweight);
+
+                    /* }else{
+
+                    } */
+
+
+                }
+
+
+            }
+            return cancllStatus;
+
+        }
+    }
+
+
+</script>
+
+
+
+<script>
+    //可拼幅宽--li
+    var pdname, line;
+    var canwdcomOptions
+    var prefix = ctx + "module/cutstore"
+
+    function queryParams(params) {
+        //键的名字和控制器的变量名必须一致
+        var temp = {
+            // limit: params.limit,   //页面大小
+            offset : params.offset, //页码
+            pageSize : this.pageSize,
+            pageNumber : this.pageNumber,
+            projectId : $("#projectId").val(),
+            requirement_Id : $("#requirement_Id").val(),
+            length : 6
+        };
+        return temp;
+    };
+
+    $(function() {
+        canwdcomOptions = {
+            url : prefix + "/listByWidth",
+            createUrl : prefix + "/add",
+            updateUrl : prefix + "/edit/{id}",
+            removeUrl : prefix + "/remove",
+            modalName : "可拼幅宽订单",
+            queryParams : queryParams,
+            search : false,
+            columns : [
+                {
+                    checkbox : true
+                },
+                {
+                    field : 'id',
+                    title : '序号',
+                    visible : false
+                },
+                {
+                    field : 'newpdorderid',
+                    title : '生产订单号'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号',
+                    visible : false
+                },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述'
+                },
+                {
+                    field : 'pdname',
+                    title : '品名'
+                },
+                {
+                    field : 'customer',
+                    title : '---客 户---',
+                    formatter : function(value, row, index) {
+
+                        if ($('#customer').val() == value) {
+                            return '<span>' + value + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#7F00FF">'
+                                + $('#customer').val() + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#32CD99">'
+                                + '(√)' + '</span>';
+                        } else {
+                            return '<span>' + value + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#7F00FF">'
+                                + $('#customer').val() + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#F00">'
+                                + '(X)' + '</span>';
+                        }
+
+                    }
+                },
+                {
+                    field : 'pdlength',
+                    title : '卷长m',
+                    formatter : function(value, row, index) {
+                        if ($('#pdlength').val() == value) {
+                            return '<span>' + value + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#7F00FF">'
+                                + $('#pdlength').val() + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#32CD99">'
+                                + '(√)' + '</span>';
+                        } else {
+                            return '<span>' + value + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#7F00FF">'
+                                + $('#pdlength').val() + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#F00">'
+                                + '(X)' + '</span>';
+                        }
+
+                    }
+                },
+                {
+                    field : 'pddiameter',
+                    title : '卷径cm',
+                    formatter : function(value, row, index) {
+
+                        if ($('#pddiameter').val() == value) {
+                            return '<span>' + value + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#7F00FF">'
+                                + $('#pddiameter').val()
+                                + '</span>' + '<br/>'
+                                + '<span style="color:#32CD99">'
+                                + '(√)' + '</span>';
+                        } else {
+                            return '<span>' + value + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#7F00FF">'
+                                + $('#pddiameter').val()
+                                + '</span>' + '<br/>'
+                                + '<span style="color:#F00">'
+                                + '(X)' + '</span>';
+                        }
+
+                    }
+                },
+                {
+                    field : 'qualityid',
+                    title : '客户质量ID',
+                    formatter : function(value, row, index) {
+                        if ($('#qualityid').val() == value) {
+                            return '<span>' + value + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#7F00FF">'
+                                + $('#qualityid').val() + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#32CD99">'
+                                + '(√)' + '</span>';
+                        } else {
+                            return '<span>' + value + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#7F00FF">'
+                                + $('#qualityid').val() + '</span>'
+                                + '<br/>'
+                                + '<span style="color:#F00">'
+                                + '(X)' + '</span>';
+                        }
+                    }
+                },
+                {
+                    field : 'pdwidth',
+                    title : '幅宽cm'
+                },
+                {
+                    field : 'pdgsm',
+                    title : '克重g',
+                    visible : false
+                },
+                {
+                    field : 'tagid',
+                    title : '标签ID',
+                    visible : false
+                },
+                {
+                    field : 'cutweight',
+                    title : '订单重量'
+                },
+                {
+                    field : 'cutbaleno',
+                    title : '订单包数',
+                    visible : false
+                },
+                {
+                    field : 'optag',
+                    title : '操作标记',
+                    visible : false
+                },
+                {
+                    field : 'oldpdorderid',
+                    title : '库存生产订单号',
+                    visible : false
+                },
+                {
+                    field : 'remark',
+                    title : '----备 注----'
+                }, {
+                    field : 'transflag',
+                    title : '传输标志',
+                    visible : false
+                } ]
+        };
+        _bootstrap_show(canwdcomOptions, "bootstrap-table-canwdcom");
+        var param = {};
+        param["optag"] = -1;//未拼幅宽
+        _bootstrap_search_tablename("#bootstrap-table-canwdcom", param);
+    });
+
+</script>
+
+
+<script>
+    //完成核减订单--li
+    var finishedWdcomfix = ctx + "module/wdcom"
+    var readywdcomOptions = "";
+    $(function() {
+        finishedWdcomOptions = {
+            url : finishedWdcomfix + "/list",
+            createUrl : finishedWdcomfix + "/add",
+            updateUrl : finishedWdcomfix + "/edit/{id}",
+            removeUrl : finishedWdcomfix + "/remove",
+            modalName : "完成拼幅宽的订单",
+            queryParams : queryParams,
+            search : false,
+            columns : [ {
+                checkbox : false
+            }, {
+                field : 'id',
+                title : '序号'
+            }, {
+                field : 'boundnumber',
+                title : '关联号'
+            }, {
+                field : 'pdorderid',
+                title : '生产订单号'
+            }, {
+                field : 'pdlineid',
+                title : '生产线号',
+                visible : false
+            },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述'
+                },
+				{
+                field : 'maxwidth',
+                title : '幅宽上限'
+            }, {
+                field : 'customer',
+                title : '客户'
+            }, {
+                field : 'pdname',
+                title : '品名'
+            }, {
+                field : 'pdwidth',
+                title : '幅宽cm'
+            }, {
+                field : 'slitno',
+                title : '分切数',
+                formatter : function(value, row, index) {
+                    return '<input id = "slitnoInput1" class = "easyui-numberbox" style="width:60px;text-align:center" value ="' + value
+                        + '" onchange="slitnoInputOnChange(this,\''+row.pdorderid+'\')">';
+                }
+            }, {
+                field : 'originweight',
+                title : '订单重量kg'
+            }, {
+                field : 'wdcomweight',
+                title : '拼幅宽重量kg',
+                formatter : function(value, row, index) {
+                    return '<input id = "wdcomweightInput1" class = "easyui-numberbox" style="width:60px;text-align:center" value ="' + value
+                        + '" onchange="wdcomweightInputOnChange(this,\''+row.pdorderid+'\')">';
+                }
+            },
+
+                {
+                    field : 'status',
+                    title : '状态',
+                    formatter : function(value, row, index) {
+                        var a = _ajax_dict('tbl_wdcom_status', value);
+                        return a;
+                    }
+
+
+                }, {
+                    field : 'pdlength',
+                    title : '卷长(m)'
+                }, {
+                    field : 'pddiameter',
+                    title : '卷径(cm)'
+                }, {
+                    field : 'volomenum',
+                    title : '卷数',
+                    visible : true
+                }, {
+                    field : 'packagenum',
+                    title : '包数',
+                    visible : true
+                }, {
+                    field : 'remark',
+                    title : '备注',
+                    visible : true
+                }, {
+                    field : 'transflag',
+                    title : '传输标志',
+                    visible : false
+                } ]
+        };
+        _bootstrap_show(finishedWdcomOptions,
+            "bootstrap-table-finishedWdcom");
+        var param12 = {};
+        param12["status"] = "0";
+        _bootstrap_search_tablename(
+            "#bootstrap-table-finishedWdcom", param12);
+    });
+
+
+    $("#bootstrap-table-finishedWdcom").on('load-success.bs.table',
+        function(data) {
+
+            getTdValue1();
+
+        });
+    function getTdValue1() {
+        var tableId = document.getElementById("bootstrap-table-finishedWdcom");
+
+        if (tableId.rows[1].cells.length > 1) {
+
+            for (var i = 1; i < tableId.rows.length; i++) {
+                if (tableId.rows[i].cells[17].innerHTML == "主订单") {
+                    tableId.rows[i].setAttribute("style",
+                        "background: #bfbfff;");
+
+                }
+
+            }
+        }
+    }
+    //分切数--li
+    function slitnoInputOnChange(data,orderid) {
+        if(orderid == 0){
+            $.modal.alertWarning("请至少选择一条拼幅宽订单");
+            return
+        }
+        if(data.value == 0){
+            $.modal.alertWarning("温馨提示：分切数不能设置为0");
+            return
+        }
+        var status = getTdSlitnoValue(data.value);
+        if(status == 1)
+        {
+            $.modal.confirm("确认要修改分切数吗?",
+                function() {
+
+                    var url = finishedWdcomfix + "/updateSlitno";
+                    var data1 = {
+                        "pdorderid" : orderid,
+                        "slitno": data.value
+                    };
+                    _ajax(url, data1, "post");
+                    //搜索条件赋值
+                    var param1 = {};
+                    param1["status"] = "0";
+                    _bootstrap_search_tablename(
+                        "#bootstrap-table-finishedWdcom", param1);
+
+                })
+        }
+        //搜索条件赋值
+        var param1 = {};
+        param1["status"] = "0";
+        _bootstrap_search_tablename(
+            "#bootstrap-table-finishedWdcom", param1);
+    }
+    function getTdSlitnoValue(slino) {
+        var tableId = document.getElementById("bootstrap-table-finishedWdcom");
+        if (tableId.rows[1].cells.length > 1) {
+            var totalNumber = 0;
+            var maxPdwidth = 0;
+            for (var i = 1; i < tableId.rows.length; i++) {
+                if (tableId.rows[i].cells[2].innerHTML == boundNumber) {
+
+                    if(tableId.rows[i].cells[3].innerHTML != finishedOrderID)
+                    {
+                        var pdwidthValue =tableId.rows[i].cells[8].innerHTML;
+
+                        //alert(pdwidthValue);
+                        var slinoValue =$(tableId.rows[i].cells[9].innerHTML).val();
+                        var totalValue = pdwidthValue * slinoValue;
+                        totalNumber = totalNumber + totalValue;
+                        console.log('other:'+pdwidthValue);
+
+                    }else{
+                        var pdwidthValue =tableId.rows[i].cells[8].innerHTML;
+                        var slinoValue = slino;
+                        var totalValue = pdwidthValue * slinoValue;
+                        maxPdwidth = tableId.rows[i].cells[5].innerHTML;
+                        totalNumber = totalNumber + totalValue;
+                        console.log('selected:'+maxPdwidth);
+                    }
+
+
+                }
+
+
+            }
+            //alert(maxPdwidth+'---'+totalNumber);//输入时的分切*幅宽的总数。
+            if(totalNumber > maxPdwidth)
+            {
+                //alert(maxPdwidth+'---'+totalNumber);//输入时的分切*幅宽的总数。
+
+                $.modal.alertWarning("超出生产线有效幅宽范围");
+                return 0;
+            }
+            return 1;
+            //
+
+        }
+    }
+    //订单重量--li
+    function originweightInputOnChange(data,orderid) {
+        var orderid = orderid;
+        $.modal.confirm("确认要修改订单重量吗?",
+            function() {
+
+                var url = finishedWdcomfix + "/updateOriginweight";
+                var data1 = {
+                    "boundNumber" : boundNumber,
+                    "pdorderid" : orderid,
+                    "originweight": data.value
+
+                };
+                _ajax(url, data1, "post");
+
+                var param1 = {};
+                param1["status"] = "0";
+                _bootstrap_search_tablename(
+                    "#bootstrap-table-finishedWdcom", param1);
+
+            })
+    }
+    //拼幅宽重量--li
+    function wdcomweightInputOnChange(data,orderid) {
+        var orderid = orderid;
+        if(boundNumber == 0){
+            $.modal.alertWarning("请至少选择一条拼幅宽订单");return
+        }
+        if(data.value == 0){
+            $.modal.alertWarning("温馨提示：拼幅宽重量不能设置为0");
+
+            return
+
+        }
+        $.modal.confirm("确认要修改拼幅宽重量吗?",
+            function() {
+                var url = finishedWdcomfix + "/updateWdcomweight";
+                var data1 = {
+                    "boundNumber" : boundNumber,
+                    "pdorderid" : orderid,
+                    "originweight": data.value
+
+                };
+                _ajax(url, data1, "post");
+
+                var param1 = {};
+                param1["status"] = "0";
+                _bootstrap_search_tablename(
+                    "#bootstrap-table-finishedWdcom", param1);
+
+
+
+            })
+    }
+</script>
+
+</body>
+</html>

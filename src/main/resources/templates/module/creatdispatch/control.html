@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+<th:block th:include="include :: header('物料调度')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+            <label class="h4">已计算物料调度单</label><br/>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" ></table>
+            </div>
+<!--         <div class="col-sm-12 select-info"> -->
+<!--             <label class="h4">物料调度单</label> -->
+<!--         </div> -->
+<!--         <div class="col-sm-12 select-info"> -->
+<!--             <table id="bootstrap-table-maschedule" data-mobile-responsive="true"> -->
+<!--             </table> -->
+<!--         </div> -->
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('module:creatdispatch:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('module:creatdispatch:remove')}]];
+        var prefix = ctx + "module/creatdispatch"
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                modalName: "生产调度",
+                columns: [
+				{
+					field : 'id', 
+					title : '序号' 
+				},
+				{
+					field : 'dispatchid', 
+					title : '生产调度单号' 
+				},
+				{
+					field : 'pdlineid', 
+					title : '生产线号' 
+				},
+//                     {
+//                         field : 'lineStr',
+//                         title : '生产线描述'
+//                     },
+				{
+					field : 'pdname', 
+					title : '品名' 
+				},
+				{
+					field : 'actualweight', 
+					title : '生产重量kg' 
+				},
+				{
+					field : 'status', 
+					title : '状态' ,
+                    formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_dispatch_status')}]];
+		            	return $.table.selectDictLabel(datas, row.status);
+                    }
+				}]
+// 				},
+// 				{
+// 					field : 'boundpdorderid', 
+// 					title : '关联生产订单号' 
+// 				}]
+            };
+            $.table.init(options);
+            var	param={};
+            param["auditflag"] = 4;
+            _bootstrap_search_tablename("#bootstrap-table",param);
+        });
+
+        var maPrefix = ctx + "module/maschedule";
+        $(function() {
+            var maOptions = {
+                url: maPrefix + "/list",
+                createUrl: maPrefix + "/add",
+                updateUrl: maPrefix + "/edit/{id}",
+                removeUrl: maPrefix + "/remove",
+                modalName: "物料调度",
+                search:false,
+                columns: [
+                    {
+                        field : 'id',
+                        title : '序号'
+                    },
+                    {
+                        field : 'pdorderid',
+                        title : '订单号'
+                    },
+                    {
+                        field : 'workshop',
+                        title : '车间名称'
+                    },
+                    {
+                        field : 'pdlineid',
+                        title : ''
+                    },
+                    {
+                        field : 'dispatchid',
+                        title : '生产调度单号'
+                    },
+                    {
+                        field : 'maneedtime',
+                        title : '物料需要时间'
+                    },
+                    {
+                        field : 'maname',
+                        title : '原料名'
+                    },
+                    {
+                        field : 'maneedamount',
+                        title : '原料需要数量'
+                    },
+                    {
+                        field : 'packname',
+                        title : '包材名称'
+                    },
+                    {
+                        field : 'paneedamount',
+                        title : '包材需要数量'
+                    },
+                    /*                {
+                                        field : 'remark',
+                                        title : '备注'
+                                    },*/
+
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs" href="#" onclick="addBill(\'' + row.id + '\')"><i class="fa fa-edit"></i>物料调度</a> ');
+                            actions.push('<a class="btn btn-success btn-xs" href="#" onclick="billDetail(\'' + row.id + '\')"><i class="fa fa-edit"></i>物料调度记录</a> ');
+                            return actions.join('');
+                        }
+                    }]
+            };
+            _bootstrap_show(maOptions, "bootstrap-table-maschedule");
+            var param={};
+            param['id'] = -1;
+            _bootstrap_search_tablename("#bootstrap-table-maschedule",param);
+        });
+
+        //清空排序数据
+        $("#bootstrap-table").on("click-row.bs.table",function(e, row, $element) {
+/*
+            var	param={};
+            var url = ctx + "module/maschedule" + "/calculate";
+            var data = {
+                "ids": row.id
+            };
+            _ajax(url, data, "post");
+*/
+            var	param={};
+            param["auditflag"] = 4;
+            _bootstrap_search_tablename("#bootstrap-table",param);
+            param={};
+            param['dispatchid'] = row.dispatchid;
+            _bootstrap_search_tablename("#bootstrap-table-maschedule",param);
+        })
+
+
+        function addBill(id) {
+            var url = maPrefix + '/addBill/' + id;
+            layer_showAuto("物料调度", url);
+        }
+        function billDetail(id) {
+            var url = maPrefix + '/billDetail/' + id;
+            layer_showAuto("物料调度记录", url);
+        }
+    </script>
+</body>
+</html>

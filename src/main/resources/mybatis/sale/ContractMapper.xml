@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ylenms.project.sale.contract.mapper.ContractMapper">
+    
+    <resultMap type="Contract" id="ContractResult">
+        <result property="id"    column="ID"    />
+        <result property="name"    column="NAME"    />
+        <result property="codeid"    column="CODEID"    />
+        <result property="firstparty"    column="FIRSTPARTY"    />
+        <result property="secondparty"    column="SECONDPARTY"    />
+        <result property="receiver"    column="RECEIVER"    />
+        <result property="recphone"    column="RECPHONE"    />
+        <result property="recaddress"    column="RECADDRESS"    />
+        <result property="recname"    column="RECNAME"    />
+        <result property="optime"    column="OPTIME"    />
+        <result property="position"    column="POSITION"    />
+        <result property="type"    column="TYPE"    />
+        <result property="category"    column="CATEGORY"    />
+        <result property="status"    column="STATUS"    />
+        <result property="firstaddress"    column="FIRSTADDRESS"    />
+        <result property="secondaddress"    column="SECONDADDRESS"    />
+        <result property="productid"    column="PRODUCTID"    />
+        <result property="standard"    column="STANDARD"    />
+        <result property="cnt"    column="CNT"    />
+        <result property="unit"    column="UNIT"    />
+        <result property="price"    column="PRICE"    />
+        <result property="amount"    column="AMOUNT"    />
+        <result property="quality"    column="QUALITY"    />
+        <result property="perform"    column="PERFORM"    />
+        <result property="confirm"    column="CONFIRM"    />
+        <result property="payterm"    column="PAYTERM"    />
+        <result property="legal1"    column="LEGAL1"    />
+        <result property="client"    column="CLIENT"    />
+        <result property="bankname1"    column="BANKNAME1"    />
+        <result property="phone1"    column="PHONE1"    />
+        <result property="fax1"    column="FAX1"    />
+        <result property="account1"    column="ACCOUNT1"    />
+        <result property="taxcode1"    column="TAXCODE1"    />
+        <result property="zipcode1"    column="ZIPCODE1"    />
+        <result property="legal2"    column="LEGAL2"    />
+        <result property="column32"    column="COLUMN_32"    />
+        <result property="bankname2"    column="BANKNAME2"    />
+        <result property="phone2"    column="PHONE2"    />
+        <result property="fax2"    column="FAX2"    />
+        <result property="account2"    column="ACCOUNT2"    />
+        <result property="taxcode2"    column="TAXCODE2"    />
+        <result property="zipcode2"    column="ZIPCODE2"    />
+        <result property="other"    column="OTHER"    />
+        <result property="filename"    column="FILENAME"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="recode"    column="RECODE"    />
+    </resultMap>
+
+    <sql id="selectContractVo">
+        select ID, NAME, CODEID, FIRSTPARTY, SECONDPARTY, RECEIVER, RECPHONE, RECADDRESS, RECNAME, OPTIME, POSITION, TYPE, CATEGORY, STATUS, FIRSTADDRESS, SECONDADDRESS, PRODUCTID, STANDARD, CNT, UNIT, PRICE, AMOUNT, QUALITY, PERFORM, CONFIRM, PAYTERM, LEGAL1, CLIENT, BANKNAME1, PHONE1, FAX1, ACCOUNT1, TAXCODE1, ZIPCODE1, LEGAL2, COLUMN_32, BANKNAME2, PHONE2, FAX2, ACCOUNT2, TAXCODE2, ZIPCODE2, OTHER, FILENAME, REMARK, RECODE from tbl_contract
+    </sql>
+
+    <select id="selectContractList" parameterType="Contract" resultMap="ContractResult">
+        <include refid="selectContractVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="codeid!= null  and codeid!= ''"> and CODEID like concat('%', #{codeid}, '%')</if>
+            <if test="type!= null  and type!= ''"> and TYPE like concat('%', #{type}, '%')</if>
+            <if test="category!= null  and category!= ''"> and CATEGORY like concat('%', #{category}, '%')</if>
+            <if test="status!= null  and status!= ''"> and STATUS like concat('%', #{status}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(OPTIME,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(OPTIME,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
+        </where>
+    </select>
+    
+    <select id="selectContractById" parameterType="Long" resultMap="ContractResult">
+        <include refid="selectContractVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertContract" parameterType="Contract" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="codeid != null  and codeid != ''">CODEID,</if>
+            <if test="firstparty != null  and firstparty != ''">FIRSTPARTY,</if>
+            <if test="secondparty != null  and secondparty != ''">SECONDPARTY,</if>
+            <if test="receiver != null  and receiver != ''">RECEIVER,</if>
+            <if test="recphone != null  and recphone != ''">RECPHONE,</if>
+            <if test="recaddress != null  and recaddress != ''">RECADDRESS,</if>
+            <if test="recname != null  and recname != ''">RECNAME,</if>
+            <if test="optime != null ">OPTIME,</if>
+            <if test="position != null  and position != ''">POSITION,</if>
+            <if test="type != null ">TYPE,</if>
+            <if test="category != null ">CATEGORY,</if>
+            <if test="status != null ">STATUS,</if>
+            <if test="firstaddress != null  and firstaddress != ''">FIRSTADDRESS,</if>
+            <if test="secondaddress != null  and secondaddress != ''">SECONDADDRESS,</if>
+            <if test="productid != null  and productid != ''">PRODUCTID,</if>
+            <if test="standard != null  and standard != ''">STANDARD,</if>
+            <if test="cnt != null ">CNT,</if>
+            <if test="unit != null ">UNIT,</if>
+            <if test="price != null ">PRICE,</if>
+            <if test="amount != null ">AMOUNT,</if>
+            <if test="quality != null  and quality != ''">QUALITY,</if>
+            <if test="perform != null  and perform != ''">PERFORM,</if>
+            <if test="confirm != null  and confirm != ''">CONFIRM,</if>
+            <if test="payterm != null  and payterm != ''">PAYTERM,</if>
+            <if test="legal1 != null  and legal1 != ''">LEGAL1,</if>
+            <if test="client != null  and client != ''">CLIENT,</if>
+            <if test="bankname1 != null  and bankname1 != ''">BANKNAME1,</if>
+            <if test="phone1 != null  and phone1 != ''">PHONE1,</if>
+            <if test="fax1 != null  and fax1 != ''">FAX1,</if>
+            <if test="account1 != null  and account1 != ''">ACCOUNT1,</if>
+            <if test="taxcode1 != null  and taxcode1 != ''">TAXCODE1,</if>
+            <if test="zipcode1 != null  and zipcode1 != ''">ZIPCODE1,</if>
+            <if test="legal2 != null  and legal2 != ''">LEGAL2,</if>
+            <if test="column32 != null  and column32 != ''">COLUMN_32,</if>
+            <if test="bankname2 != null  and bankname2 != ''">BANKNAME2,</if>
+            <if test="phone2 != null  and phone2 != ''">PHONE2,</if>
+            <if test="fax2 != null  and fax2 != ''">FAX2,</if>
+            <if test="account2 != null  and account2 != ''">ACCOUNT2,</if>
+            <if test="taxcode2 != null  and taxcode2 != ''">TAXCODE2,</if>
+            <if test="zipcode2 != null  and zipcode2 != ''">ZIPCODE2,</if>
+            <if test="other != null  and other != ''">OTHER,</if>
+            <if test="filename != null  and filename != ''">FILENAME,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="recode != null  and recode != ''">RECODE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="codeid != null  and codeid != ''">#{codeid},</if>
+            <if test="firstparty != null  and firstparty != ''">#{firstparty},</if>
+            <if test="secondparty != null  and secondparty != ''">#{secondparty},</if>
+            <if test="receiver != null  and receiver != ''">#{receiver},</if>
+            <if test="recphone != null  and recphone != ''">#{recphone},</if>
+            <if test="recaddress != null  and recaddress != ''">#{recaddress},</if>
+            <if test="recname != null  and recname != ''">#{recname},</if>
+            <if test="optime != null ">#{optime},</if>
+            <if test="position != null  and position != ''">#{position},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="category != null ">#{category},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="firstaddress != null  and firstaddress != ''">#{firstaddress},</if>
+            <if test="secondaddress != null  and secondaddress != ''">#{secondaddress},</if>
+            <if test="productid != null  and productid != ''">#{productid},</if>
+            <if test="standard != null  and standard != ''">#{standard},</if>
+            <if test="cnt != null ">#{cnt},</if>
+            <if test="unit != null ">#{unit},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="amount != null ">#{amount},</if>
+            <if test="quality != null  and quality != ''">#{quality},</if>
+            <if test="perform != null  and perform != ''">#{perform},</if>
+            <if test="confirm != null  and confirm != ''">#{confirm},</if>
+            <if test="payterm != null  and payterm != ''">#{payterm},</if>
+            <if test="legal1 != null  and legal1 != ''">#{legal1},</if>
+            <if test="client != null  and client != ''">#{client},</if>
+            <if test="bankname1 != null  and bankname1 != ''">#{bankname1},</if>
+            <if test="phone1 != null  and phone1 != ''">#{phone1},</if>
+            <if test="fax1 != null  and fax1 != ''">#{fax1},</if>
+            <if test="account1 != null  and account1 != ''">#{account1},</if>
+            <if test="taxcode1 != null  and taxcode1 != ''">#{taxcode1},</if>
+            <if test="zipcode1 != null  and zipcode1 != ''">#{zipcode1},</if>
+            <if test="legal2 != null  and legal2 != ''">#{legal2},</if>
+            <if test="column32 != null  and column32 != ''">#{column32},</if>
+            <if test="bankname2 != null  and bankname2 != ''">#{bankname2},</if>
+            <if test="phone2 != null  and phone2 != ''">#{phone2},</if>
+            <if test="fax2 != null  and fax2 != ''">#{fax2},</if>
+            <if test="account2 != null  and account2 != ''">#{account2},</if>
+            <if test="taxcode2 != null  and taxcode2 != ''">#{taxcode2},</if>
+            <if test="zipcode2 != null  and zipcode2 != ''">#{zipcode2},</if>
+            <if test="other != null  and other != ''">#{other},</if>
+            <if test="filename != null  and filename != ''">#{filename},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="recode != null  and recode != ''">#{recode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateContract" parameterType="Contract">
+        update tbl_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="codeid != null  and codeid != ''">CODEID = #{codeid},</if>
+            <if test="firstparty != null  and firstparty != ''">FIRSTPARTY = #{firstparty},</if>
+            <if test="secondparty != null  and secondparty != ''">SECONDPARTY = #{secondparty},</if>
+            <if test="receiver != null  and receiver != ''">RECEIVER = #{receiver},</if>
+            <if test="recphone != null  and recphone != ''">RECPHONE = #{recphone},</if>
+            <if test="recaddress != null  and recaddress != ''">RECADDRESS = #{recaddress},</if>
+            <if test="recname != null  and recname != ''">RECNAME = #{recname},</if>
+            <if test="optime != null ">OPTIME = #{optime},</if>
+            <if test="position != null  and position != ''">POSITION = #{position},</if>
+            <if test="type != null ">TYPE = #{type},</if>
+            <if test="category != null ">CATEGORY = #{category},</if>
+            <if test="status != null ">STATUS = #{status},</if>
+            <if test="firstaddress != null  and firstaddress != ''">FIRSTADDRESS = #{firstaddress},</if>
+            <if test="secondaddress != null  and secondaddress != ''">SECONDADDRESS = #{secondaddress},</if>
+            <if test="productid != null  and productid != ''">PRODUCTID = #{productid},</if>
+            <if test="standard != null  and standard != ''">STANDARD = #{standard},</if>
+            <if test="cnt != null ">CNT = #{cnt},</if>
+            <if test="unit != null ">UNIT = #{unit},</if>
+            <if test="price != null ">PRICE = #{price},</if>
+            <if test="amount != null ">AMOUNT = #{amount},</if>
+            <if test="quality != null  and quality != ''">QUALITY = #{quality},</if>
+            <if test="perform != null  and perform != ''">PERFORM = #{perform},</if>
+            <if test="confirm != null  and confirm != ''">CONFIRM = #{confirm},</if>
+            <if test="payterm != null  and payterm != ''">PAYTERM = #{payterm},</if>
+            <if test="legal1 != null  and legal1 != ''">LEGAL1 = #{legal1},</if>
+            <if test="client != null  and client != ''">CLIENT = #{client},</if>
+            <if test="bankname1 != null  and bankname1 != ''">BANKNAME1 = #{bankname1},</if>
+            <if test="phone1 != null  and phone1 != ''">PHONE1 = #{phone1},</if>
+            <if test="fax1 != null  and fax1 != ''">FAX1 = #{fax1},</if>
+            <if test="account1 != null  and account1 != ''">ACCOUNT1 = #{account1},</if>
+            <if test="taxcode1 != null  and taxcode1 != ''">TAXCODE1 = #{taxcode1},</if>
+            <if test="zipcode1 != null  and zipcode1 != ''">ZIPCODE1 = #{zipcode1},</if>
+            <if test="legal2 != null  and legal2 != ''">LEGAL2 = #{legal2},</if>
+            <if test="column32 != null  and column32 != ''">COLUMN_32 = #{column32},</if>
+            <if test="bankname2 != null  and bankname2 != ''">BANKNAME2 = #{bankname2},</if>
+            <if test="phone2 != null  and phone2 != ''">PHONE2 = #{phone2},</if>
+            <if test="fax2 != null  and fax2 != ''">FAX2 = #{fax2},</if>
+            <if test="account2 != null  and account2 != ''">ACCOUNT2 = #{account2},</if>
+            <if test="taxcode2 != null  and taxcode2 != ''">TAXCODE2 = #{taxcode2},</if>
+            <if test="zipcode2 != null  and zipcode2 != ''">ZIPCODE2 = #{zipcode2},</if>
+            <if test="other != null  and other != ''">OTHER = #{other},</if>
+            <if test="filename != null  and filename != ''">FILENAME = #{filename},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="recode != null  and recode != ''">RECODE = #{recode},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteContractById" parameterType="Long">
+        delete from tbl_contract where ID = #{id}
+    </delete>
+
+    <delete id="deleteContractByIds" parameterType="String">
+        delete from tbl_contract where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

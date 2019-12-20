@@ -1,0 +1,402 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+    <th:block th:include="include :: header('订单信息列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<table width="100%" height="80%" border="1">
+				<tr height="20%" widht="100%" align="center">
+					<td width="100%">
+						<table border="0" height="100%" width="100%">
+							<tr height="100%">
+								<td width="30%" align="center">
+									<table border="0" align="center" width="100%" height="100%">
+										<tr height="25%">
+											<td width="100%"><label class="col-sm-5 control-label">合同号：</label>
+												<p class="col-sm-5 control-label" id="contractid"
+													th:utext="${order.contractid}"></p></td>
+										</tr>
+										<tr height="25%">
+											<td width="100%"><label class="col-sm-5 control-label">生产订单号：</label>
+												<p class="col-sm-5 control-label" id="orderid"
+													th:utext="${order.pdod}"></p></td>
+										</tr>
+									</table>					
+								</td>
+								<td width="70%">
+									<table height="100%" width="100%" border="0">
+										<tr height="50%" width="100%">
+											<td align="center" th:each="loglist : ${logList}">
+												<div th:switch="${loglist.optype}">
+													<p th:case="1">
+														<img src="/img/orderlog/add.png" width="60px" height="60px" border="0">
+													</p>
+													<p th:case="2">
+														<img src="/img/orderlog/submit.png" width="60px" height="60px" border="0">
+													</p>
+													<p th:case="3">
+														<img src="/img/orderlog/audit.png" width="60px" height="60px" border="0">
+													</p>
+													<p th:case="4">
+														<img src="/img/orderlog/back.png" width="60px" height="60px" border="0">
+													</p>
+													<p th:case="5">
+														<img src="/img/orderlog/send.png" width="60px" height="60px" border="0">
+													</p>
+												</div>
+											</td>
+										</tr>
+										<tr height="50%" width="100%">
+											<td align="center" th:each="loglist : ${logList}">
+												<div th:utext="${loglist.userName}"></div>
+												<div th:utext="${loglist.deptName}"></div>
+												<div th:switch="${loglist.optype}">
+													<p th:case="1">新建</p>
+													<p th:case="2">申请</p>
+													<p th:case="3">审核</p>
+													<p th:case="4">退审</p>
+													<p th:case="5">派单</p>
+												</div>
+												<div th:utext="${loglist.remark}"></div>
+											</td>
+										</tr>
+										<!-- 
+										<tr>
+											<td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
+											<td width="20%" align="center">
+											</td>
+											<td width="20%" align="center"></td>
+											<td width="20%" align="center"><img
+												src="/img/orderlog/back.png" width="60px" height="60px"
+												border="0"></td>
+											<td width="20%" align="center"><img
+												src="/img/orderlog/audit.png" width="60px" height="60px"
+												border="0"></td>
+											<td width="20%" align="center"><img
+												src="/img/orderlog/send.png" width="60px" height="60px"
+												border="0"></td>
+										</tr>
+										<tr>
+											<td width="20%" align="center"><a href="#"
+												class="btn btn-lg red" id="new"> <span
+													class="fa fa-edit"></span>新建
+											</a></td>
+											<td width="20%" align="center"><a href="#"
+												class="btn btn-lg red" id="new"> <span
+													class="fa fa-edit"></span>申请
+											</a></td>
+											<td width="20%" align="center"><a href="#"
+												class="btn btn-lg red" id="new"> <span
+													class="fa fa-edit"></span>退审
+											</a></td>
+											<td width="20%" align="center"><a href="#"
+												class="btn btn-lg red" id="new"> <span
+													class="fa fa-edit"></span>审核
+											</a></td>
+											<td width="20%" align="center"><a href="#"
+												class="btn btn-lg red" id="new"> <span
+													class="fa fa-edit"></span>派单
+											</a></td>
+										</tr>
+										 -->
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr height="20%" widht="100%" align="center">
+					<td>
+						<table height="100%" width="100%" border="0">
+							<tr height="10%">
+								<td width="33%">&nbsp;</td>
+								<td align="center" width="33%"><span><b>订单详细信息</b></span></td>
+								<td width="33%">&nbsp;</td>
+							</tr>
+							<tr height="30%">
+								<td width="33%">
+									<form class="form-horizontal m" th:object="${order}">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">合同号：</label>
+											<div class="col-sm-8">
+												<label class="control-label" th:text="*{contractid}"></label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-4 control-label">客户名称：</label>
+											<div class="col-sm-8">
+												<label class="control-label" th:text="*{fullname}"></label>
+											</div>
+										</div>
+									</form>
+								</td>
+								<td widht="33%">
+									<form class="form-horizontal m" th:object="${order}">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">生产单号：</label>
+											<div class="col-sm-8">
+												<label class="control-label" th:text="*{pdod}"></label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-4 control-label">产品品名：</label>
+											<div class="col-sm-8">
+												<label class="control-label" th:text="*{name}"></label>
+											</div>
+										</div>
+									</form>
+								</td>
+								<td widht="33%">
+									<form class="form-horizontal m" th:object="${order}">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">人民币总价：</label>
+											<div class="col-sm-8">
+												<label class="control-label" th:text="*{rmbamount}"></label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-4 control-label">交货日期：</label>
+											<div class="col-sm-8">
+												<label class="control-label" th:text="${#dates.format(order.optime, 'yyyy-MM-dd')}"></label>
+											</div>
+										</div>
+									</form>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+        var prefix = ctx + "produce/orderlog"
+
+        $(function() {
+            var options = {
+                url: prefix + "/loglist/" + $("#orderod").val(),
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                search : false, // 是否显示搜索框功能
+                modalName: "订单流水",
+                columns: [
+				{
+					field : 'operId', 
+					title : '日志主键' 
+				},
+				{
+					field : 'orderid', 
+					title : '订单号' 
+				},
+				{
+					field : 'type', 
+					title : '订单类别' 
+				},
+				{
+					field : 'fullname', 
+					title : '客户名称' 
+				},
+				{
+					field : 'pdname', 
+					title : '产品品名' 
+				},
+				{
+					field : 'signdate', 
+					title : '交付日期' 
+				},
+				{
+					field : 'userName', 
+					title : '登录账号' 
+				},
+				{
+					field : 'deptName', 
+					title : '部门名称' 
+				},
+				{
+					field : 'optype',
+					title : '订单状态',
+					formatter: function(value, row, index) {
+						 var a = _ajax_dict('tbl_status',value); 
+						 return a;
+					 }
+				},
+				{
+					field : 'operTime', 
+					title : '操作时间' 
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				}]
+            };
+            $.table.init(options);
+        });
+        
+        $(function() {            
+          var columns = [
+				{
+					field : 'id', 
+					title : '序号' ,
+					visible : false
+				},
+	               {
+                    field : 'pdod', 
+                    title : '订单号'
+                },
+                {
+                    field : 'contractid', 
+                    title : '合同号',
+                    formatter: function(value, row, index) {
+                    	return '<a onclick="showContractDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'optime', 
+                    title : '合同日期'
+                },
+//                 {
+//                     field : 'saleod', 
+//                     title : '销售订单号'
+//                 },
+//                 {
+//                     field : 'orderClass', 
+//                     title : '订单种类'
+//                 },
+                {
+                    field : 'type', 
+                    title : '订单类型',
+                    formatter: function(value, row, index) {
+                        //alert(row.status);
+        				var datas = [[${@dict.getType('tbl_order_type')}]];
+                		return $.table.selectDictLabel(datas, row.type);
+                    }
+                },
+                {
+                    field : 'fullname', 
+                    title : '客户名称'
+                },
+                {
+                    field : 'materialcode', 
+                    title : '产品编码',
+                    formatter: function(value, row, index) {
+                    	return '<a onclick="showProductDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'name', 
+                    title : '产品品名'
+                },
+                {
+                    field : 'qualityid', 
+                    title : '质量ID',
+                    formatter: function(value, row, index) {
+                        return '<a onclick="showCpqsDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'tagid', 
+                    title : '标签ID',
+                    formatter: function(value, row, index) {
+                        return '<a onclick="showTagDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+//                 {
+//                     field : 'quality', 
+//                     title : '质量要求'
+//                 },
+                {
+                    field : 'line', 
+                    title : '生产线'
+                },
+//                 {
+//                     field : 'price', 
+//                     title : '单价(元)'
+//                 },
+//                 {
+//                     field : 'totalcnt', 
+//                     title : '包数(包)'
+//                 },
+//                 {
+//                     field : 'weight', 
+//                     title : '订单重量KG'
+//                 },
+//                 {
+//                     field : 'rmbamount', 
+//                     title : '人民币总价(元)'
+//                 },
+                {
+                    field : 'sendtime', 
+                    title : '交货日期'
+                },
+                {
+                    field : 'status', 
+                    title : '订单状态',
+                    formatter: function(value, row, index) {
+                        //alert(row.status);
+        				var datas = [[${@dict.getType('tbl_order_status')}]];
+                		return $.table.selectDictLabel(datas, row.status);
+                    }
+                }];
+            
+          myBootstraptable(columns,prefix + "/orderlist/"+$("#orderid").val());
+        });
+        
+        function myBootstraptable(_columns, _url) {
+    		$('#my-bootstraptable').bootstrapTable({
+    			method : 'get', // 请求方式（*）
+    			dataType : "json", // 返回格式（*）
+    			url : _url, // 请求后台的URL（*）
+    			pagination : true, // 是否显示分页（*）
+    			pageSize : 10, // 每页的记录行数（*）
+    			pageNumber : 1, // 初始化加载第一页，默认第一页
+    			pageList : [ 10, 25, 50 ], // 可供选择的每页的行数（*）
+    			search : false, // 是否显示搜索框功能
+    			singleSelect : false, // 是否禁止多选
+    			iconSize : 'outline', // 图标大小：undefined默认的按钮尺寸 xs超小按钮sm小按钮lg大按钮
+    			toolbar : '#tableToolbar', // 指定工作栏
+    			sidePagination : "server", // 启用服务端分页
+    			showRefresh : true, // 是否显示刷新按钮
+    			showColumns : true, // 是否显示隐藏某列下拉框
+    			showToggle : true, // 是否显示详细视图和列表视图的切换按钮
+    			cache : false, // 是否使用缓存
+    			showExport : true, // 是否支持导出文件
+    			queryParams : function(params) {
+    				return {
+    					// 传递参数查询参数
+    					pageSize : params.limit,
+    					pageNum : params.offset / params.limit + 1,
+    					searchValue : params.search,
+    					orderByColumn : params.sort,
+    					isAsc : params.order
+    				};
+    			},
+    			columns : _columns
+    		});
+    	}
+        
+        $(document).ready(function(){
+        	var status = $('#orderStatus').val();
+        	if(status == 0){
+        		$('#new').addClass("active");	
+        	}else if (status == 1){
+        		$('#apply').addClass("active");	        		
+        	}else if (status == 2){
+        		$('#audit').addClass("active");	        		
+        	}else if (status == 3){
+        		$('#unaudit').addClass("active");	        		
+        	}else if (status == 4){
+        		$('#dispatch').addClass("active");	        		
+        	}
+        })
+        
+    </script>
+</body>
+</html>

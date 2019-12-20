@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('信息详情')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-ammeter-detail" th:object="${ammeter}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备编号：</label>
+                <div class="col-sm-8">
+                    <input name="devid" th:field="*{devid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备名称：</label>
+                <div class="col-sm-8">
+                    <input name="devname" th:field="*{devname}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">采集时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="gentime" th:value="${#dates.format(ammeter.gentime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧A相电压：</label>
+                <div class="col-sm-8">
+                    <input name="avol1" th:field="*{avol1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧B相电压：</label>
+                <div class="col-sm-8">
+                    <input name="bvol1" th:field="*{bvol1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧C相电压：</label>
+                <div class="col-sm-8">
+                    <input name="cvol1" th:field="*{cvol1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧AB相电压：</label>
+                <div class="col-sm-8">
+                    <input name="abvol1" th:field="*{abvol1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧BC相电压：</label>
+                <div class="col-sm-8">
+                    <input name="bcvol1" th:field="*{bcvol1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧CA相电压：</label>
+                <div class="col-sm-8">
+                    <input name="cavol1" th:field="*{cavol1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧A相电流：</label>
+                <div class="col-sm-8">
+                    <input name="aflow1" th:field="*{aflow1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧B相电流：</label>
+                <div class="col-sm-8">
+                    <input name="bflow1" th:field="*{bflow1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧C相电流：</label>
+                <div class="col-sm-8">
+                    <input name="cflow1" th:field="*{cflow1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧A相有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="apower1" th:field="*{apower1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧B相有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="bpower1" th:field="*{bpower1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧C相有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="cpower1" th:field="*{cpower1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧总有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="totalpower1" th:field="*{totalpower1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧A总有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="atotalpower1" th:field="*{atotalpower1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧B总有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="btotalpower1" th:field="*{btotalpower1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧C总有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="ctotalpower1" th:field="*{ctotalpower1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧总无功功率：</label>
+                <div class="col-sm-8">
+                    <input name="totalwattless1" th:field="*{totalwattless1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧总视在功率：</label>
+                <div class="col-sm-8">
+                    <input name="appliedpower1" th:field="*{appliedpower1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧总功率因数：</label>
+                <div class="col-sm-8">
+                    <input name="powerfactor1" th:field="*{powerfactor1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">一次侧频率：</label>
+                <div class="col-sm-8">
+                    <input name="freqency1" th:field="*{freqency1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">A相电压：</label>
+                <div class="col-sm-8">
+                    <input name="avol" th:field="*{avol}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">B相电压：</label>
+                <div class="col-sm-8">
+                    <input name="bvol" th:field="*{bvol}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">C相电压：</label>
+                <div class="col-sm-8">
+                    <input name="cvol" th:field="*{cvol}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">AB线电压：</label>
+                <div class="col-sm-8">
+                    <input name="abvol" th:field="*{abvol}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">BC线电压：</label>
+                <div class="col-sm-8">
+                    <input name="bcvol" th:field="*{bcvol}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">CA线电压：</label>
+                <div class="col-sm-8">
+                    <input name="cavol" th:field="*{cavol}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">A相电流：</label>
+                <div class="col-sm-8">
+                    <input name="aflow" th:field="*{aflow}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">B相电流：</label>
+                <div class="col-sm-8">
+                    <input name="bflow" th:field="*{bflow}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">C相电流：</label>
+                <div class="col-sm-8">
+                    <input name="cflow" th:field="*{cflow}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">A相有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="apower" th:field="*{apower}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">B相有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="bpower" th:field="*{bpower}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">C相有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="cpower" th:field="*{cpower}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">总有功功率：</label>
+                <div class="col-sm-8">
+                    <input name="totalpower" th:field="*{totalpower}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">A相无功功率：</label>
+                <div class="col-sm-8">
+                    <input name="atotalpower" th:field="*{atotalpower}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">B相无功功率：</label>
+                <div class="col-sm-8">
+                    <input name="btotalpower" th:field="*{btotalpower}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">C相无功功率：</label>
+                <div class="col-sm-8">
+                    <input name="ctotalpower" th:field="*{ctotalpower}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">总无功功率：</label>
+                <div class="col-sm-8">
+                    <input name="totalwattless" th:field="*{totalwattless}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">A相视在功率：</label>
+                <div class="col-sm-8">
+                    <input name="appliedpowera1" th:field="*{appliedpowera1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">A相视在功率：</label>
+                <div class="col-sm-8">
+                    <input name="appliedpowera2" th:field="*{appliedpowera2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">A相视在功率：</label>
+                <div class="col-sm-8">
+                    <input name="appliedpowera3" th:field="*{appliedpowera3}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">总视在功率：</label>
+                <div class="col-sm-8">
+                    <input name="totalappliedpower" th:field="*{totalappliedpower}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">A相功率因素：</label>
+                <div class="col-sm-8">
+                    <input name="apowerfactor" th:field="*{apowerfactor}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">B相功率因素：</label>
+                <div class="col-sm-8">
+                    <input name="bpowerfactor" th:field="*{bpowerfactor}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">C相功率因素：</label>
+                <div class="col-sm-8">
+                    <input name="cpowerfactor" th:field="*{cpowerfactor}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">总功率因素：</label>
+                <div class="col-sm-8">
+                    <input name="powerfactor" th:field="*{powerfactor}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">频率：</label>
+                <div class="col-sm-8">
+                    <input name="freqency" th:field="*{freqency}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">AB相电压间相位：</label>
+                <div class="col-sm-8">
+                    <input name="abphase" th:field="*{abphase}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">BC相电压间相位：</label>
+                <div class="col-sm-8">
+                    <input name="bcphase" th:field="*{bcphase}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">CA相电压间相位：</label>
+                <div class="col-sm-8">
+                    <input name="caphase" th:field="*{caphase}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当前总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="currentenergy" th:field="*{currentenergy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当前正向总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="directenergy" th:field="*{directenergy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当前反向总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="reverseenergy" th:field="*{reverseenergy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当前总无功电能：</label>
+                <div class="col-sm-8">
+                    <input name="inactivepoer" th:field="*{inactivepoer}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当前正向总无功电能：</label>
+                <div class="col-sm-8">
+                    <input name="directinactive" th:field="*{directinactive}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当前反向总无功电能：</label>
+                <div class="col-sm-8">
+                    <input name="reverseinactive" th:field="*{reverseinactive}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上1月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass1" th:field="*{powerpass1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上2月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass2" th:field="*{powerpass2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上3月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass3" th:field="*{powerpass3}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上4月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass4" th:field="*{powerpass4}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上5月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass5" th:field="*{powerpass5}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上6月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass6" th:field="*{powerpass6}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上7月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass7" th:field="*{powerpass7}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上8月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass8" th:field="*{powerpass8}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上9月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass9" th:field="*{powerpass9}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上10月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass10" th:field="*{powerpass10}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上11月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass11" th:field="*{powerpass11}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上12月总有功电能：</label>
+                <div class="col-sm-8">
+                    <input name="powerpass12" th:field="*{powerpass12}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+		$(document).ready(
+			function() {
+				$('input,select,textarea,span',
+						$('form[id="form-ammeter-detail"]')).attr(
+						'readonly', true);
+			}
+		);
+        var prefix = ctx + "module/ammeter";
+        $("#form-ammeter-detail").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-ammeter-detail').serialize());
+            }
+        }
+
+        $("input[name='gentime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

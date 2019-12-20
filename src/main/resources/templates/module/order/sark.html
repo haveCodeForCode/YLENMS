@@ -1,0 +1,1177 @@
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="col-sm-12 container-div">
+	<div class="row">
+		<div class="col-sm-6 select-info">
+			<label class="h4">生产订单</label>
+			<form id="operlog-form">
+				<div class="select-list gd">
+					<ul>
+						<li>客户名称：<input type="text" name="fullname" />
+						</li>
+						<li>产品品名：<input type="text" name="name" />
+						</li>
+						<!--						<li>订单状态：<select name="status" th:with="type=${@dictService.selectDictData('tbl_order_status')}">
+                                                    <option value="">所有</option>
+                                                    <option th:each="e : ${type}" th:text="${e['dictLabel']}" th:value="${e['dictValue']}"></option>
+                                                </select>
+                                                </li>-->
+						<!-- 							<li><a class="btn btn-primary btn-rounded btn-sm"
+                            onclick="$.table.search($('form').attr('id'))"><i
+                                class="fa fa-search"></i>&nbsp;搜索</a></li> -->
+						<li style="display:none;">
+							<input type="text" name="status" value="4"/>
+							<input type="text" name="type" value="2"/>
+						</li>
+						<div class="pull-right">
+							<li><a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search($('form').attr('id'))"><i class="fa fa-search" id="searchByOrder"></i>查询订单</a></li>
+							<li><a class="btn btn-info btn-rounded btn-sm" onclick="calculate()">装柜计算</a></li>
+						</div>
+					</ul>
+				</div>
+			</form>
+		</div>
+		<div class="col-sm-12 select-info" style="height:300px;">
+			<!-- 查询所需数据 -->
+			<table id="bootstrap-table" class="bootstrap-table bottom col-sm-12" data-mobile-responsive="true" data-height="300">
+			</table>
+		</div>
+		<div class="col-sm-6 container-div">
+			<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+				<form class="form-horizontal m" id="form-cutstoredetail-detail" target="hidden_frame">
+					<input id="id" name="id"  type="hidden">
+					<input id="fullname" name="fullname" class="form-control" type="hidden">
+					<input id="pallet" name="pallet" class="form-control" type="hidden">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">订单重量kg：</label>
+						<div class="col-sm-8">
+							<input id="weight" name="weight" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">卷长m：</label>
+						<div class="col-sm-8">
+							<input id="rolength" name="rolength" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">卷径cm：</label>
+						<div class="col-sm-8">
+							<input id="bagdia" name="bagdia" type="text"
+								   class="form-control">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">幅宽cm：</label>
+						<div class="col-sm-8">
+							<input id="sumwidth" name="sumwidth" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">货柜类型：</label>
+						<div class="col-sm-8">
+							<input id="containerName" name="containerName" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">货柜最大长度、宽度、高度m：</label>
+						<div class="col-sm-8">
+							<input id="maxloadlength" name="maxloadlength" class="form-control" type="text">
+							<input id="maxloadwidth" name="maxloadwidth" class="form-control" type="text">
+							<input id="maxloadheight" name="maxloadheight" class="form-control" type="text">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label">托盘高度cm：</label>
+						<div class="col-sm-8">
+							<input id="palletheight" name="palletheight" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">垛数：</label>
+						<div class="col-sm-8">
+							<input id="stacks" name="stacks" class="form-control" type="text">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label">分切数：</label>
+						<div class="col-sm-8">
+							<input id="splitnum" name="splitnum" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">克重：</label>
+						<div class="col-sm-8">
+							<input id="kweight" name="kweight" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<h4>计算结果：</h4>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">每包最大盘数：</label>
+						<div class="col-sm-8">
+							<input id="maxrollnum" name="maxrollnum" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">模拟卷数：</label>
+						<div class="col-sm-8">
+							<input id="demovol" name="demovol" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">实际重量kg：</label>
+						<div class="col-sm-8">
+							<input id="actualweight" name="actualweight" readonly="readonly" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">总盘数：</label>
+						<div class="col-sm-8">
+							<input id="sumroll" name="sumroll" readonly="readonly" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">装柜方法：</label>
+						<div class="col-sm-8">
+							<input id="actualpack" name="actualpack" readonly="readonly" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group" style="display: none">
+						<label class="col-sm-3 control-label">生产线号：</label>
+						<div class="col-sm-8">
+							<input id="line" name="line" readonly="readonly" class="form-control" type="text">
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<div class="form-control-static col-sm-offset-9">
+							<button class="btn btn-info" type="button" onclick="packFnc();">模拟包装方式</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="col-sm-6 container-div">
+			<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+				<form class="form-horizontal m" id="form-containerloadcal-add">
+					<!--										<div class="form-group">
+                                                                <label class="col-sm-3 control-label">装柜形式：</label>
+                                                                <div class="col-sm-8">
+                                                                    <input id="loadmode" name="loadmode" class="form-control" type="text">
+                                                                </div>
+                                                            </div>-->
+					<div class="form-group">
+						<label class="col-sm-3 control-label">装柜数量：</label>
+						<div class="col-sm-8">
+							<input id="modeno" name="modeno" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">产品品名：</label>
+						<div class="col-sm-8">
+							<input id="pdname" name="pdname" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">1层每包盘数：</label>
+						<div class="col-sm-4">
+							<input id="f1panperbale" name="f1panperbale" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')">
+						</div>
+						<label class="col-sm-2 control-label">单层包数：</label>
+						<div class="col-sm-4">
+							<input id="f1baleno" name="f1baleno" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">2层每包盘数：</label>
+						<div class="col-sm-4">
+							<input id="f2panperbale" name="f2panperbale" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')">
+						</div>
+						<label class="col-sm-2 control-label">总生产卷数：</label>
+						<div class="col-sm-4">
+							<input id="volume" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">3层每包盘数：</label>
+						<div class="col-sm-4">
+							<input id="f3panperbale" name="f3panperbale" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')">
+						</div>
+						<label class="col-sm-2 control-label">实际生产重量：</label>
+						<div class="col-sm-4">
+							<input id="realWeight" class="form-control" type="text">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">4层每包盘数：</label>
+						<div class="col-sm-4">
+							<input id="f4panperbale" name="f4panperbale" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')">
+						</div>
+						<label class="col-sm-2 control-label">包装方式：</label>
+						<div class="col-sm-4">
+							<input id="sumpack" name="loadmode" class="form-control" type="text">
+							<input id="sumpackCount" class="form-control" type="hidden">
+						</div>
+					</div>
+					<div class="form-group">
+
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">单垛盘数：</label>
+						<div class="col-sm-8">
+							<input id="singlestackpanno" name="singlestackpanno" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">单柜卷数：</label>
+						<div class="col-sm-8">
+							<input id="singleconreelno" name="singleconreelno" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">单柜重量kg：</label>
+						<div class="col-sm-8">
+							<input id="singleconweight" name="singleconweight" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">库存查询</label>
+						<div class="col-sm-8">
+							<input class="form-control" type="button" readonly="readonly" onclick="cutstore(this)">
+						</div>
+					</div>
+					<!--					<div class="form-group">
+                                            <label class="col-sm-2 control-label">库存2层每包盘数：</label>
+                                            <div class="col-sm-4">
+                                                <input id="sf2panperbale" name="sf2panperbale" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')">
+                                            </div>
+                                            <label class="col-sm-2 control-label">库存2层包数：</label>
+                                            <div class="col-sm-4">
+                                                <input id="sf2baleno" name="sf2baleno" class="form-control" type="text" readonly="readonly" onclick="cutstore(this)">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">库存3层每包盘数：</label>
+                                            <div class="col-sm-4">
+                                                <input id="sf3panperbale" name="sf3panperbale" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')">
+                                            </div>
+                                            <label class="col-sm-2 control-label">库存3层包数：</label>
+                                            <div class="col-sm-4">
+                                                <input id="sf3baleno" name="sf3baleno" class="form-control" type="text" readonly="readonly" onclick="cutstore(this)">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">库存4层每包盘数：</label>
+                                            <div class="col-sm-4">
+                                                <input id="sf4panperbale" name="sf4panperbale" class="form-control" type="text" oninput="value=value.replace(/[^\d]/g,'')">
+                                            </div>
+                                            <label class="col-sm-2 control-label">库存4层包数：</label>
+                                            <div class="col-sm-4">
+                                                <input id="sf4baleno" name="sf4baleno" class="form-control" type="text" readonly="readonly" onclick="cutstore(this)">
+                                            </div>
+                                        </div>-->
+					<div class="form-group">
+						<label class="col-sm-3 control-label">核减库存重量kg：</label>
+						<div class="col-sm-8">
+							<input id="cutweight" name="cutweight" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">备注：</label>
+						<div class="col-sm-8">
+							<input id="remark" name="remark" class="form-control" type="text">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">生产订单号：</label>
+						<div class="col-sm-8">
+							<input id="pdorderid" name="pdorderid" class="form-control" type="text" readonly="readonly">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="form-control-static col-sm-offset-9">
+							<!--							<button type="submit" class="btn btn-primary">保存装柜方法</button>-->
+							<button type="submit" class="btn btn-info">保存并生成调度单</button>
+
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<iframe name='hidden_frame' id="hidden_frame" style="display:none"></iframe>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var	pdname,pdwidth;
+
+    var prefix = ctx + "module/order"
+
+    function queryParams(params) {
+        var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+            // limit: params.limit,   //页面大小
+            offset: params.offset,  //页码
+            pageSize:this.pageSize,
+            pageNumber:this.pageNumber,
+            projectId: $("#projectId").val(),
+            requirement_Id:$("#requirement_Id").val(),
+            length: 6
+        };
+        return temp;
+    };
+
+    $(function() {
+        var options = {
+            url: prefix + "/sarklist",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "订单",
+            queryParams :queryParams,
+            search:false,
+            columns: [
+                {
+                    checkbox: true,
+                },
+                {
+                    field : 'id',
+                    title : '序号' ,
+                    visible : false
+                },
+                {
+                    field : 'contractid',
+                    title : '合同号' ,
+                    visible : false
+                },
+                {
+                    field : 'optime',
+                    title : '合同日期' ,
+                    visible : false
+                },
+                {
+                    field : 'saleod',
+                    title : '销售订单号' ,
+                    visible : false
+                },
+                {
+                    field : 'pdod',
+                    title : '生产订单号'
+                },
+                {
+                    field : 'orderClass',
+                    title : '订单类型(销售生产)' ,
+                    visible : false
+                },
+                {
+                    field : 'type',
+                    title : '国内订单、出口订单' ,
+                    visible : false
+                },
+                {
+                    field : 'fullname',
+                    title : '客户名称'
+                },
+                {
+                    field : 'name',
+                    title : '产品品名'
+                },
+                {
+                    field : 'gsm',
+                    title : '克重g'
+                },
+                {
+                    field : 'width',
+                    title : '幅宽mm'
+                },
+                {
+                    field : 'rolength',
+                    title : '卷长m' ,
+                    visible : false
+                },
+                {
+                    field : 'bagdia',
+                    title : '卷径cm' ,
+                    visible : false
+                },
+                {
+                    field : 'qualityid',
+                    title : '质量ID' ,
+                    visible : false
+                },
+                {
+                    field : 'containerid',
+                    title : '货柜id' ,
+                    visible : false
+                },
+                {
+                    field : 'palletid',
+                    title : '托盘id' ,
+                    visible : false
+                },
+                {
+                    field : 'plynum',
+                    title : '缠绕膜层数' ,
+                    visible : false
+                },
+                {
+                    field : 'tubetype',
+                    title : '纸管类型' ,
+                    visible : false
+                },
+                {
+                    field : 'tagid',
+                    title : '永信默认、客户指定' ,
+                    visible : false
+                },
+                {
+                    field : 'quality',
+                    title : '质量要求' ,
+                    visible : false
+                },
+                {
+                    field : 'maxrollnum',
+                    title : '每包最大盘数' ,
+                    visible : false
+                },
+                {
+                    field : 'packing',
+                    title : '包装形式' ,
+                    visible : false
+                },
+                {
+                    field : 'bagcolor',
+                    title : '编织袋颜色' ,
+                    visible : false
+                },
+                {
+                    field : 'pallet',
+                    title : '是否带托盘' ,
+                    visible : false
+                },
+                {
+                    field : 'line',
+                    title : '生产线',
+                    visible : false
+                },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述'
+                },
+                {
+                    field : 'price',
+                    title : '单价(元)' ,
+                    visible : false
+                },
+                {
+                    field : 'exchrate',
+                    title : '汇率' ,
+                    visible : false
+                },
+                {
+                    field : 'totalcnt',
+                    title : '包数(包)'
+                },
+                {
+                    field : 'weight',
+                    title : '订单重量kg'
+                },
+                {
+                    field : 'priceterm',
+                    title : '计价方式' ,
+                    visible : false
+                },
+                {
+                    field : 'doamount',
+                    title : '美元总价($)' ,
+                    visible : false
+                },
+                {
+                    field : 'rmbamount',
+                    title : '人民币总价(元)' ,
+                    visible : false
+                },
+                {
+                    field : 'payment',
+                    title : '付款方式' ,
+                    visible : false
+                },
+                {
+                    field : 'prepayratio',
+                    title : '预付款比例' ,
+                    visible : false
+                },
+                {
+                    field : 'prepay',
+                    title : '预付款金额' ,
+                    visible : false
+                },
+                {
+                    field : 'sendtime',
+                    title : '交货日期' ,
+                    visible : false
+                },
+                {
+                    field : 'selfdli',
+                    title : '是否自提' ,
+                    visible : false
+                },
+                {
+                    field : 'shipcorp',
+                    title : '船运公司' ,
+                    visible : false
+                },
+                {
+                    field : 'shipcost',
+                    title : '船运费用' ,
+                    visible : false
+                },
+                {
+                    field : 'transcorp',
+                    title : '货运公司' ,
+                    visible : false
+                },
+                {
+                    field : 'transtartpl',
+                    title : '货运始发地' ,
+                    visible : false
+                },
+                {
+                    field : 'transendpl',
+                    title : '货运目的地' ,
+                    visible : false
+                },
+                {
+                    field : 'transdis',
+                    title : '物流里程暂估' ,
+                    visible : false
+                },
+                {
+                    field : 'transprice',
+                    title : '物流单价暂估' ,
+                    visible : false
+                },
+                {
+                    field : 'transcost',
+                    title : '物流费用暂估' ,
+                    visible : false
+                },
+                {
+                    field : 'dliplace',
+                    title : '提货地点' ,
+                    visible : false
+                },
+                {
+                    field : 'loadport',
+                    title : '装船港口' ,
+                    visible : false
+                },
+                {
+                    field : 'destport',
+                    title : '到货港口' ,
+                    visible : false
+                },
+                {
+                    field : 'padder',
+                    title : '是否轧车' ,
+                    visible : false
+                },
+                {
+                    field : 'material',
+                    title : '指定原料' ,
+                    visible : false
+                },
+                {
+                    field : 'status',
+                    title : '订单状态' ,
+                    visible : true,
+                    formatter: function(value, row, index) {
+                        var a = _ajax_dict('tbl_order_status',value);
+                        return a;
+                    }
+                },
+                {
+                    field : 'auditname',
+                    title : '审核人' ,
+                    visible : false
+                },
+                {
+                    field : 'audittime',
+                    title : '审核时间' ,
+                    visible : false
+                },
+                {
+                    field : 'documentary',
+                    title : '是否跟单' ,
+                    visible : false
+                },
+                {
+                    field : 'docdate',
+                    title : '跟单日期' ,
+                    visible : false
+                },
+                {
+                    field : 'deliverytime',
+                    title : '发货日期' ,
+                    visible : true
+                },
+                {
+                    field : 'salesman',
+                    title : '业务员' ,
+                    visible : false
+                },
+                {
+                    field : 'signtime',
+                    title : '签订日期' ,
+                    visible : false
+                },
+                {
+                    field : 'inputname',
+                    title : '录入人' ,
+                    visible : false
+                },
+                {
+                    field : 'inputtime',
+                    title : '录入时间' ,
+                    visible : false
+                },
+                {
+                    field : 'delFlag',
+                    title : '启用状态' ,
+                    visible : false
+                },
+                {
+                    field : 'ression',
+                    title : '退审理由' ,
+                    visible : false
+                },
+                {
+                    field : 'container',
+                    title : '是否装柜' ,
+                    visible : false
+                },
+                {
+                    field : 'containercom',
+                    title : '是否拼柜' ,
+                    visible : false
+                },
+                {
+                    field : 'conpdod',
+                    title : '拼柜生产订单号' ,
+                    visible : false
+                },
+                {
+                    field : 'conno',
+                    title : '装柜数' ,
+                    visible : false
+                },
+                {
+                    field : 'wdcom',
+                    title : '是否拼幅宽' ,
+                    visible : false
+                },
+                {
+                    field : 'wdpdod',
+                    title : '拼幅宽生产订单号' ,
+                    visible : false
+                },
+                {
+                    field : 'remark',
+                    title : '备注' ,
+                    visible : false
+                },
+                {
+                    field : 'transflag',
+                    title : '传输标志' ,
+                    visible : false
+                }]
+        };
+        _bootstrap_show(options, "bootstrap-table");
+        //搜索条件赋值
+        var	param={};
+        param["type"] = 2;//国外
+        param["status"] = 4;//下单
+        _bootstrap_search_tablename("#bootstrap-table",param);
+    });
+
+    $("#bootstrap-table").on('load-success.bs.table',function(data){
+        getTdValue();
+    });
+
+    //将已批准的数据改变背景颜色
+    function getTdValue(){
+        var tableId = document.getElementById("bootstrap-table");
+        if(tableId.rows[1].cells.length>1){
+            for(var i = 1;i < tableId.rows.length;i++) {
+                if(tableId.rows[i].cells[8].innerHTML.indexOf("已下单") != -1 ){
+                    //已下单
+                    tableId.rows[i].setAttribute("style","background: #bfbfff;");
+                }else if(tableId.rows[i].cells[8].innerHTML.indexOf("已核减") != -1 ){
+                    //已核减
+                    tableId.rows[i].setAttribute("style","background: #df90ff;");
+                }
+                else if(tableId.rows[i].cells[8].innerHTML.indexOf("已拼幅宽") != -1 ){
+                    //已拼幅宽
+                    tableId.rows[i].setAttribute("style","background: #d28476;");
+                }
+                else if(tableId.rows[i].cells[8].innerHTML.indexOf("已调度") != -1 ){
+                    //已调度
+                    tableId.rows[i].setAttribute("style","background: #edba34;");
+                }
+                else if(tableId.rows[i].cells[8].innerHTML.indexOf("已排产") != -1 ){
+                    //已排产
+                    tableId.rows[i].setAttribute("style","background: #00ff00;");
+                }
+                else if(tableId.rows[i].cells[8].innerHTML.indexOf("已撤单") != -1 ){
+                    //已撤单
+                    tableId.rows[i].setAttribute("style","background: #faf50b;");
+                }
+            }
+        }
+    }
+
+
+
+
+
+    //计算装柜数据
+    /*    function sark(row) {
+            $('#weight').val(row.weight);
+            $('#rolength').val(row.rolength);
+            $('#maxrollnum').val(row.maxrollnum);
+            $('#bagdia').val(row.bagdia);
+
+
+            var data = {'orderid': row.id};
+            var config = {
+                url: sarkprefix + '/sark',
+                type: 'get',
+                dataType: "json",
+                data: data,
+                async: false,
+                success: function (result) {
+                    $('#sumwidth').val(result.sumwidth);//总幅宽
+                    $('#maxloadheight').val(result.containerSize.maxloadheight);//货柜高
+                    $('#palletheight').val(result.palletSize.height);//托盘高
+                    $('#stacks').val(result.stacks);
+                }
+            };
+            $.ajax(config);
+        }*/
+
+
+    var cutweight = 0;
+    var sarkprefix = ctx + "module/containerloadcal";
+    function calculate(){
+        var weight = 0;
+        var pdname = '';
+        var rolength = 0;
+        var maxrollnum = 0;
+        var bagdia = 0;
+        var splitnum = 0;
+        var sumwidth = 0;
+        var maxloadheight = 0;
+        var maxloadlength = 0;
+        var maxloadwidth = 0;
+        var palletheight = 0;
+        var stacks = 0;
+        var gsm = 0;
+        var pdod = '';
+        var line = '';
+        var containerName = '';
+        var fullname = '';
+        var pallet = 0;
+        var success = true;
+
+        var ids = new Array();
+        var selected = $('#bootstrap-table').bootstrapTable('getSelections');
+        for(var i=0;i<selected.length;i++){
+            weight += selected[i].weight;
+            rolength += selected[i].rolength;
+            maxrollnum = selected[0].maxrollnum;
+            pallet = selected[0].pallet;
+            /*            if(i>0){
+                            if(selected[i].trim() != selected[i-1].trim()){
+                                success = false;
+                                return;
+                            }
+                        }*/
+            bagdia = selected[0].bagdia;
+            line = selected[0].line;
+            pdname += selected[0].name;
+            fullname += selected[0].fullname;
+            gsm += selected[i].gsm;
+            sumwidth += selected[i].width;
+            ids[i] = selected[i].id;
+            pdod += selected[i].pdod + ',';
+        }
+        if(success == false){
+            $.modal.alertWarning('产品品名需相同才可拼柜');
+            return;
+        }
+        $('#weight').val(weight);
+        $('#rolength').val(rolength);
+        $('#maxrollnum').val(maxrollnum);
+        $('#bagdia').val(bagdia);
+        $('#line').val(line);
+        $('#kweight').val(gsm);
+        $('#pdname').val(pdname);
+        $('#pdorderid').val(pdod.substring(0,pdod.length-1));
+        $('#fullname').val(fullname);
+
+
+        var data = {'ids':ids.join()};
+        var config = {
+            url : sarkprefix + '/sark',
+            type : 'get',
+            dataType : "json",
+            data : data,
+            async:false,
+            success : function(result) {
+                containerName += result[0].containerSize.name;
+                for(var i = 0;i<result.length;i++){
+                    var map = result[i];
+                    splitnum += map.splitnum;
+                    maxloadheight += map.containerSize.maxloadheight;
+                    maxloadlength += map.containerSize.maxloadlength;
+                    maxloadwidth += map.containerSize.maxloadwidth;
+                    palletheight += map.palletSize.height;
+                    cutweight += map.cutstore.cutweight;
+                    stacks += map.stacks;
+                    //splitnum += map.
+                }
+            }
+        };
+        $.ajax(config);
+        $('#sumwidth').val(sumwidth);//幅宽
+        splitnum = fomatFloat(splitnum,0);
+        $('#splitnum').val(splitnum);//分切数
+        $('#maxloadheight').val(maxloadheight);//货柜高
+        $('#maxloadwidth').val(maxloadwidth);//货柜宽
+        $('#maxloadlength').val(maxloadlength);//货柜长
+        $('#palletheight').val(palletheight);//托盘高
+        $('#pallet').val(pallet);//托盘高
+        //$('#stacks').val(stacks);//垛数
+        $('#containerName').val(containerName);//货柜别名
+        calculation();
+    }
+
+
+
+
+
+    function fomatFloat(src,pos){
+        return Math.round(src*Math.pow(10, pos))/Math.pow(10, pos);
+    }
+
+
+    var eachstacks = 0;
+    //根据记录表读取每层件数
+    function calculation(){
+        var bagdia = Number($('#bagdia').val());
+        var weight = Number($('#weight').val());
+        var containerName = $('#containerName').val();
+        var containerHeight = $('#maxloadheight').val();
+        var sumwidth = Number($('#sumwidth').val());
+        var maxrollnum = Number($('#maxrollnum').val());
+        var splitnum = Number($('#splitnum').val());
+        var splitnum = Number($('#splitnum').val());
+        var splitnum = Number($('#splitnum').val());
+        var mass = 0;
+        var modeno = weight/10000;
+        modeno = Math.ceil(modeno);
+        $('#modeno').val(modeno);//装柜数量
+        var config = {
+            url : sarkprefix + '/findPackageNum',
+            type : 'get',
+            dataType : "json",
+            data : {'container':containerName,'pddiameter':bagdia},
+            async:false,
+            success : function(data) {
+                mass = data;
+            }
+        };
+        $.ajax(config);
+        //单垛每包盘数确定
+        if(mass == 0){
+            $.modal.alertWarning('装柜基础数据中无该卷径对应件数');
+            return
+        }
+        $('#stacks').val(mass);
+        $('#f1baleno').val(mass);
+        var packnum =  Math.floor(containerHeight*100/sumwidth);//单垛盘数：柜高/幅宽舍去小数
+        if($('#pallet').val() == 1){
+            packnum = Math.floor((containerHeight*100-Number($('#palletheight').val()))/sumwidth);//单垛盘数：柜高/幅宽舍去小数
+        }
+        var eachPack = Math.floor(packnum/maxrollnum);
+        $('#singlestackpanno').val(packnum);
+        var singleconreelno = Math.floor(packnum*mass/splitnum);//单柜卷数
+        $('#singleconreelno').val(singleconreelno);
+        var volume = Math.ceil(modeno*singleconreelno);
+        $('#volume').val(volume);//总生产卷数
+        var singleconweight = $('#rolength').val()*$('#sumwidth').val()*$('#kweight').val()/100000*splitnum*singleconreelno;//单柜重量
+        $('#singleconweight').val(singleconweight);
+        $('#realWeight').val(singleconweight*modeno);//实际生产重量
+
+        //包装规格计算
+
+
+        for(var i=1;i<=eachPack;i++){
+            $('#f'+i+'panperbale').val(maxrollnum);
+        }
+        if(packnum%maxrollnum != 0){
+            $('#f'+(eachPack+1)+'panperbale').val(packnum%maxrollnum);
+        }
+
+
+    }
+
+    //模拟包装方式
+    function packFnc() {
+        var arr = [];
+        var arrCount = [];
+        if($('#f1panperbale').val()=='' || $('#f1panperbale').val()>$('#maxrollnum').val() || $('#f2panperbale').val()>$('#maxrollnum').val() || $('#f3panperbale').val()>$('#maxrollnum').val() || $('#f4panperbale').val()>$('#maxrollnum').val()){
+            $.modal.alertWarning('层每包盘数应小于每包最大盘数且一层不能为空');
+            return
+        }
+        //判断和等于单垛盘数
+        var sum = 0;
+        for(var i=1;i<=4;i++){
+            if($('#f'+i+'panperbale').val()!=''){
+                sum += Number($('#f'+i+'panperbale').val());
+                arr.push(Number($('#f'+i+'panperbale').val()));
+                arrCount.push(Number($('#f'+i+'panperbale').val()));
+            }
+        }
+        if(sum != $('#singlestackpanno').val()){
+            $.modal.alertWarning('层每包盘数之和应等于单垛盘数，请重新输入');
+            return
+        }
+
+        $('#sumpack').val(arrCheck(arr));
+        $('#sumpackCount').val(arrCheckCount(arrCount));
+    }
+
+    //数组去重并计算包装方式
+    function arrCheck(arr){
+        var newStr = '';
+        for(var i=0;i<arr.length;i++){
+            var temp=arr[i];
+            var count=0;
+            for(var j=0;j<arr.length;j++){
+                if(arr[j]==temp){
+                    count++;
+                    arr[j]=-1;
+                }
+            }
+            if(temp != -1){
+                var a = Math.ceil(count*$('#f1baleno').val()*$('#modeno').val());
+                newStr += temp+"盘每包共需:"+a+"包,";
+            }
+        }
+        newStr = newStr.substring(0,newStr.length-1);
+        return newStr;
+    }
+
+    //数组去重并计算重复个数
+    function arrCheckCount(arr){
+        console.log(arr);
+        var newStr = '';
+        for(var i=0;i<arr.length;i++){
+            var temp=arr[i];
+            var count=0;
+            for(var j=0;j<arr.length;j++){
+                if(arr[j]==temp){
+                    count++;
+                    arr[j]=-1;
+                }
+            }
+            if(temp != -1){
+                newStr += temp+":"+count+",";
+            }
+        }
+        newStr = newStr.substring(0,newStr.length-1);
+        return newStr;
+    }
+
+    //最终计算
+    /*   function sumcalculation(){
+           var sumwidth = $('#sumwidth').val() * $('#splitnum').val();//有效总幅宽
+           var actualweight = $('#demovol').val()*sumwidth*$('#rolength').val()*$('#kweight').val()/100000;//实际重量
+           $('#actualweight').val(actualweight);
+           var sumroll = $('#demovol').val()*$('#splitnum').val();//总盘数
+           $('#sumroll').val(sumroll);
+           $('#actualpack').val(parseInt(sumroll/$('#maxrollnum').val()));//包装方式
+
+
+
+           //单垛每包盘数确定
+           var packnum =  parseInt(eachstacks/$('#maxrollnum').val());
+           for(var i=1;i<=packnum;i++){
+               $('#f'+i+'panperbale').val($('#maxrollnum').val());
+           }
+           if(eachstacks%$('#maxrollnum').val() != 0){
+               $('#f'+(packnum+1)+'panperbale').val(eachstacks%$('#maxrollnum').val());
+           }
+
+
+           //单层包数确定
+           //count:单柜垛数
+           var count = parseInt($('#maxloadwidth').val()*100/$('#bagdia').val());//宽
+           count = parseInt(count*($('#maxloadlength').val()*100/$('#bagdia').val()));//长
+           if(eachstacks%$('#maxrollnum').val() != 0){
+               packnum += 1;
+           }
+           var sumroll = $('#sumroll').val();
+           var singleconreelno = count*$('#singlestackpanno').val()/$('#splitnum').val();//单柜卷数
+           $('#singleconreelno').val(Math.ceil(singleconreelno));
+           var modeno = $('#sumroll').val()/(count*$('#singlestackpanno').val());//装柜数量
+           $('#modeno').val(modeno);
+           var singleconweight = $('#actualweight').val()/modeno;//单柜重量
+           $('#singleconweight').val(singleconweight);
+           var hascutweight = $('#weight').val()-cutweight;//核减库存重量
+           $('#cutweight').val(hascutweight);
+           for(var i=1;i<=packnum;i++){
+               var eachroll = $('#f'+i+'panperbale').val()*count;//每层包数
+               sumroll = sumroll-eachroll;
+               if(sumroll<($('#f'+i+'panperbale').val()*count)){
+                   return
+               }else{
+                   $('#f'+i+'baleno').val(eachroll);
+               }
+           }
+
+
+           //最后一层包数计算
+           if(sumroll > 0){
+
+           }
+       }*/
+
+
+
+
+
+
+</script>
+
+<script type="text/javascript">
+    $("#form-containerloadcal-add").validate({
+        rules: {
+            pdorderid: {
+                required: true,
+            },
+        },
+        submitHandler: function (form) {
+            var success = true;
+            //判断修改盘数不大于每包最大盘数且等于每垛盘数
+            var sumLayer = 0;
+            for (var i = 1; i < 5; i++) {
+                sumLayer += Number($('#f' + i + 'panperbale').val());
+                if (Number($('#f' + i + 'panperbale').val()) > Number($('#maxrollnum').val())) {
+                    $.modal.alertWarning('层每包盘数应小于每包最大盘数');
+                    success = false;
+                    return
+                }
+            }
+            if ($('#singlestackpanno').val() != sumLayer) {
+                $.modal.alertWarning('层每包盘数之和相加应等于每垛盘数');
+                success = false;
+            }
+
+            if (success == true) {
+                //保存装柜数据
+                var config = {
+                    url: ctx + "module/containerloadcal" + "/saveSark",
+                    type: 'post',
+                    dataType: "json",
+                    data: $('#form-containerloadcal-add').serialize(),
+                    async: false,
+                    success: function (result) {
+                    }
+                };
+                $.ajax(config);
+
+                //保存核减数据
+                submitCutstore();
+            }
+
+            //  $.operate.save(ctx + "module/containerloadcal" + "/saveSark",$('#form-containerloadcal-add').serialize() );
+        }
+    })
+
+
+    //核减库存
+    function cutstore(data) {
+        openMacode("装柜核减库存",sarkprefix+"/cutstore","1200","");
+    }
+
+
+    //关闭事件监听
+    function openMacode(title,url,width,height){
+        if($.common.isEmpty(title)){title=false}
+        if($.common.isEmpty(url)){url="404.html"}
+        if($.common.isEmpty(width)){width=800}
+        if($.common.isEmpty(height)){height=($(window).height()-50)}
+        var index = layer.open({
+            type: 2,
+            area: [width + 'px', height + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: title,
+            content: url,
+            end: function () {//无论是确认还是取消，只要层被销毁了，end都会执行，不携带任何参数。layer.open关闭事件
+            }
+
+        });
+
+    }
+
+    //核减全部符合条件的库存信息
+    function submitCutstore() {
+        var success = true;
+        var data = {
+            'pdwidthw' : $('#sumwidth').val(),
+            'customer' : $('#fullname').val(),
+            'pdname' : $('#pdname').val(),
+            'status' : '未核减',
+            'pdorderid':$('#pdorderid').val(),
+            'sumWeight':$('#realWeight').val(),//总重量
+            'volume':$('#volume').val(),//生产卷数
+            'splitnum':$('#splitnum').val(),//分切数
+            'modeno':$('#modeno').val(),//装柜数
+            'sumpackCount':$('#sumpackCount').val(),//核减前包装方式
+        };
+        var config = {
+            url : ctx + "module/cutstoredetail" + '/sarkCutstore',
+            type : 'get',
+            dataType : "json",
+            data : data,
+            async:false,
+            success : function(result) {
+/*                if(result.msg() == "操作成功"){*/
+                    alert('操作成功');
+                    location.reload();
+/*                }*/
+            }
+        };
+        $.ajax(config);
+    }
+
+
+
+
+</script>
+
+</body>
+</html>

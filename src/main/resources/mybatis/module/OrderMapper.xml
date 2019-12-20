@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ylenms.project.module.order.mapper.OrderMapper">
+    
+    <resultMap type="Order" id="OrderResult">
+        <result property="id"    column="ID"    />
+        <result property="pdod"    column="PDOD"    />
+        <result property="contractid"    column="CONTRACTID"    />
+        <result property="optime"    column="OPTIME"    />
+        <result property="saleod"    column="SALEOD"    />
+        <result property="orderClass"    column="ORDER_CLASS"    />
+        <result property="type"    column="TYPE"    />
+        <result property="fullname"    column="FULLNAME"    />
+        <result property="materialcode"    column="MATERIALCODE"    />
+        <result property="name"    column="NAME"    />
+        <result property="qualityid"    column="QUALITYID"    />
+        <result property="tagid"    column="TAGID"    />
+        <result property="quality"    column="QUALITY"    />
+        <result property="line"    column="LINE"    />
+        <result property="price"    column="PRICE"    />
+        <result property="totalcnt"    column="TOTALCNT"    />
+        <result property="weight"    column="WEIGHT"    />
+        <result property="rmbamount"    column="RMBAMOUNT"    />
+        <result property="sendtime"    column="SENDTIME"    />
+        <result property="status"    column="STATUS"    />
+        <result property="cusremark"    column="CUSREMARK"    />
+        <result property="produceremark"    column="PRODUCEREMARK"    />
+        <result property="delFlag"    column="DEL_FLAG"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="transflag"    column="TRANSFLAG"    />
+    </resultMap>
+    
+    <select id="selectOrderById" parameterType="Integer" resultMap="OrderResult">
+        select ID, PDOD, CONTRACTID, OPTIME, SALEOD, ORDER_CLASS, TYPE, FULLNAME, MATERIALCODE, NAME, QUALITYID, TAGID, QUALITY, LINE, PRICE, TOTALCNT, WEIGHT, RMBAMOUNT, SENDTIME, STATUS, CUSREMARK, PRODUCEREMARK, DEL_FLAG, REMARK, TRANSFLAG,
+        (SELECT TBL_BELTLINE.BL_FACTORY+','+TBL_BELTLINE.WORKSHOP+','+TBL_BELTLINE.LINEID FROM TBL_BELTLINE WHERE TBL_ORDER.LINE = ID) AS LINESTR
+         from TBL_ORDER 
+         where ID = #{id}
+    </select>
+    
+    <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
+        select ID, PDOD, CONTRACTID, OPTIME, SALEOD, ORDER_CLASS, TYPE, FULLNAME, MATERIALCODE, NAME, QUALITYID, TAGID, QUALITY, LINE, PRICE, TOTALCNT, WEIGHT, RMBAMOUNT, SENDTIME, STATUS, CUSREMARK, PRODUCEREMARK, DEL_FLAG, REMARK, TRANSFLAG
+        from TBL_ORDER
+        <where>  
+            <if test="fullname != null  and fullname != ''"> and FULLNAME like concat('%', #{fullname}, '%')</if>
+            <if test="line!= null  and line!= ''"> and LINE like concat('%', #{line}, '%')</if>
+            <if test="name!= null  and name!= ''"> and NAME like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <insert id="insertOrder" parameterType="Order">
+        insert into TBL_ORDER (
+       <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="pdod != null  and pdod != ''">PDOD,</if>
+            <if test="contractid != null  and contractid != ''">CONTRACTID,</if>
+            <if test="optime != null ">OPTIME,</if>
+            <if test="saleod != null  and saleod != ''">SALEOD,</if>
+            <if test="orderClass != null ">ORDER_CLASS,</if>
+            <if test="type != null ">TYPE,</if>
+            <if test="fullname != null  and fullname != ''">FULLNAME,</if>
+            <if test="materialcode != null  and materialcode != ''">MATERIALCODE,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="qualityid != null  and qualityid != ''">QUALITYID,</if>
+            <if test="tagid != null  and tagid != ''">TAGID,</if>
+            <if test="quality != null  and quality != ''">QUALITY,</if>
+            <if test="line != null ">LINE,</if>
+            <if test="price != null ">PRICE,</if>
+            <if test="totalcnt != null ">TOTALCNT,</if>
+            <if test="weight != null ">WEIGHT,</if>
+            <if test="rmbamount != null ">RMBAMOUNT,</if>
+            <if test="sendtime != null ">SENDTIME,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="cusremark != null  and cusremark != ''">CUSREMARK,</if>
+            <if test="produceremark != null  and produceremark != ''">PRODUCEREMARK,</if>
+            <if test="delFlag != null  and delFlag != ''">DEL_FLAG,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="transflag != null ">TRANSFLAG,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="pdod != null  and pdod != ''">#{pdod},</if>
+            <if test="contractid != null  and contractid != ''">#{contractid},</if>
+            <if test="optime != null ">#{optime},</if>
+            <if test="saleod != null  and saleod != ''">#{saleod},</if>
+            <if test="orderClass != null ">#{orderClass},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="fullname != null  and fullname != ''">#{fullname},</if>
+            <if test="materialcode != null  and materialcode != ''">#{materialcode},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="qualityid != null  and qualityid != ''">#{qualityid},</if>
+            <if test="tagid != null  and tagid != ''">#{tagid},</if>
+            <if test="quality != null  and quality != ''">#{quality},</if>
+            <if test="line != null ">#{line},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="totalcnt != null ">#{totalcnt},</if>
+            <if test="weight != null ">#{weight},</if>
+            <if test="rmbamount != null ">#{rmbamount},</if>
+            <if test="sendtime != null ">#{sendtime},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="cusremark != null  and cusremark != ''">#{cusremark},</if>
+            <if test="produceremark != null  and produceremark != ''">#{produceremark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="transflag != null ">#{transflag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrder" parameterType="Order">
+        update TBL_ORDER
+       	<trim prefix="SET" suffixOverrides=",">
+            <if test="pdod != null  and pdod != ''">PDOD = #{pdod},</if>
+            <if test="contractid != null  and contractid != ''">CONTRACTID = #{contractid},</if>
+            <if test="optime != null ">OPTIME = #{optime},</if>
+            <if test="saleod != null  and saleod != ''">SALEOD = #{saleod},</if>
+            <if test="orderClass != null ">ORDER_CLASS = #{orderClass},</if>
+            <if test="type != null ">TYPE = #{type},</if>
+            <if test="fullname != null  and fullname != ''">FULLNAME = #{fullname},</if>
+            <if test="materialcode != null  and materialcode != ''">MATERIALCODE = #{materialcode},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="qualityid != null  and qualityid != ''">QUALITYID = #{qualityid},</if>
+            <if test="tagid != null  and tagid != ''">TAGID = #{tagid},</if>
+            <if test="quality != null  and quality != ''">QUALITY = #{quality},</if>
+            <if test="line != null ">LINE = #{line},</if>
+            <if test="price != null ">PRICE = #{price},</if>
+            <if test="totalcnt != null ">TOTALCNT = #{totalcnt},</if>
+            <if test="weight != null ">WEIGHT = #{weight},</if>
+            <if test="rmbamount != null ">RMBAMOUNT = #{rmbamount},</if>
+            <if test="sendtime != null ">SENDTIME = #{sendtime},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="cusremark != null  and cusremark != ''">CUSREMARK = #{cusremark},</if>
+            <if test="produceremark != null  and produceremark != ''">PRODUCEREMARK = #{produceremark},</if>
+            <if test="delFlag != null  and delFlag != ''">DEL_FLAG = #{delFlag},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="transflag != null ">TRANSFLAG = #{transflag},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+	
+    <delete id="deleteOrderByIds" parameterType="Integer">
+        delete from TBL_ORDER where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

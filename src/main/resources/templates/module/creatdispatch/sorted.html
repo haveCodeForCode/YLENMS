@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+<th:block th:include="include :: header('调度排序')" />
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="col-sm-12 select-info">
+        <form id="operlog-form">
+            <div class="select-list gd">
+                <ul>
+                    <li class="col-sm-3">调度单单号：<input style="width: 55%;"
+                                                     type="text" name="sortid"/>
+                    </li>
+                    <li class="col-sm-3">生产调度单号：<input style="width: 55%;"
+                                                     type="text" name="dispatchid"/>
+                    </li>
+                    <li class="col-sm-3">产品品名：<input style="width: 55%;"
+                                                    type="text" name="pdname"/>
+                    </li>
+                    <li class="col-sm-3" style="display: none">状态：<input style="width: 55%;"
+                                                    type="hidden" name="optag" value="2"/>
+                    </li>
+                    <li class="col-sm-1"><a
+                            class="btn btn-primary btn-rounded btn-sm"
+                            onclick="$.table.search($('form').attr('id'))"><i
+                            class="fa fa-search" id="searchByOrder"></i>查询订单</a></li>
+                </ul>
+            </div>
+        </form>
+    </div>
+        <div class="col-sm-12 select-info">
+            <table id="bootstrap-table" data-mobile-responsive="true">
+           </table>
+        </div>
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "module/creatdispatch"
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                modalName: "生产调度",
+                search:false,
+                columns: [
+				{
+					field : 'id', 
+					title : '序号' ,
+                    visible:false
+				},
+                {
+                    field : 'sortid',
+                    title : '调度单单号'
+                },
+				{
+					field : 'dispatchid', 
+					title : '生产调度单号' 
+				},
+				{
+					field : 'pdlineid', 
+					title : '生产线号' 
+				},
+				{
+					field : 'pdname', 
+					title : '品名' 
+				},
+				{
+					field : 'actualweight', 
+					title : '生产重量kg' 
+				},
+				{
+					field : 'actualreel', 
+					title : '生产卷数' 
+				},
+				{
+					field : 'pdlength', 
+					title : '卷长' 
+				},
+				{
+					field : 'pddiameter', 
+					title : '卷径' 
+				},
+				{
+					field : 'totalwidth', 
+					title : '总幅宽' 
+				},
+				{
+					field : 'status', 
+					title : '状态' ,
+                    formatter: function(value, row, index) {
+                        var a = _ajax_dict('tbl_creatdispatch_status',value.trim());
+                        return a;
+                    }
+				},
+                {
+                    field : 'stopbegintime',
+                    title : '停车开始时间'
+
+                },
+                {
+                    field : 'stopendtime',
+                    title : '停车结束时间'
+                },
+                {
+                    field : 'planstoptime',
+                    title : '预计停车时间'
+                },
+				{
+					field : 'boundpdorderid', 
+					title : '关联生产订单号' 
+				},
+				{
+					field : 'remark', 
+					title : '备注' 
+				}]
+            };
+            //搜索条件赋值
+            _bootstrap_show(options, "bootstrap-table");
+            var	param={};
+            param["optag"] = "2";
+            _bootstrap_search_tablename("#bootstrap-table",param);
+        });
+    </script>
+</body>
+</html>

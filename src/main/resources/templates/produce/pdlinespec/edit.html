@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改产品线特性')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-pdlinespec-edit" th:object="${pdlinespec}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司ID：</label>
+                <div class="col-sm-8">
+                    <input name="corpid" th:field="*{corpid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">车间ID：</label>
+                <div class="col-sm-8">
+                    <input name="workshopid" th:field="*{workshopid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">生产线号：</label>
+                <div class="col-sm-8">
+                    <input name="pdlineid" th:field="*{pdlineid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">工艺类型：</label>
+                <div class="col-sm-8">
+                    <select name="techtype" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">黏胶比例下限%：</label>
+                <div class="col-sm-8">
+                    <input name="minrayonratio" th:field="*{minrayonratio}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">黏胶比例上限%：</label>
+                <div class="col-sm-8">
+                    <input name="maxrayonratio" th:field="*{maxrayonratio}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">克重下限G：</label>
+                <div class="col-sm-8">
+                    <input name="mingsm" th:field="*{mingsm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">克重上限G：</label>
+                <div class="col-sm-8">
+                    <input name="maxgsm" th:field="*{maxgsm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">有效幅宽下限CM：</label>
+                <div class="col-sm-8">
+                    <input name="minwidth" th:field="*{minwidth}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">有效幅宽上限CM：</label>
+                <div class="col-sm-8">
+                    <input name="maxwidth" th:field="*{maxwidth}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">花型系列：</label>
+                <div class="col-sm-8">
+                    <input name="series" th:field="*{series}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否有轧车：</label>
+                <div class="col-sm-8">
+                    <input name="ispadder" th:field="*{ispadder}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">工艺线速下限M/MIN：</label>
+                <div class="col-sm-8">
+                    <input name="minlinespeed" th:field="*{minlinespeed}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">工艺线速上限M/MIN：</label>
+                <div class="col-sm-8">
+                    <input name="maxlinespeed" th:field="*{maxlinespeed}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">传输标志 0：未传输；1：已传输：</label>
+                <div class="col-sm-8">
+                    <input name="transflag" th:field="*{transflag}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "module/pdlinespec";
+        $("#form-pdlinespec-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-pdlinespec-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

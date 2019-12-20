@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	
+	<form class="form-horizontal m" id="form-product-add" target="hidden_frame" th:object="${technology1}">
+		<input type="hidden" id="tblId"  th:value="${id}">
+		<input type="hidden" id="url" th:value="${url}">
+		<!-- <input type="hidden" id="tbloptag"  th:field="*{optag}">
+		<input type="hidden" id="tblstatus" th:field="*{status}"> -->
+		
+		<div>
+		    <div class="form-group">	
+				<label class="col-sm-2 control-label" style="text-align:right;">工艺编号：</label>
+				<div class="col-sm-8">
+					<input id="totaltechnologysn" name="totaltechnologysn" class="form-control" type="text" th:field="*{totaltechnologysn}">
+				</div>
+			</div>
+			 <div class="form-group">	
+				<label class="col-sm-2 control-label" style="text-align:right;">品名：</label>
+				<div class="col-sm-8">
+					<input id="pdname" name="pdname" class="form-control" type="text" th:field="*{pdname}">
+				</div>
+			</div>
+			 <div class="form-group">	
+				<label class="col-sm-2 control-label" style="text-align:right;">生产线：</label>
+				<div class="col-sm-8">
+					<input id="pdlineid" name="pdlineid" class="form-control" type="text" th:field="*{pdlineid}">
+				</div>
+			</div>
+			  <div class="form-group">	
+				<label class="col-sm-2 control-label" style="text-align:right;">客户：</label>
+				<div class="col-sm-8">
+					<input id="customer" name="customer" class="form-control" type="text" th:field="*{customer}">
+				</div>
+			</div> 
+			 <div class="form-group">	
+				<label class="col-sm-2 control-label" style="text-align:right;">客户质量标准ID：</label>
+				<div class="col-sm-8">
+					<input id="qulityid" name="qulityid" class="form-control" type="text" th:field="*{qulityid}">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-2 control-label" style="text-align:right;">客户质量要求：</label>
+				<div class="col-sm-8">
+					<!-- <input id="optime" name="optime" class="form-control" type="text" th:field="*{qulity}"> -->
+					<textarea id="qulity" name="qulity" class="form-control" rows="5" th:field="*{qulity}"></textarea>
+				</div>
+			</div>
+			
+		</div>
+		<!-- <div class="form-group" id=falseression  style="display: none;">	
+				<label class="col-sm-2 control-label" style="text-align:right;">退审原因：</label>
+				<div class="col-sm-8">
+					<input id="ression" name="ression" class="form-control" type="text" th:field="*{ression}">
+					<textarea id="auditcomment" name="auditcomment" class="form-control" rows="5" th:field="*{auditcomment}"></textarea>
+				</div>
+			</div> -->
+		   <!--  <div class="form-group">	
+				<label class="col-sm-2 control-label" style="text-align:right;">质量编号：</label>
+				<div class="col-sm-8">
+					<input id="qualitysn" name="qualitysn" class="form-control" type="text" th:field="*{qualitysn}">
+				</div>
+	            <button id="confirmButton" onclick="submitQuality();" class=" col-sm-1 btn btn-primary">详情</button>
+			</div> -->
+		<div class="form-group">
+			<label class="col-sm-2 control-label" style="text-align:right;">开清工艺编号：</label>
+			<div class="col-sm-8">
+					<input id="opensn" name="opensn" class="form-control" type="text" th:field="*{opensn}">
+			</div>
+			<button id="confirmButton" onclick="submitOpen();" class=" col-sm-1 btn btn-primary">详情</button>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" style="text-align:right;">梳理工艺编号：</label>
+			<div class="col-sm-8">
+					<input id="combsn" name="combsn" class="form-control" type="text" th:field="*{combsn}">
+				</div>
+				<button id="confirmButton" onclick="submitComb();" class=" col-sm-1 btn btn-primary">详情</button>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" style="text-align:right;">水刺工艺编号：</label>
+			<div class="col-sm-8">
+					<input id="spunlacesn" name="spunlacesn" class="form-control" type="text" th:field="*{spunlacesn}">
+				</div>
+				<button id="confirmButton" onclick="submitSpunlace();" class=" col-sm-1 btn btn-primary">详情</button>
+				
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" style="text-align:right;">卷绕工艺编号：</label>
+			<div class="col-sm-8">
+					<input id="windsn" name="windsn" class="form-control" type="text" th:field="*{windsn}">
+			</div>
+			<button id="confirmButton" onclick="submitWind();" class=" col-sm-1 btn btn-primary">详情</button>
+		</div>
+		<!-- <div class="form-group">
+				<label class="col-sm-2 control-label" style="text-align: right;">修改记录：</label>
+				<div class="col-sm-8">
+					<input id="optime" name="optime" class="form-control" type="text" th:field="*{chgcomment}">
+					<textarea id="chgcomment" name="chgcomment" class="form-control" rows="5" th:field="*{chgcomment}"></textarea>
+				</div>
+			</div> -->
+		
+	 <div class="form-group">
+			<div class="form-control-static col-sm-offset-9">
+				<!-- <button id="confirmButton" onclick="submitRession();" class="btn btn-primary">确认提交</button>
+  				<button id="confirmButton" onclick="submitRession();" class="btn btn-primary">确认提交</button> -->
+				<button onclick="$.modal.close()" class="btn btn-danger"
+					type="button">关闭</button>
+		    </div>
+    	</div>
+	</form>
+	<div th:include="include::footer"></div>
+  <iframe name='hidden_frame' id="hidden_frame" style="display:none"></iframe>
+	<script type="text/javascript">
+    if($('#tblId').val() == 0)
+   	{
+    	
+    	document.getElementById("confirmButton").style.display="none";
+   	}
+   
+    if($('#tbloptag').val() == 3 && $('#tblstatus').val() == 6)
+   	{
+    	
+    	 
+    	document.getElementById("falseression").style.display="block";
+   	}
+    
+    
+	function submitQuality(){
+		var id = document.getElementById('qualitysn').value;
+		
+		
+		var url2 = ctx+"module/technology" + "/submitQuality/" + id;
+
+    	openTechnologyDetail("工艺质量详情",url2,800,800);
+		
+	}
+	function submitOpen(){
+		var id = document.getElementById('opensn').value;
+		var url2 = ctx+"module/technology" + "/submitOpen/" + id;
+
+    	openTechnologyDetail("开清工艺详情",url2,800,700);
+		
+	}
+	function submitComb(){
+		var id = document.getElementById('combsn').value;
+		var url2 = ctx+"module/technology" + "/submitComb/" + id;
+
+    	openTechnologyDetail("梳理工艺详情",url2,800,700);
+		
+	}
+	function submitSpunlace(){
+		var id = document.getElementById('spunlacesn').value;
+		var url2 = ctx+"module/technology" + "/submitSpunlace/" + id;
+
+    	openTechnologyDetail("水刺工艺详情",url2,800,700);
+		
+	}
+	function submitWind(){
+		var id = document.getElementById('windsn').value;
+		var url2 = ctx+"module/technology" + "/submitWind/" + id;
+
+    	openTechnologyDetail("卷绕工艺详情",url2,800,700);
+		
+	}
+	 function openTechnologyDetail(title,url,width,height){
+	     
+         layer.open({
+         id:'addMacode1',
+         type:2,
+         area:[width+"px",height+"px"],
+         fix:false,
+         maxmin:true,
+         shade:0.3,
+         title:title,
+         content:url  ,
+         end: function () {//layer.open关闭事件关闭事件
+         	
+         	//alert("页面关闭");
+         	// var	param={};
+            //  param["status"] = 4;
+            //  _bootstrap_search_tablename("#bootstrap-table",param);
+         }
+      })}
+	</script>
+</body>
+</html>

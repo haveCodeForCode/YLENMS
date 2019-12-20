@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ylenms.project.module.ammeter.mapper.AmmeterMapper">
+    
+    <resultMap type="Ammeter" id="AmmeterResult">
+        <result property="id"    column="ID"    />
+        <result property="devid"    column="DEVID"    />
+        <result property="devname"    column="DEVNAME"    />
+        <result property="gentime"    column="GENTIME"    />
+        <result property="avol1"    column="AVOL1"    />
+        <result property="bvol1"    column="BVOL1"    />
+        <result property="cvol1"    column="CVOL1"    />
+        <result property="abvol1"    column="ABVOL1"    />
+        <result property="bcvol1"    column="BCVOL1"    />
+        <result property="cavol1"    column="CAVOL1"    />
+        <result property="aflow1"    column="AFLOW1"    />
+        <result property="bflow1"    column="BFLOW1"    />
+        <result property="cflow1"    column="CFLOW1"    />
+        <result property="apower1"    column="APOWER1"    />
+        <result property="bpower1"    column="BPOWER1"    />
+        <result property="cpower1"    column="CPOWER1"    />
+        <result property="totalpower1"    column="TOTALPOWER1"    />
+        <result property="atotalpower1"    column="ATOTALPOWER1"    />
+        <result property="btotalpower1"    column="BTOTALPOWER1"    />
+        <result property="ctotalpower1"    column="CTOTALPOWER1"    />
+        <result property="totalwattless1"    column="TOTALWATTLESS1"    />
+        <result property="appliedpower1"    column="APPLIEDPOWER1"    />
+        <result property="powerfactor1"    column="POWERFACTOR1"    />
+        <result property="freqency1"    column="FREQENCY1"    />
+        <result property="avol"    column="AVOL"    />
+        <result property="bvol"    column="BVOL"    />
+        <result property="cvol"    column="CVOL"    />
+        <result property="abvol"    column="ABVOL"    />
+        <result property="bcvol"    column="BCVOL"    />
+        <result property="cavol"    column="CAVOL"    />
+        <result property="aflow"    column="AFLOW"    />
+        <result property="bflow"    column="BFLOW"    />
+        <result property="cflow"    column="CFLOW"    />
+        <result property="apower"    column="APOWER"    />
+        <result property="bpower"    column="BPOWER"    />
+        <result property="cpower"    column="CPOWER"    />
+        <result property="totalpower"    column="TOTALPOWER"    />
+        <result property="atotalpower"    column="ATOTALPOWER"    />
+        <result property="btotalpower"    column="BTOTALPOWER"    />
+        <result property="ctotalpower"    column="CTOTALPOWER"    />
+        <result property="totalwattless"    column="TOTALWATTLESS"    />
+        <result property="appliedpowera1"    column="APPLIEDPOWERA1"    />
+        <result property="appliedpowera2"    column="APPLIEDPOWERA2"    />
+        <result property="appliedpowera3"    column="APPLIEDPOWERA3"    />
+        <result property="totalappliedpower"    column="TOTALAPPLIEDPOWER"    />
+        <result property="apowerfactor"    column="APOWERFACTOR"    />
+        <result property="bpowerfactor"    column="BPOWERFACTOR"    />
+        <result property="cpowerfactor"    column="CPOWERFACTOR"    />
+        <result property="powerfactor"    column="POWERFACTOR"    />
+        <result property="freqency"    column="FREQENCY"    />
+        <result property="abphase"    column="ABPHASE"    />
+        <result property="bcphase"    column="BCPHASE"    />
+        <result property="caphase"    column="CAPHASE"    />
+        <result property="currentenergy"    column="CURRENTENERGY"    />
+        <result property="directenergy"    column="DIRECTENERGY"    />
+        <result property="reverseenergy"    column="REVERSEENERGY"    />
+        <result property="inactivepoer"    column="INACTIVEPOER"    />
+        <result property="directinactive"    column="DIRECTINACTIVE"    />
+        <result property="reverseinactive"    column="REVERSEINACTIVE"    />
+        <result property="powerpass1"    column="POWERPASS1"    />
+        <result property="powerpass2"    column="POWERPASS2"    />
+        <result property="powerpass3"    column="POWERPASS3"    />
+        <result property="powerpass4"    column="POWERPASS4"    />
+        <result property="powerpass5"    column="POWERPASS5"    />
+        <result property="powerpass6"    column="POWERPASS6"    />
+        <result property="powerpass7"    column="POWERPASS7"    />
+        <result property="powerpass8"    column="POWERPASS8"    />
+        <result property="powerpass9"    column="POWERPASS9"    />
+        <result property="powerpass10"    column="POWERPASS10"    />
+        <result property="powerpass11"    column="POWERPASS11"    />
+        <result property="powerpass12"    column="POWERPASS12"    />
+        <result property="remark"    column="REMARK"    />
+    </resultMap>
+
+    <sql id="selectAmmeterVo">
+        select ID, DEVID, DEVNAME, GENTIME, AVOL1, BVOL1, CVOL1, ABVOL1, BCVOL1, CAVOL1, AFLOW1, BFLOW1, CFLOW1, APOWER1, BPOWER1, CPOWER1, TOTALPOWER1, ATOTALPOWER1, BTOTALPOWER1, CTOTALPOWER1, TOTALWATTLESS1, APPLIEDPOWER1, POWERFACTOR1, FREQENCY1, AVOL, BVOL, CVOL, ABVOL, BCVOL, CAVOL, AFLOW, BFLOW, CFLOW, APOWER, BPOWER, CPOWER, TOTALPOWER, ATOTALPOWER, BTOTALPOWER, CTOTALPOWER, TOTALWATTLESS, APPLIEDPOWERA1, APPLIEDPOWERA2, APPLIEDPOWERA3, TOTALAPPLIEDPOWER, APOWERFACTOR, BPOWERFACTOR, CPOWERFACTOR, POWERFACTOR, FREQENCY, ABPHASE, BCPHASE, CAPHASE, CURRENTENERGY, DIRECTENERGY, REVERSEENERGY, INACTIVEPOER, DIRECTINACTIVE, REVERSEINACTIVE, POWERPASS1, POWERPASS2, POWERPASS3, POWERPASS4, POWERPASS5, POWERPASS6, POWERPASS7, POWERPASS8, POWERPASS9, POWERPASS10, POWERPASS11, POWERPASS12, REMARK from tbl_ammeter
+    </sql>
+
+    <select id="selectAmmeterList" parameterType="Ammeter" resultMap="AmmeterResult">
+        <include refid="selectAmmeterVo"/>
+        <where>  
+            <if test="devname != null  and devname != ''"> and DEVNAME like concat('%', #{devname}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(GENTIME,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(GENTIME,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
+        </where>
+    </select>
+    
+    <select id="selectAmmeterById" parameterType="Long" resultMap="AmmeterResult">
+        <include refid="selectAmmeterVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertAmmeter" parameterType="Ammeter" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_ammeter
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="devid != null ">DEVID,</if>
+            <if test="devname != null  and devname != ''">DEVNAME,</if>
+            <if test="gentime != null ">GENTIME,</if>
+            <if test="avol1 != null ">AVOL1,</if>
+            <if test="bvol1 != null ">BVOL1,</if>
+            <if test="cvol1 != null ">CVOL1,</if>
+            <if test="abvol1 != null ">ABVOL1,</if>
+            <if test="bcvol1 != null ">BCVOL1,</if>
+            <if test="cavol1 != null ">CAVOL1,</if>
+            <if test="aflow1 != null ">AFLOW1,</if>
+            <if test="bflow1 != null ">BFLOW1,</if>
+            <if test="cflow1 != null ">CFLOW1,</if>
+            <if test="apower1 != null ">APOWER1,</if>
+            <if test="bpower1 != null ">BPOWER1,</if>
+            <if test="cpower1 != null ">CPOWER1,</if>
+            <if test="totalpower1 != null ">TOTALPOWER1,</if>
+            <if test="atotalpower1 != null ">ATOTALPOWER1,</if>
+            <if test="btotalpower1 != null ">BTOTALPOWER1,</if>
+            <if test="ctotalpower1 != null ">CTOTALPOWER1,</if>
+            <if test="totalwattless1 != null ">TOTALWATTLESS1,</if>
+            <if test="appliedpower1 != null ">APPLIEDPOWER1,</if>
+            <if test="powerfactor1 != null ">POWERFACTOR1,</if>
+            <if test="freqency1 != null ">FREQENCY1,</if>
+            <if test="avol != null ">AVOL,</if>
+            <if test="bvol != null ">BVOL,</if>
+            <if test="cvol != null ">CVOL,</if>
+            <if test="abvol != null ">ABVOL,</if>
+            <if test="bcvol != null ">BCVOL,</if>
+            <if test="cavol != null ">CAVOL,</if>
+            <if test="aflow != null ">AFLOW,</if>
+            <if test="bflow != null ">BFLOW,</if>
+            <if test="cflow != null ">CFLOW,</if>
+            <if test="apower != null ">APOWER,</if>
+            <if test="bpower != null ">BPOWER,</if>
+            <if test="cpower != null ">CPOWER,</if>
+            <if test="totalpower != null ">TOTALPOWER,</if>
+            <if test="atotalpower != null ">ATOTALPOWER,</if>
+            <if test="btotalpower != null ">BTOTALPOWER,</if>
+            <if test="ctotalpower != null ">CTOTALPOWER,</if>
+            <if test="totalwattless != null ">TOTALWATTLESS,</if>
+            <if test="appliedpowera1 != null ">APPLIEDPOWERA1,</if>
+            <if test="appliedpowera2 != null ">APPLIEDPOWERA2,</if>
+            <if test="appliedpowera3 != null ">APPLIEDPOWERA3,</if>
+            <if test="totalappliedpower != null ">TOTALAPPLIEDPOWER,</if>
+            <if test="apowerfactor != null ">APOWERFACTOR,</if>
+            <if test="bpowerfactor != null ">BPOWERFACTOR,</if>
+            <if test="cpowerfactor != null ">CPOWERFACTOR,</if>
+            <if test="powerfactor != null ">POWERFACTOR,</if>
+            <if test="freqency != null ">FREQENCY,</if>
+            <if test="abphase != null ">ABPHASE,</if>
+            <if test="bcphase != null ">BCPHASE,</if>
+            <if test="caphase != null ">CAPHASE,</if>
+            <if test="currentenergy != null ">CURRENTENERGY,</if>
+            <if test="directenergy != null ">DIRECTENERGY,</if>
+            <if test="reverseenergy != null ">REVERSEENERGY,</if>
+            <if test="inactivepoer != null ">INACTIVEPOER,</if>
+            <if test="directinactive != null ">DIRECTINACTIVE,</if>
+            <if test="reverseinactive != null ">REVERSEINACTIVE,</if>
+            <if test="powerpass1 != null ">POWERPASS1,</if>
+            <if test="powerpass2 != null ">POWERPASS2,</if>
+            <if test="powerpass3 != null ">POWERPASS3,</if>
+            <if test="powerpass4 != null ">POWERPASS4,</if>
+            <if test="powerpass5 != null ">POWERPASS5,</if>
+            <if test="powerpass6 != null ">POWERPASS6,</if>
+            <if test="powerpass7 != null ">POWERPASS7,</if>
+            <if test="powerpass8 != null ">POWERPASS8,</if>
+            <if test="powerpass9 != null ">POWERPASS9,</if>
+            <if test="powerpass10 != null ">POWERPASS10,</if>
+            <if test="powerpass11 != null ">POWERPASS11,</if>
+            <if test="powerpass12 != null ">POWERPASS12,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="devid != null ">#{devid},</if>
+            <if test="devname != null  and devname != ''">#{devname},</if>
+            <if test="gentime != null ">#{gentime},</if>
+            <if test="avol1 != null ">#{avol1},</if>
+            <if test="bvol1 != null ">#{bvol1},</if>
+            <if test="cvol1 != null ">#{cvol1},</if>
+            <if test="abvol1 != null ">#{abvol1},</if>
+            <if test="bcvol1 != null ">#{bcvol1},</if>
+            <if test="cavol1 != null ">#{cavol1},</if>
+            <if test="aflow1 != null ">#{aflow1},</if>
+            <if test="bflow1 != null ">#{bflow1},</if>
+            <if test="cflow1 != null ">#{cflow1},</if>
+            <if test="apower1 != null ">#{apower1},</if>
+            <if test="bpower1 != null ">#{bpower1},</if>
+            <if test="cpower1 != null ">#{cpower1},</if>
+            <if test="totalpower1 != null ">#{totalpower1},</if>
+            <if test="atotalpower1 != null ">#{atotalpower1},</if>
+            <if test="btotalpower1 != null ">#{btotalpower1},</if>
+            <if test="ctotalpower1 != null ">#{ctotalpower1},</if>
+            <if test="totalwattless1 != null ">#{totalwattless1},</if>
+            <if test="appliedpower1 != null ">#{appliedpower1},</if>
+            <if test="powerfactor1 != null ">#{powerfactor1},</if>
+            <if test="freqency1 != null ">#{freqency1},</if>
+            <if test="avol != null ">#{avol},</if>
+            <if test="bvol != null ">#{bvol},</if>
+            <if test="cvol != null ">#{cvol},</if>
+            <if test="abvol != null ">#{abvol},</if>
+            <if test="bcvol != null ">#{bcvol},</if>
+            <if test="cavol != null ">#{cavol},</if>
+            <if test="aflow != null ">#{aflow},</if>
+            <if test="bflow != null ">#{bflow},</if>
+            <if test="cflow != null ">#{cflow},</if>
+            <if test="apower != null ">#{apower},</if>
+            <if test="bpower != null ">#{bpower},</if>
+            <if test="cpower != null ">#{cpower},</if>
+            <if test="totalpower != null ">#{totalpower},</if>
+            <if test="atotalpower != null ">#{atotalpower},</if>
+            <if test="btotalpower != null ">#{btotalpower},</if>
+            <if test="ctotalpower != null ">#{ctotalpower},</if>
+            <if test="totalwattless != null ">#{totalwattless},</if>
+            <if test="appliedpowera1 != null ">#{appliedpowera1},</if>
+            <if test="appliedpowera2 != null ">#{appliedpowera2},</if>
+            <if test="appliedpowera3 != null ">#{appliedpowera3},</if>
+            <if test="totalappliedpower != null ">#{totalappliedpower},</if>
+            <if test="apowerfactor != null ">#{apowerfactor},</if>
+            <if test="bpowerfactor != null ">#{bpowerfactor},</if>
+            <if test="cpowerfactor != null ">#{cpowerfactor},</if>
+            <if test="powerfactor != null ">#{powerfactor},</if>
+            <if test="freqency != null ">#{freqency},</if>
+            <if test="abphase != null ">#{abphase},</if>
+            <if test="bcphase != null ">#{bcphase},</if>
+            <if test="caphase != null ">#{caphase},</if>
+            <if test="currentenergy != null ">#{currentenergy},</if>
+            <if test="directenergy != null ">#{directenergy},</if>
+            <if test="reverseenergy != null ">#{reverseenergy},</if>
+            <if test="inactivepoer != null ">#{inactivepoer},</if>
+            <if test="directinactive != null ">#{directinactive},</if>
+            <if test="reverseinactive != null ">#{reverseinactive},</if>
+            <if test="powerpass1 != null ">#{powerpass1},</if>
+            <if test="powerpass2 != null ">#{powerpass2},</if>
+            <if test="powerpass3 != null ">#{powerpass3},</if>
+            <if test="powerpass4 != null ">#{powerpass4},</if>
+            <if test="powerpass5 != null ">#{powerpass5},</if>
+            <if test="powerpass6 != null ">#{powerpass6},</if>
+            <if test="powerpass7 != null ">#{powerpass7},</if>
+            <if test="powerpass8 != null ">#{powerpass8},</if>
+            <if test="powerpass9 != null ">#{powerpass9},</if>
+            <if test="powerpass10 != null ">#{powerpass10},</if>
+            <if test="powerpass11 != null ">#{powerpass11},</if>
+            <if test="powerpass12 != null ">#{powerpass12},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAmmeter" parameterType="Ammeter">
+        update tbl_ammeter
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="devid != null ">DEVID = #{devid},</if>
+            <if test="devname != null  and devname != ''">DEVNAME = #{devname},</if>
+            <if test="gentime != null ">GENTIME = #{gentime},</if>
+            <if test="avol1 != null ">AVOL1 = #{avol1},</if>
+            <if test="bvol1 != null ">BVOL1 = #{bvol1},</if>
+            <if test="cvol1 != null ">CVOL1 = #{cvol1},</if>
+            <if test="abvol1 != null ">ABVOL1 = #{abvol1},</if>
+            <if test="bcvol1 != null ">BCVOL1 = #{bcvol1},</if>
+            <if test="cavol1 != null ">CAVOL1 = #{cavol1},</if>
+            <if test="aflow1 != null ">AFLOW1 = #{aflow1},</if>
+            <if test="bflow1 != null ">BFLOW1 = #{bflow1},</if>
+            <if test="cflow1 != null ">CFLOW1 = #{cflow1},</if>
+            <if test="apower1 != null ">APOWER1 = #{apower1},</if>
+            <if test="bpower1 != null ">BPOWER1 = #{bpower1},</if>
+            <if test="cpower1 != null ">CPOWER1 = #{cpower1},</if>
+            <if test="totalpower1 != null ">TOTALPOWER1 = #{totalpower1},</if>
+            <if test="atotalpower1 != null ">ATOTALPOWER1 = #{atotalpower1},</if>
+            <if test="btotalpower1 != null ">BTOTALPOWER1 = #{btotalpower1},</if>
+            <if test="ctotalpower1 != null ">CTOTALPOWER1 = #{ctotalpower1},</if>
+            <if test="totalwattless1 != null ">TOTALWATTLESS1 = #{totalwattless1},</if>
+            <if test="appliedpower1 != null ">APPLIEDPOWER1 = #{appliedpower1},</if>
+            <if test="powerfactor1 != null ">POWERFACTOR1 = #{powerfactor1},</if>
+            <if test="freqency1 != null ">FREQENCY1 = #{freqency1},</if>
+            <if test="avol != null ">AVOL = #{avol},</if>
+            <if test="bvol != null ">BVOL = #{bvol},</if>
+            <if test="cvol != null ">CVOL = #{cvol},</if>
+            <if test="abvol != null ">ABVOL = #{abvol},</if>
+            <if test="bcvol != null ">BCVOL = #{bcvol},</if>
+            <if test="cavol != null ">CAVOL = #{cavol},</if>
+            <if test="aflow != null ">AFLOW = #{aflow},</if>
+            <if test="bflow != null ">BFLOW = #{bflow},</if>
+            <if test="cflow != null ">CFLOW = #{cflow},</if>
+            <if test="apower != null ">APOWER = #{apower},</if>
+            <if test="bpower != null ">BPOWER = #{bpower},</if>
+            <if test="cpower != null ">CPOWER = #{cpower},</if>
+            <if test="totalpower != null ">TOTALPOWER = #{totalpower},</if>
+            <if test="atotalpower != null ">ATOTALPOWER = #{atotalpower},</if>
+            <if test="btotalpower != null ">BTOTALPOWER = #{btotalpower},</if>
+            <if test="ctotalpower != null ">CTOTALPOWER = #{ctotalpower},</if>
+            <if test="totalwattless != null ">TOTALWATTLESS = #{totalwattless},</if>
+            <if test="appliedpowera1 != null ">APPLIEDPOWERA1 = #{appliedpowera1},</if>
+            <if test="appliedpowera2 != null ">APPLIEDPOWERA2 = #{appliedpowera2},</if>
+            <if test="appliedpowera3 != null ">APPLIEDPOWERA3 = #{appliedpowera3},</if>
+            <if test="totalappliedpower != null ">TOTALAPPLIEDPOWER = #{totalappliedpower},</if>
+            <if test="apowerfactor != null ">APOWERFACTOR = #{apowerfactor},</if>
+            <if test="bpowerfactor != null ">BPOWERFACTOR = #{bpowerfactor},</if>
+            <if test="cpowerfactor != null ">CPOWERFACTOR = #{cpowerfactor},</if>
+            <if test="powerfactor != null ">POWERFACTOR = #{powerfactor},</if>
+            <if test="freqency != null ">FREQENCY = #{freqency},</if>
+            <if test="abphase != null ">ABPHASE = #{abphase},</if>
+            <if test="bcphase != null ">BCPHASE = #{bcphase},</if>
+            <if test="caphase != null ">CAPHASE = #{caphase},</if>
+            <if test="currentenergy != null ">CURRENTENERGY = #{currentenergy},</if>
+            <if test="directenergy != null ">DIRECTENERGY = #{directenergy},</if>
+            <if test="reverseenergy != null ">REVERSEENERGY = #{reverseenergy},</if>
+            <if test="inactivepoer != null ">INACTIVEPOER = #{inactivepoer},</if>
+            <if test="directinactive != null ">DIRECTINACTIVE = #{directinactive},</if>
+            <if test="reverseinactive != null ">REVERSEINACTIVE = #{reverseinactive},</if>
+            <if test="powerpass1 != null ">POWERPASS1 = #{powerpass1},</if>
+            <if test="powerpass2 != null ">POWERPASS2 = #{powerpass2},</if>
+            <if test="powerpass3 != null ">POWERPASS3 = #{powerpass3},</if>
+            <if test="powerpass4 != null ">POWERPASS4 = #{powerpass4},</if>
+            <if test="powerpass5 != null ">POWERPASS5 = #{powerpass5},</if>
+            <if test="powerpass6 != null ">POWERPASS6 = #{powerpass6},</if>
+            <if test="powerpass7 != null ">POWERPASS7 = #{powerpass7},</if>
+            <if test="powerpass8 != null ">POWERPASS8 = #{powerpass8},</if>
+            <if test="powerpass9 != null ">POWERPASS9 = #{powerpass9},</if>
+            <if test="powerpass10 != null ">POWERPASS10 = #{powerpass10},</if>
+            <if test="powerpass11 != null ">POWERPASS11 = #{powerpass11},</if>
+            <if test="powerpass12 != null ">POWERPASS12 = #{powerpass12},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteAmmeterById" parameterType="Long">
+        delete from tbl_ammeter where ID = #{id}
+    </delete>
+
+    <delete id="deleteAmmeterByIds" parameterType="String">
+        delete from tbl_ammeter where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

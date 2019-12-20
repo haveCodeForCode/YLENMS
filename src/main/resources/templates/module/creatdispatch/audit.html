@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+<th:block th:include="include :: header('调度审核')" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+<!--       <div class="col-sm-12 search-collapse"> -->
+<!--          <form id="formId"> -->
+<!--               <div class="select-list"> -->
+<!--                 <ul> -->
+<!--                     <li class="col-sm-3">调度单单号：<input style="width: 55%;" type="text" name="sortid"/> -->
+<!--                     </li> -->
+<!--                     <li class="col-sm-3">生产调度单号：<input style="width: 55%;" type="text" name="dispatchid"/> -->
+<!--                     </li> -->
+<!--                     <li class="col-sm-3">产品品名：<input style="width: 55%;" type="text" name="pdname"/> -->
+<!--                     </li> -->
+<!--                     <li class="col-sm-3" style="display: none">状态：<input style="width: 55%;" type="hidden" name="optag" value="2"/> -->
+<!--                     </li> -->
+<!--                     <li class="col-sm-1"> -->
+<!--                     	<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search($('form').attr('id'))"> -->
+<!--                     		<i class="fa fa-search" id="searchByOrder"></i>查询订单 -->
+<!--                     	</a> -->
+<!--                     </li> -->
+<!--                 </ul> -->
+<!--             </div> -->
+<!--         </form> -->
+<!--     </div> -->
+    <div class="col-sm-12 select-table table-striped">
+    	<table id="bootstrap-table" ></table>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "module/creatdispatch"
+    var auditFlag = [[${@permission.hasPermi('module:creatdispatch:audit')}]];
+    var submitFlag = [[${@permission.hasPermi('module:creatdispatch:submit')}]];
+    var dispatchFlag = [[${@permission.hasPermi('module:creatdispatch:dispatch')}]];
+    $(function() {
+        var options = {
+            url: prefix + "/auditList",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "生产调度",
+            search:false,
+            columns: [
+                {
+                    field : 'id',
+                    title : '序号' ,
+                    visible:false
+                },
+                {
+                    field : 'sortid',
+                    title : '调度单单号'
+                },
+                {
+                    field : 'dispatchid',
+                    title : '生产调度单号'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号'
+                },
+                {
+                    field : 'pdname',
+                    title : '品名'
+                },
+                {
+                    field : 'actualweight',
+                    title : '生产重量kg'
+                },
+                {
+                    field : 'status',
+                    title : '调度单状态' ,
+                    formatter: function(value, row, index) {
+                    	//alert(row.status);
+						var datas = [[${@dict.getType('tbl_dispatch_status')}]];
+		            	return $.table.selectDictLabel(datas, row.status);
+                    }
+                },
+                {
+                    field:'auditflag',
+                    title : '审核状态' ,
+                    formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_status')}]];
+		            	return $.table.selectDictLabel(datas, row.type);
+                    }
+                },
+                {
+                    field : 'stopbegintime',
+                    title : '停车开始时间'
+
+                },
+                {
+                    field : 'stopendtime',
+                    title : '停车结束时间'
+                },
+                {
+                    field : 'planstoptime',
+                    title : '预计停车时间'
+                },
+//                 {
+//                     field : 'boundpdorderid',
+//                     title : '关联生产订单号'
+//                 },
+                {
+                    field : 'remark',
+                    title : '备注'
+                },
+                {
+                    field:'ression',
+                    title:'退审理由'
+                },
+                {
+                    field : 'transflag',
+                    title : '传输标志',
+                    visible:false
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if(row.auditflag == 0 || row.auditflag == 3){
+                            actions.push('<a class="btn btn-success btn-xs ' + submitFlag + '" href="#" onclick="submit(\'' + row.id + '\')"><i class="fa fa-edit"></i>申请</a> ');
+                        }else if(row.auditflag == 1 ){
+                            actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="#" onclick="audit(\'' + row.id + '\')"><i class="fa fa-edit"></i>审核</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="#" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-edit"></i>退审</a> ');
+                        }else if(row.auditflag == 2){
+                            actions.push('<a class="btn btn-success btn-xs ' + dispatchFlag + '" href="#" onclick="dispatch(\'' + row.id + '\')"><i class="fa fa-edit"></i>排产下达</a> ');
+                        }else if(row.auditflag == 4){
+                            actions.push('<a class="btn btn-success btn-xs ' + dispatchFlag + '" href="#" onclick="undispatch(\'' + row.id + '\')"><i class="fa fa-edit"></i>取消下达</a> ');
+                        }
+                        return actions.join('');
+                    }
+                }
+                ]
+        };
+        //搜索条件赋值
+        _bootstrap_show(options, "bootstrap-table");
+        var	param={};
+        param["statusm"] = '3';
+        _bootstrap_search_tablename("#bootstrap-table",param);
+    });
+
+
+    // 审核
+    function audit(id) {
+        $.modal.confirm("确定要审核选中调度单吗？", function() {
+            _ajax(prefix + "/audit/" + id, "", "post");
+            location.reload();
+        })
+    }
+
+    // 退审
+    function unaudit(id){
+
+        var url = prefix + "/toRession/" + id;
+        $.modal.open("审核意见",url);
+    }
+
+    // 申请-单个
+    function submit(id) {
+        $.modal.confirm("将选中的订单标记为申请状态？", function() {
+
+            _ajax(prefix + "/submit/" + id, "", "post");
+            location.reload();
+        })
+    }
+    //派单
+    function dispatch(id){
+        $.modal.confirm("确定要派出选中订单吗？", function() {
+            _ajax(prefix + "/dispatch/" + id, "", "post");
+            location.reload();
+        })
+    }
+    // 取消派单
+    function undispatch(id) {
+        $.modal.confirm("确定要取消选中订单吗？", function() {
+            _ajax(prefix + "/audit/" + id, "", "post");
+            location.reload();
+        })
+    }
+
+</script>
+</body>
+</html>

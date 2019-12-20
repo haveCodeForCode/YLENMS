@@ -1,0 +1,489 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="include :: header('工艺匹配')" />
+</head>
+<link th:href="@{/ajax/libs/bootstrap-table/rows/bootstrap-table-reorder-rows.css}" rel="stylesheet"/>
+<body class="gray-bg">
+     <div class="container-div">
+     	<div class="col-sm-12 search-collapse">
+			<label class="h4">生产调度单</label>
+			<div class="form-group">
+				<a class="btn btn-danger btn-rounded btn-sm pull-right" onclick="teachnologyStep()">工艺申请</a>
+				<!-- <a class="btn btn-danger btn-rounded btn-sm pull-right" onclick="checkToPass()">工艺审核</a>
+				<a class="btn btn-danger btn-rounded btn-sm pull-right" onclick="checkToNopass()">工艺退审</a> -->
+				<a class="btn btn-info btn-rounded btn-sm pull-right" onclick="teachnologyMapping()">工艺匹配</a>
+				<!-- <a class="btn btn-info btn-rounded btn-sm pull-right" onclick="teachnologyAdd()">新增工艺</a>  -->
+			</div>
+		</div>
+        <div class="col-sm-12 select-table">
+        	<table id="bootstrap-table" ></table>
+        </div>
+     	<div class="col-sm-12 search-collapse">
+			<label class="h4">调度单详情</label>
+		</div>
+        <div class="col-sm-12 select-table">
+			<table id="bootstrap-table-order" class="table table-striped bottom col-sm-6">
+			</table>
+		</div>
+		<input type="hidden" id="optag">
+	</div>
+<div th:include="include :: footer"></div>
+<script th:src="@{/ajax/libs/bootstrap-table/rows/bootstrap-table-reorder-rows.js}"></script>
+<script th:src="@{/ajax/libs/bootstrap-table/rows/jquery.tablednd.js}"></script>
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('module:technology:edit')}]];
+    var goFlag = [[${@permission.hasPermi('module:technology:go')}]];
+    var auditFlag = [[${@permission.hasPermi('module:technology:audit')}]];
+    var submitFlag = [[${@permission.hasPermi('module:technology:submit')}]];
+    var prefix = ctx + "module/creatdispatch"
+    var options;
+
+    function queryParams(params) {
+        var temp = {
+            // limit: params.limit,   //页面大小
+            offset : params.offset, //页码
+            pageSize : this.pageSize,
+            pageNumber : this.pageNumber,
+            projectId : $("#projectId").val(),
+            requirement_Id : $("#requirement_Id").val(),
+            length : 6
+        };
+        return temp;
+    };
+
+    $(function() {
+        options = {
+            url: prefix + "/techlist",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "生产调度",
+            queryParams : queryParams,
+            search:false,
+            columns : [ {
+                checkbox : true,
+                visible : true
+            },
+                {
+                    field : 'id',
+                    title : '序号'
+                },
+                {
+                    field : 'dispatchid',
+                    title : '生产调度单号'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号'
+                },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述'
+                },
+                {
+                    field : 'pdname',
+                    title : '品名'
+                },
+                {
+                    field : 'actualweight',
+                    title : '生产重量kg'
+                },
+                {
+                    field : 'optag',
+                    title : '操作标记',
+                    formatter: function(value, row, index) {
+                        $('#optag').val(value);
+						var datas = [[${@dict.getType('tbl_creatdispatch_optag')}]];
+		            	return $.table.selectDictLabel(datas, row.optag);
+                    }
+                },
+//                 {
+//                     field : 'status',
+//                     title : '状态',
+//                     formatter : function(value, row, index) {
+// 						var datas = [[${@dict.getType('tbl_creatdispatch_technologystatus')}]];
+// 		            	return $.table.selectDictLabel(datas, row.status);
+//                     }
+//                 },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        // actions.push('<a class="btn btn-success btn-xs" href="#" onclick="technologyDetails(\'' + row.id + '\')"><i class="fa fa-edit"></i>工艺详情</a> ');
+
+                        /*  if ($('#optag').val() == "2") {
+                              //已匹配
+                              var par = row.dispatchid+"_"+row.optag+"_"+row.id;
+                              actions.push('<a class="btn btn-success btn-xs" href="#" onclick="technologyDetails(\'' + par + '\')"><i class="fa fa-edit"></i>工艺匹配</a> ');
+
+                          } */
+                        if ($('#optag').val() == "3" || $('#optag').val() == "7") {
+                            //已匹配
+                            var par = row.dispatchid+"_"+row.optag+"_"+row.id;
+                            actions.push('<a class="btn btn-success btn-xs" href="#" onclick="technologyDetails(\'' + par + '\')"><i class="fa fa-edit"></i>工艺匹配详情</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="technologyUpdate(\'' + par + '\')"><i class="fa fa-edit"></i>修改工艺</a> ');
+                        }
+
+                        if ($('#optag').val() == "4") {
+                            //申请状态
+                            var par = row.dispatchid+"_"+row.optag+"_"+row.id;
+                            actions.push('<a class="btn btn-success btn-xs" href="#" onclick="technologyDetails(\'' + par + '\')"><i class="fa fa-edit"></i>工艺匹配详情</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="#" onclick="audit(\'' + row.id + '\')"><i class="fa fa-edit"></i>确审</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="#" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-edit"></i>退审</a> ');
+                        }
+                        if ($('#optag').val() == "5") {
+                            //审核通过状态
+                            var par = row.dispatchid+"_"+row.optag+"_"+row.id;
+                            actions.push('<a class="btn btn-success btn-xs" href="#" onclick="technologyDetails(\'' + par + '\')"><i class="fa fa-edit"></i>工艺匹配详情</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + goFlag + '" href="#" onclick="technologyGo(\'' + par + '\')"><i class="fa fa-edit"></i>工艺下达</a> ');
+                            //actions.push('<a class="btn btn-success btn-xs" href="#" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-edit"></i>退审</a> ');
+                        }
+                        if ($('#optag').val() == "6") {
+                            //审核没有通过状态
+                            var par = row.dispatchid+"_"+row.optag+"_"+row.id;
+                            actions.push('<a class="btn btn-success btn-xs" href="#" onclick="technologyDetails(\'' + par + '\')"><i class="fa fa-edit"></i>工艺匹配详情</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="technologyUpdate(\'' + par + '\')"><i class="fa fa-edit"></i>修改工艺</a> ');
+                            // actions.push('<a class="btn btn-success btn-xs" href="#" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-edit"></i>确审</a> ');
+                            //actions.push('<a class="btn btn-success btn-xs" href="#" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-edit"></i>退审</a> ');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        _bootstrap_show(options, "bootstrap-table");
+        var	param={};
+        param["status"] = 5;
+        _bootstrap_search_tablename("#bootstrap-table",param);
+    });
+
+    $("#bootstrap-table").on("click-row.bs.table",function(e, row, $element) {
+        var	param={};
+        param["remark"] = row.boundpdorderid;
+        _bootstrap_search_tablename("#bootstrap-table-order",param);
+        //alert("click  button"+row.boundpdorderid);
+
+    })
+
+    //工艺下达
+    function technologyGo(id) {
+
+        $.modal.confirm("是否将此工艺下达？", function() {
+            adjax_post(ctx+"module/technology" + "/technologyGo/" + id, "", "post");
+            //location.reload();
+        })
+    }
+    function technologyUpdate(id) {
+        //alert(id);
+
+        var url = ctx+"module/technology" + "/technologyUpdate/" + id;
+
+        openTechnologyDetail("修改工艺匹配结果",url,1000,830);
+    }
+    function technologyDetails(id) {
+        //alert(id);
+
+        var url = ctx+"module/technology" + "/technologyDetails/" + id;
+
+        openTechnologyDetail("智能匹配工艺详情",url,1000,830);
+    }
+    function technologyDispatchDetails(id) {
+        var url = prefix + "/technologyDetails/" + "0";
+
+        $.modal.open(id+"号生产订单-工艺详情",url);
+        //$.modal.openFull("工艺详情",url);
+
+    }
+    //新增工艺
+    function teachnologyAdd() {
+        //alert("新增工艺");
+        var ids = new Array();
+        var selected = $('#bootstrap-table').bootstrapTable('getSelections');
+        if(selected.length>0)
+        {
+
+            if(selected.length == 1){
+
+                var url = ctx+"module/technology" + "/technologyAdd/" + selected[0].id;
+                $.modal.open("新增工艺",url);
+            }else{
+                $.modal.confirm("请选中一条数据");
+
+            }
+
+
+        }else{
+            $.modal.confirm("请选中一条数据");
+        }
+
+
+    }
+    //工艺匹配
+    function teachnologyMapping() {
+        //alert("工艺匹配");
+        var ids = new Array();
+        var selected = $('#bootstrap-table').bootstrapTable('getSelections');
+        if(selected.length > 0)
+        {
+            if(selected.length == 1){
+                for(var i=0;i<selected.length;i++){
+                    ids[i]=selected[i].id;
+                }
+
+                if(selected[0].optag == 2){
+                    var url = ctx+"module/technology" + "/automatch/" + selected[0].id;
+                    $.modal.openNoBtn("工艺匹配",url);
+                }else{
+                    $.modal.confirm("该调度单已经匹配完成，请勿重复匹配！");
+                }
+
+            }else{
+                $.modal.confirm("请选择一条调度单数据");
+            }
+        }else{
+            $.modal.confirm("请选择一条调度单数据");
+        }
+
+
+
+    }
+    //工艺申请
+    function teachnologyStep() {
+
+        var ids = new Array();
+        var selected = $('#bootstrap-table').bootstrapTable('getSelections');
+        for(var i=0;i<selected.length;i++){
+            ids[i]=selected[i].id;
+        }
+        $.modal.confirm("工艺申请？", function() {
+            var url = ctx+"module/technology" + "/applay";
+            var crttime = CurentTime();
+            var data = {
+                "ids" : ids.join(),
+                "crttime" : crttime
+            };
+            adjax_post(url, data, "post");
+            /*  _ajax(url, data, "post");
+                  location.reload(); */
+        })
+        //$.modal.confirm("工艺下达");
+    }
+    //单个
+    function audit(id) {
+        $.modal.confirm("审核功能");
+        $.modal.confirm("确定要退审选中标签吗？", function() {
+            adjax_post(ctx+"module/technology" + "/audit/" + id, "", "post");
+            /* _ajax(ctx+"module/technology" + "/audit/" + id, "", "post");
+            location.reload(); */
+        })
+
+    }
+
+    //单个
+    function unaudit(id) {
+        var url = ctx+"module/technology" + "/toRession/" + id;
+
+        $.modal.open("退审原因",url);
+
+
+        /* 	$.modal.confirm("确定要退审选中标签吗？", function() {
+        		_ajax(prefix + "/unaudit/" + id, "", "post");
+        		location.reload();
+            })
+             */
+    }
+
+
+
+
+    //顶部
+    function checkToPass(id) {
+
+
+        $.modal.confirm("审核功能");
+
+
+        /* 	$.modal.confirm("确定要退审选中标签吗？", function() {
+                _ajax(prefix + "/unaudit/" + id, "", "post");
+                location.reload();
+            })
+             */
+    }
+
+    //顶部
+    function checkToNopass(id) {
+        var url = prefix + "/toRession/" + id;
+
+        $.modal.open("退审原因",url);
+
+
+        /* 	$.modal.confirm("确定要退审选中标签吗？", function() {
+                _ajax(prefix + "/unaudit/" + id, "", "post");
+                location.reload();
+            })
+             */
+    }
+
+
+    function openTechnologyDetail(title,url,width,height){
+
+        layer.open({
+            id:'addMacode',
+            type:2,
+            area:[width+"px",height+"px"],
+            fix:false,
+            maxmin:true,
+            shade:0.3,
+            title:title,
+            content:url,
+            end: function () {//layer.open关闭事件关闭事件
+
+                //alert("页面关闭");
+                var	param={};
+                param["status"] = 5;
+                _bootstrap_search_tablename("#bootstrap-table",param);
+            }
+        })}
+    //订单信息
+    var orderprefix = ctx + "module/creatdispatch"
+    $(function() {
+        var orderoptions = {
+            url: orderprefix + "/technologyOrderlist",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "订单",
+            search:false,
+            columns: [
+                {
+                    field : 'id',
+                    title : '序号' ,
+                    visible : false
+                },
+                {
+                    field : 'contractid',
+                    title : '合同号' ,
+                    visible : false
+                },
+                {
+                    field : 'optime',
+                    title : '合同日期' ,
+                    visible : false
+                },
+                {
+                    field : 'saleod',
+                    title : '销售订单号' ,
+                    visible : false
+                },
+                {
+                    field : 'pdod',
+                    title : '生产订单号'
+                },
+                {
+                    field : 'line',
+                    title : '生产线'
+                },
+                {
+                    field : 'orderClass',
+                    title : '订单类型(销售生产)' ,
+                    visible : false
+                },
+                {
+                    field : 'type',
+                    title : '国内订单、出口订单' ,
+                    visible : false
+                },
+                {
+                    field : 'fullname',
+                    title : '客户名称'
+                },
+                {
+                    field : 'name',
+                    title : '产品品名'
+                },
+                {
+                    field : 'qualityid',
+                    title : '质量ID' ,
+                    visible : true
+                },
+                {
+                    field : 'quality',
+                    title : '质量要求' ,
+                    visible : true
+                },]
+        };
+        _bootstrap_show(orderoptions, "bootstrap-table-order");
+        //搜索条件赋值
+        var	param={};
+        param["name"]="XXX";
+        _bootstrap_search_tablename("#bootstrap-table-order",param);
+    });
+    function CurentTime()
+    {
+        var now = new Date();
+
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+
+        var hh = now.getHours();            //时
+        var mm = now.getMinutes();          //分
+        var ss = now.getSeconds();
+
+        var clock = year + "-";
+
+        if(month < 10)
+            clock += "0";
+
+        clock += month + "-";
+
+        if(day < 10)
+            clock += "0";
+
+        clock += day + " ";
+
+        if(hh < 10)
+            clock += "0";
+
+        clock += hh + ":";
+        if (mm < 10) clock += '0';
+        clock += mm+ ":";
+
+        if (ss < 10) clock += '0';
+        clock += ss;
+        return(clock);
+    }
+    function adjax_post(url, data, type) {
+        var config = {
+            url : url,
+            type : type,
+            dataType : "json",
+            data : data,
+            async : false,
+            success : function(result) {
+                simpleSuccess(result);
+            }
+        };
+        $.ajax(config)
+    };
+    /** 返回结果处理 */
+    function simpleSuccess(result) {
+        if (result.code == web_status.SUCCESS) {
+            $.modal.msg(result.msg, modal_status.SUCCESS);
+            setTimeout(function(){
+                location.reload();
+            },1000);
+
+        } else {
+            $.modal.alert(result.msg, modal_status.FAIL);
+        }
+    }
+</script>
+<script>
+
+</script>
+</body>
+</html>

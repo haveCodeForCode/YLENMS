@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+<th:block th:include="include :: header('调度编辑')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-creatdispatch-editTime" th:object="${creatdispatch}">
+        <input id="id" name="id" th:field="*{id}"  type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">生产调度单号：</label>
+            <div class="col-sm-8">
+                <input id="dispatchid" name="dispatchid" th:field="*{dispatchid}" class="form-control" type="text" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">计划开始时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="begintime" name="begintime"  th:field="*{begintime}" type="text"
+                           class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">计划结束时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="endtime" name="endtime"  th:field="*{endtime}" type="text"
+                           class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">生产时间：</label>
+            <div class="col-sm-8">
+                <input id="pdperiod" name="pdperiod" th:field="*{pdperiod}" class="form-control" type="text" readonly="readonly">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">停车开始时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="stopbegintime" name="stopbegintime"  th:field="*{stopbegintime}" type="text"
+                           class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">停车结束时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="stopendtime" name="stopendtime"  th:field="*{stopendtime}" type="text"
+                           class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">预计停车时间：</label>
+            <div class="col-sm-8">
+                <input id="planstoptime" name="planstoptime" th:field="*{planstoptime}" class="form-control" type="text" readonly="readonly">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-control-static col-sm-offset-9">
+                <button type="submit" class="btn btn-primary">提交</button>
+                <button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "module/creatdispatch"
+    $("#form-creatdispatch-editTime").validate({
+        rules:{
+            dispatchid:{
+                required:true,
+            },
+            begintime:{
+                required:true,
+                date:true
+            },
+            endtime:{
+                required:true,
+                date:true
+            }
+/*            stopbegintime:{
+                required:true,
+                date:true
+            },
+            stopendtime:{
+                required:true,
+                date:true
+            }*/
+        },
+        submitHandler: function(form) {
+            //时间大小判断即生产时间运算
+            var begintime = Date.parse($('#begintime').val());
+            var endtime = Date.parse($('#endtime').val());
+            var stopbegintime = Date.parse($('#stopbegintime').val());
+            var stopendtime = Date.parse($('#stopendtime').val());
+            if(begintime>endtime){
+                alert("计划开始时间应小于计划结束时间");
+                return;
+            }else if(stopbegintime>stopendtime){
+                alert("停车开始时间应小于停车结束时间");
+                return;
+            }else{
+
+                $('#pdperiod').val(evalDate(endtime-begintime));
+                $('#planstoptime').val(evalDate(stopendtime-stopbegintime));
+            }
+            $.operate.save(prefix + "/save", $('#form-creatdispatch-editTime').serialize());
+
+        }
+    });
+    //时间换算
+    function evalDate(data){
+        var days    = data / 1000 / 60 / 60 / 24;
+        var daysRound   = Math.floor(days);
+        var hours    = data/ 1000 / 60 / 60 - (24 * daysRound);
+        var hoursRound   = Math.floor(hours);
+        var minutes   = data / 1000 /60 - (24 * 60 * daysRound) - (60 * hoursRound);
+        var minutesRound  = Math.floor(minutes);
+        var seconds   = data/ 1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound);
+        var secondsRound  = Math.floor(seconds);
+        return daysRound + '天' + hoursRound + '时' + minutesRound + '分' + secondsRound + '秒';
+    }
+
+
+
+
+</script>
+</body>
+</html>

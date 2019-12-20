@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ylenms.project.sale.customer.mapper.CustomerMapper">
+    
+    <resultMap type="Customer" id="CustomerResult">
+        <result property="id"    column="ID"    />
+        <result property="fullname"    column="FULLNAME"    />
+        <result property="shortname"    column="SHORTNAME"    />
+        <result property="describe"    column="DESCRIBE"    />
+        <result property="quality"    column="QUALITY"    />
+        <result property="legalperson"    column="LEGALPERSON"    />
+        <result property="business"    column="BUSINESS"    />
+        <result property="product"    column="PRODUCT"    />
+        <result property="nation"    column="NATION"    />
+        <result property="type"    column="TYPE"    />
+        <result property="capital"    column="CAPITAL"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="telephone"    column="TELEPHONE"    />
+        <result property="fax"    column="FAX"    />
+        <result property="mail"    column="MAIL"    />
+        <result property="manager"    column="MANAGER"    />
+        <result property="managerdept"    column="MANAGERDEPT"    />
+        <result property="managerduty"    column="MANAGERDUTY"    />
+        <result property="managertel"    column="MANAGERTEL"    />
+        <result property="managerfax"    column="MANAGERFAX"    />
+        <result property="managermail"    column="MANAGERMAIL"    />
+        <result property="tax"    column="TAX"    />
+        <result property="zipcode"    column="ZIPCODE"    />
+        <result property="accountid"    column="ACCOUNTID"    />
+        <result property="bank"    column="BANK"    />
+        <result property="bankid"    column="BANKID"    />
+        <result property="grade"    column="GRADE"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="transflag"    column="TRANSFLAG"    />
+        <result property="cuscode"    column="CUSCODE"    />
+    </resultMap>
+
+    <sql id="selectCustomerVo">
+        select ID, FULLNAME, SHORTNAME, `DESCRIBE`, QUALITY, LEGALPERSON, BUSINESS, PRODUCT, NATION, `TYPE`, CAPITAL, ADDRESS, TELEPHONE, FAX, MAIL, MANAGER, MANAGERDEPT, MANAGERDUTY, MANAGERTEL, MANAGERFAX, MANAGERMAIL, TAX, ZIPCODE, ACCOUNTID, BANK, BANKID, GRADE, REMARK, TRANSFLAG, CUSCODE from tbl_customer
+    </sql>
+
+    <select id="selectCustomerList" parameterType="Customer" resultMap="CustomerResult">
+        <include refid="selectCustomerVo"/>
+        <where>  
+            <if test="fullname != null  and fullname != ''"> and FULLNAME like concat('%', #{fullname}, '%')</if>
+            <if test="shortname != null  and shortname != ''"> and SHORTNAME like concat('%', #{shortname}, '%')</if>
+            <if test="telephone!= null  and telephone!= ''"> and TELEPHONE like concat('%', #{telephone}, '%')</if>
+            <if test="type!= null  and type!= ''"> and TYPE like concat('%', #{type}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectCustomerById" parameterType="Long" resultMap="CustomerResult">
+        <include refid="selectCustomerVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertCustomer" parameterType="Customer" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fullname != null  and fullname != ''">FULLNAME,</if>
+            <if test="shortname != null  and shortname != ''">SHORTNAME,</if>
+            <if test="describe != null  and describe != ''">DESCRIBE,</if>
+            <if test="quality != null  and quality != ''">QUALITY,</if>
+            <if test="legalperson != null  and legalperson != ''">LEGALPERSON,</if>
+            <if test="business != null  and business != ''">BUSINESS,</if>
+            <if test="product != null  and product != ''">PRODUCT,</if>
+            <if test="nation != null  and nation != ''">NATION,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="capital != null  and capital != ''">CAPITAL,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="telephone != null  and telephone != ''">TELEPHONE,</if>
+            <if test="fax != null  and fax != ''">FAX,</if>
+            <if test="mail != null  and mail != ''">MAIL,</if>
+            <if test="manager != null  and manager != ''">MANAGER,</if>
+            <if test="managerdept != null  and managerdept != ''">MANAGERDEPT,</if>
+            <if test="managerduty != null  and managerduty != ''">MANAGERDUTY,</if>
+            <if test="managertel != null  and managertel != ''">MANAGERTEL,</if>
+            <if test="managerfax != null  and managerfax != ''">MANAGERFAX,</if>
+            <if test="managermail != null  and managermail != ''">MANAGERMAIL,</if>
+            <if test="tax != null  and tax != ''">TAX,</if>
+            <if test="zipcode != null  and zipcode != ''">ZIPCODE,</if>
+            <if test="accountid != null  and accountid != ''">ACCOUNTID,</if>
+            <if test="bank != null  and bank != ''">BANK,</if>
+            <if test="bankid != null  and bankid != ''">BANKID,</if>
+            <if test="grade != null  and grade != ''">GRADE,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="transflag != null ">TRANSFLAG,</if>
+            <if test="cuscode != null  and cuscode != ''">CUSCODE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fullname != null  and fullname != ''">#{fullname},</if>
+            <if test="shortname != null  and shortname != ''">#{shortname},</if>
+            <if test="describe != null  and describe != ''">#{describe},</if>
+            <if test="quality != null  and quality != ''">#{quality},</if>
+            <if test="legalperson != null  and legalperson != ''">#{legalperson},</if>
+            <if test="business != null  and business != ''">#{business},</if>
+            <if test="product != null  and product != ''">#{product},</if>
+            <if test="nation != null  and nation != ''">#{nation},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="capital != null  and capital != ''">#{capital},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="telephone != null  and telephone != ''">#{telephone},</if>
+            <if test="fax != null  and fax != ''">#{fax},</if>
+            <if test="mail != null  and mail != ''">#{mail},</if>
+            <if test="manager != null  and manager != ''">#{manager},</if>
+            <if test="managerdept != null  and managerdept != ''">#{managerdept},</if>
+            <if test="managerduty != null  and managerduty != ''">#{managerduty},</if>
+            <if test="managertel != null  and managertel != ''">#{managertel},</if>
+            <if test="managerfax != null  and managerfax != ''">#{managerfax},</if>
+            <if test="managermail != null  and managermail != ''">#{managermail},</if>
+            <if test="tax != null  and tax != ''">#{tax},</if>
+            <if test="zipcode != null  and zipcode != ''">#{zipcode},</if>
+            <if test="accountid != null  and accountid != ''">#{accountid},</if>
+            <if test="bank != null  and bank != ''">#{bank},</if>
+            <if test="bankid != null  and bankid != ''">#{bankid},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="transflag != null ">#{transflag},</if>
+            <if test="cuscode != null  and cuscode != ''">#{cuscode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCustomer" parameterType="Customer">
+        update tbl_customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fullname != null  and fullname != ''">FULLNAME = #{fullname},</if>
+            <if test="shortname != null  and shortname != ''">SHORTNAME = #{shortname},</if>
+            <if test="describe != null  and describe != ''">`DESCRIBE` = #{describe},</if>
+            <if test="quality != null  and quality != ''">QUALITY = #{quality},</if>
+            <if test="legalperson != null  and legalperson != ''">LEGALPERSON = #{legalperson},</if>
+            <if test="business != null  and business != ''">BUSINESS = #{business},</if>
+            <if test="product != null  and product != ''">PRODUCT = #{product},</if>
+            <if test="nation != null  and nation != ''">NATION = #{nation},</if>
+            <if test="type != null  and type != ''">`TYPE` = #{type},</if>
+            <if test="capital != null  and capital != ''">CAPITAL = #{capital},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="telephone != null  and telephone != ''">TELEPHONE = #{telephone},</if>
+            <if test="fax != null  and fax != ''">FAX = #{fax},</if>
+            <if test="mail != null  and mail != ''">MAIL = #{mail},</if>
+            <if test="manager != null  and manager != ''">MANAGER = #{manager},</if>
+            <if test="managerdept != null  and managerdept != ''">MANAGERDEPT = #{managerdept},</if>
+            <if test="managerduty != null  and managerduty != ''">MANAGERDUTY = #{managerduty},</if>
+            <if test="managertel != null  and managertel != ''">MANAGERTEL = #{managertel},</if>
+            <if test="managerfax != null  and managerfax != ''">MANAGERFAX = #{managerfax},</if>
+            <if test="managermail != null  and managermail != ''">MANAGERMAIL = #{managermail},</if>
+            <if test="tax != null  and tax != ''">TAX = #{tax},</if>
+            <if test="zipcode != null  and zipcode != ''">ZIPCODE = #{zipcode},</if>
+            <if test="accountid != null  and accountid != ''">ACCOUNTID = #{accountid},</if>
+            <if test="bank != null  and bank != ''">BANK = #{bank},</if>
+            <if test="bankid != null  and bankid != ''">BANKID = #{bankid},</if>
+            <if test="grade != null  and grade != ''">GRADE = #{grade},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="transflag != null ">TRANSFLAG = #{transflag},</if>
+            <if test="cuscode != null  and cuscode != ''">CUSCODE = #{cuscode},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCustomerById" parameterType="Long">
+        delete from tbl_customer where ID = #{id}
+    </delete>
+
+    <delete id="deleteCustomerByIds" parameterType="String">
+        delete from tbl_customer where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

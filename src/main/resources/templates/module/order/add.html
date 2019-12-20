@@ -1,0 +1,451 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-order-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">合同号：</label>
+				<div class="col-sm-8">
+					<input id="contractid" name="contractid" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">合同日期：</label>
+				<div class="col-sm-8">
+					<input id="optime" name="optime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">销售订单号：</label>
+				<div class="col-sm-8">
+					<input id="saleod" name="saleod" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">生产订单号：</label>
+				<div class="col-sm-8">
+					<input id="pdod" name="pdod" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">订单类型(销售生产)：</label>
+				<div class="col-sm-8">
+					<input id="orderClass" name="orderClass" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">国内订单、出口订单：</label>
+				<div class="col-sm-8">
+					<input id="type" name="type" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">：</label>
+				<div class="col-sm-8">
+					<input id="sample" name="sample" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">客户名称：</label>
+				<div class="col-sm-8">
+					<input id="fullname" name="fullname" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">产品品名：</label>
+				<div class="col-sm-8">
+					<input id="name" name="name" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">克重g：</label>
+				<div class="col-sm-8">
+					<input id="gsm" name="gsm" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">幅宽mm：</label>
+				<div class="col-sm-8">
+					<input id="width" name="width" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">卷长m：</label>
+				<div class="col-sm-8">
+					<input id="rolength" name="rolength" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">卷径cm：</label>
+				<div class="col-sm-8">
+					<input id="bagdia" name="bagdia" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">质量ID：</label>
+				<div class="col-sm-8">
+					<input id="qualityid" name="qualityid" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">货柜id：</label>
+				<div class="col-sm-8">
+					<input id="containerid" name="containerid" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">托盘id：</label>
+				<div class="col-sm-8">
+					<input id="palletid" name="palletid" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">缠绕膜层数：</label>
+				<div class="col-sm-8">
+					<input id="plynum" name="plynum" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">纸管类型：</label>
+				<div class="col-sm-8">
+					<input id="tubetype" name="tubetype" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">永信默认、客户指定：</label>
+				<div class="col-sm-8">
+					<input id="tagid" name="tagid" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">质量要求：</label>
+				<div class="col-sm-8">
+					<input id="quality" name="quality" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">每包最大盘数：</label>
+				<div class="col-sm-8">
+					<input id="maxrollnum" name="maxrollnum" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">包装形式：</label>
+				<div class="col-sm-8">
+					<input id="packing" name="packing" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">编织袋颜色：</label>
+				<div class="col-sm-8">
+					<input id="bagcolor" name="bagcolor" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否带托盘：</label>
+				<div class="col-sm-8">
+					<input id="pallet" name="pallet" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">生产线：</label>
+				<div class="col-sm-8">
+					<input id="line" name="line" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">单价(元)：</label>
+				<div class="col-sm-8">
+					<input id="price" name="price" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">汇率：</label>
+				<div class="col-sm-8">
+					<input id="exchrate" name="exchrate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">包数(包)：</label>
+				<div class="col-sm-8">
+					<input id="totalcnt" name="totalcnt" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">订单重量kg：</label>
+				<div class="col-sm-8">
+					<input id="weight" name="weight" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">计价方式：</label>
+				<div class="col-sm-8">
+					<input id="priceterm" name="priceterm" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">美元总价($)：</label>
+				<div class="col-sm-8">
+					<input id="doamount" name="doamount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">人民币总价(元)：</label>
+				<div class="col-sm-8">
+					<input id="rmbamount" name="rmbamount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">付款方式：</label>
+				<div class="col-sm-8">
+					<input id="payment" name="payment" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">预付款比例：</label>
+				<div class="col-sm-8">
+					<input id="prepayratio" name="prepayratio" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">预付款金额：</label>
+				<div class="col-sm-8">
+					<input id="prepay" name="prepay" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">交货日期：</label>
+				<div class="col-sm-8">
+					<input id="sendtime" name="sendtime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否自提：</label>
+				<div class="col-sm-8">
+					<input id="selfdli" name="selfdli" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">船运公司：</label>
+				<div class="col-sm-8">
+					<input id="shipcorp" name="shipcorp" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">船运费用：</label>
+				<div class="col-sm-8">
+					<input id="shipcost" name="shipcost" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">货运公司：</label>
+				<div class="col-sm-8">
+					<input id="transcorp" name="transcorp" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">货运始发地：</label>
+				<div class="col-sm-8">
+					<input id="transtartpl" name="transtartpl" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">货运目的地：</label>
+				<div class="col-sm-8">
+					<input id="transendpl" name="transendpl" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">物流里程暂估：</label>
+				<div class="col-sm-8">
+					<input id="transdis" name="transdis" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">物流单价暂估：</label>
+				<div class="col-sm-8">
+					<input id="transprice" name="transprice" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">物流费用暂估：</label>
+				<div class="col-sm-8">
+					<input id="transcost" name="transcost" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">提货地点：</label>
+				<div class="col-sm-8">
+					<input id="dliplace" name="dliplace" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">装船港口：</label>
+				<div class="col-sm-8">
+					<input id="loadport" name="loadport" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">到货港口：</label>
+				<div class="col-sm-8">
+					<input id="destport" name="destport" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否跟单：</label>
+				<div class="col-sm-8">
+					<input id="documentary" name="documentary" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">跟单日期：</label>
+				<div class="col-sm-8">
+					<input id="docdate" name="docdate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否轧车：</label>
+				<div class="col-sm-8">
+					<input id="padder" name="padder" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">指定原料：</label>
+				<div class="col-sm-8">
+					<input id="material" name="material" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">订单状态：</label>
+				<div class="col-sm-8">
+					<input id="status" name="status" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">审核人：</label>
+				<div class="col-sm-8">
+					<input id="auditname" name="auditname" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">审核时间：</label>
+				<div class="col-sm-8">
+					<input id="audittime" name="audittime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">签订日期：</label>
+				<div class="col-sm-8">
+					<input id="deliverytime" name="deliverytime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">业务员：</label>
+				<div class="col-sm-8">
+					<input id="salesman" name="salesman" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">签订日期：</label>
+				<div class="col-sm-8">
+					<input id="signtime" name="signtime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">录入人：</label>
+				<div class="col-sm-8">
+					<input id="inputname" name="inputname" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">录入时间：</label>
+				<div class="col-sm-8">
+					<input id="inputtime" name="inputtime" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">启用状态：</label>
+				<div class="col-sm-8">
+					<input id="delFlag" name="delFlag" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">退审理由：</label>
+				<div class="col-sm-8">
+					<input id="ression" name="ression" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否装柜：</label>
+				<div class="col-sm-8">
+					<input id="container" name="container" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否拼柜：</label>
+				<div class="col-sm-8">
+					<input id="containercom" name="containercom" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">拼柜生产订单号：</label>
+				<div class="col-sm-8">
+					<input id="conpdod" name="conpdod" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">装柜数：</label>
+				<div class="col-sm-8">
+					<input id="conno" name="conno" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">是否拼幅宽：</label>
+				<div class="col-sm-8">
+					<input id="wdcom" name="wdcom" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">拼幅宽生产订单号：</label>
+				<div class="col-sm-8">
+					<input id="wdpdod" name="wdpdod" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remark" name="remark" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">传输标志：</label>
+				<div class="col-sm-8">
+					<input id="transflag" name="transflag" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "module/order"
+		$("#form-order-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			submitHandler: function(form) {
+				$.operate.save(prefix + "/save", $('#form-order-add').serialize());
+			}
+		});
+	</script>
+</body>
+</html>

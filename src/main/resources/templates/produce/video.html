@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('视频显示')" />
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<div>
+			<video controls="controls" style="height: 280px" autoplay="autoplay"
+				loop="loop">
+				<source th:src="${'/profile/'+data}" type="video/mp4" />
+			</video>
+		</div>
+	</div>
+</body>
+</html>

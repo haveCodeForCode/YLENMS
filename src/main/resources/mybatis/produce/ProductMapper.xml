@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ylenms.project.produce.product.mapper.ProductMapper">
+    
+    <resultMap type="Product" id="ProductResult">
+        <result property="id"    column="ID"    />
+        <result property="type"    column="TYPE"    />
+        <result property="pdname"    column="PDNAME"    />
+        <result property="pdcode"    column="PDCODE"    />
+        <result property="technology"    column="TECHNOLOGY"    />
+        <result property="macode"    column="MACODE"    />
+        <result property="maratio"    column="MARATIO"    />
+        <result property="recipe"    column="RECIPE"    />
+        <result property="consumption"	column="CONSUMPTION"/>
+        <result property="item1"    column="ITEM1"    />
+        <result property="item2"    column="ITEM2"    />
+        <result property="item3"    column="ITEM3"    />
+        <result property="item4"    column="ITEM4"    />
+        <result property="item5"    column="ITEM5"    />
+        <result property="item6"    column="ITEM6"    />
+        <result property="item7"    column="ITEM7"    />
+        <result property="item8"    column="ITEM8"    />
+        <result property="item9"    column="ITEM9"    />
+        <result property="item10"    column="ITEM10"    />
+        <result property="item11"    column="ITEM11"    />
+        <result property="item12"    column="ITEM12"    />
+        <result property="item13"    column="ITEM13"    />
+        <result property="item14"    column="ITEM14"    />
+        <result property="item15"    column="ITEM15"    />
+        <result property="item16"    column="ITEM16"    />
+        <result property="status"    column="STATUS"    />
+        <result property="delFlag"    column="DEL_FLAG"    />
+        <result property="ression"    column="RESSION"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="transflag"    column="TRANSFLAG"    />
+        <result property="auditname"    column="AUDITNAME"    />
+        <result property="audittime"    column="AUDITTIME"    />
+        <result property="inputname"    column="INPUTNAME"    />
+        <result property="inputtime"    column="INPUTTIME"    />
+    </resultMap>
+
+    <sql id="selectProductVo">
+        select ID,TYPE,PDNAME, PDCODE, TECHNOLOGY, MACODE, MARATIO, RECIPE, CONSUMPTION,ITEM1, ITEM2, ITEM3, ITEM4, ITEM5, ITEM6, ITEM7, ITEM8, ITEM9, ITEM10, ITEM11, ITEM12, ITEM13, ITEM14, ITEM15, ITEM16, STATUS, DEL_FLAG, RESSION, REMARK, TRANSFLAG, AUDITNAME, AUDITTIME, INPUTNAME, INPUTTIME from tbl_product
+    </sql>
+
+    <select id="selectProductList" parameterType="Product" resultMap="ProductResult">
+        <include refid="selectProductVo"/>
+        <where>  
+            <if test="pdname != null  and pdname != ''"> and PDNAME like concat('%', #{pdname}, '%')</if>
+            <if test="pdcode!= null  and pdcode!= ''"> and PDCODE like concat('%', #{pdcode}, '%')</if>
+            <if test="type!= null  and type!= ''"> and TYPE like concat('%', #{type}, '%')</if>
+            <if test="status!= null  and status!= ''"> and status like concat('%', #{status}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectProductById" parameterType="Long" resultMap="ProductResult">
+        <include refid="selectProductVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertProduct" parameterType="Product" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="pdname != null  and pdname != ''">PDNAME,</if>
+            <if test="pdcode != null  and pdcode != ''">PDCODE,</if>
+            <if test="technology != null  and technology != ''">TECHNOLOGY,</if>
+            <if test="macode != null  and macode != ''">MACODE,</if>
+            <if test="maratio != null  and maratio != ''">MARATIO,</if>
+            <if test="recipe != null  and recipe != ''">RECIPE,</if>
+            <if test="consumption!=null and consumption!=''">CONSUMPTION,</if>
+            <if test="item1 != null ">ITEM1,</if>
+            <if test="item2 != null ">ITEM2,</if>
+            <if test="item3 != null ">ITEM3,</if>
+            <if test="item4 != null ">ITEM4,</if>
+            <if test="item5 != null ">ITEM5,</if>
+            <if test="item6 != null ">ITEM6,</if>
+            <if test="item7 != null ">ITEM7,</if>
+            <if test="item8 != null ">ITEM8,</if>
+            <if test="item9 != null ">ITEM9,</if>
+            <if test="item10 != null ">ITEM10,</if>
+            <if test="item11 != null ">ITEM11,</if>
+            <if test="item12 != null ">ITEM12,</if>
+            <if test="item13 != null ">ITEM13,</if>
+            <if test="item14 != null ">ITEM14,</if>
+            <if test="item15 != null ">ITEM15,</if>
+            <if test="item16 != null ">ITEM16,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="delFlag != null  and delFlag != ''">DEL_FLAG,</if>
+            <if test="ression != null  and ression != ''">RESSION,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="transflag != null ">TRANSFLAG,</if>
+            <if test="auditname != null  and auditname != ''">AUDITNAME,</if>
+            <if test="audittime != null ">AUDITTIME,</if>
+            <if test="inputname != null  and inputname != ''">INPUTNAME,</if>
+            <if test="inputtime != null ">INPUTTIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="pdname != null  and pdname != ''">#{pdname},</if>
+            <if test="pdcode != null  and pdcode != ''">#{pdcode},</if>
+            <if test="technology != null  and technology != ''">#{technology},</if>
+            <if test="macode != null  and macode != ''">#{macode},</if>
+            <if test="maratio != null  and maratio != ''">#{maratio},</if>
+            <if test="recipe != null  and recipe != ''">#{recipe},</if>
+            <if test="consumption!=null and consumption!=''">#{consumption},</if>
+            <if test="item1 != null ">#{item1},</if>
+            <if test="item2 != null ">#{item2},</if>
+            <if test="item3 != null ">#{item3},</if>
+            <if test="item4 != null ">#{item4},</if>
+            <if test="item5 != null ">#{item5},</if>
+            <if test="item6 != null ">#{item6},</if>
+            <if test="item7 != null ">#{item7},</if>
+            <if test="item8 != null ">#{item8},</if>
+            <if test="item9 != null ">#{item9},</if>
+            <if test="item10 != null ">#{item10},</if>
+            <if test="item11 != null ">#{item11},</if>
+            <if test="item12 != null ">#{item12},</if>
+            <if test="item13 != null ">#{item13},</if>
+            <if test="item14 != null ">#{item14},</if>
+            <if test="item15 != null ">#{item15},</if>
+            <if test="item16 != null ">#{item16},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ression != null  and ression != ''">#{ression},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="transflag != null ">#{transflag},</if>
+            <if test="auditname != null  and auditname != ''">#{auditname},</if>
+            <if test="audittime != null ">#{audittime},</if>
+            <if test="inputname != null  and inputname != ''">#{inputname},</if>
+            <if test="inputtime != null ">#{inputtime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProduct" parameterType="Product">
+        update tbl_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="pdname != null  and pdname != ''">PDNAME = #{pdname},</if>
+            <if test="pdcode != null  and pdcode != ''">PDCODE = #{pdcode},</if>
+            <if test="technology != null  and technology != ''">TECHNOLOGY = #{technology},</if>
+            <if test="macode != null  and macode != ''">MACODE = #{macode},</if>
+            <if test="maratio != null  and maratio != ''">MARATIO = #{maratio},</if>
+            <if test="recipe != null  and recipe != ''">RECIPE = #{recipe},</if>
+            <if test="consumption!=null and consumption!=''">CONSUMPTION=#{consumption},</if>
+            <if test="item1 != null ">ITEM1 = #{item1},</if>
+            <if test="item2 != null ">ITEM2 = #{item2},</if>
+            <if test="item3 != null ">ITEM3 = #{item3},</if>
+            <if test="item4 != null ">ITEM4 = #{item4},</if>
+            <if test="item5 != null ">ITEM5 = #{item5},</if>
+            <if test="item6 != null ">ITEM6 = #{item6},</if>
+            <if test="item7 != null ">ITEM7 = #{item7},</if>
+            <if test="item8 != null ">ITEM8 = #{item8},</if>
+            <if test="item9 != null ">ITEM9 = #{item9},</if>
+            <if test="item10 != null ">ITEM10 = #{item10},</if>
+            <if test="item11 != null ">ITEM11 = #{item11},</if>
+            <if test="item12 != null ">ITEM12 = #{item12},</if>
+            <if test="item13 != null ">ITEM13 = #{item13},</if>
+            <if test="item14 != null ">ITEM14 = #{item14},</if>
+            <if test="item15 != null ">ITEM15 = #{item15},</if>
+            <if test="item16 != null ">ITEM16 = #{item16},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="delFlag != null  and delFlag != ''">DEL_FLAG = #{delFlag},</if>
+            <if test="ression != null  and ression != ''">RESSION = #{ression},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="transflag != null ">TRANSFLAG = #{transflag},</if>
+            <if test="auditname != null  and auditname != ''">AUDITNAME = #{auditname},</if>
+            <if test="audittime != null ">AUDITTIME = #{audittime},</if>
+            <if test="inputname != null  and inputname != ''">INPUTNAME = #{inputname},</if>
+            <if test="inputtime != null ">INPUTTIME = #{inputtime},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteProductById" parameterType="Long">
+        delete from tbl_product where ID = #{id}
+    </delete>
+
+    <delete id="deleteProductByIds" parameterType="String">
+        delete from tbl_product where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectProductByName" parameterType="String" resultMap="ProductResult">
+		select ID, TYPE, PDNAME, PDCODE, TECHNOLOGY, MACODE, MARATIO, RECIPE,CONSUMPTION,AUDITNAME, AUDITTIME,INPUTNAME, INPUTTIME
+		from TBL_PRODUCT where PDNAME = #{pdname}
+	</select>
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ylenms.project.basic.amdevice.mapper.AmdeviceMapper">
+    
+    <resultMap type="Amdevice" id="DeviceResult">
+        <result property="id"    column="ID"    />
+        <result property="devid"    column="DEVID"    />
+        <result property="devname"    column="DEVNAME"    />
+        <result property="devtype"    column="DEVTYPE"    />
+        <result property="position"    column="POSITION"    />
+        <result property="brand"    column="BRAND"    />
+        <result property="version"    column="VERSION"    />
+        <result property="description"    column="DESCRIPTION"    />
+        <result property="status"    column="STATUS"    />
+        <result property="useflag"    column="USEFLAG"    />
+        <result property="spare1"    column="SPARE1"    />
+        <result property="spare2"    column="SPARE2"    />
+        <result property="remark"    column="REMARK"    />
+    </resultMap>
+
+    <sql id="selectAmdeviceVo">
+        select ID, DEVID, DEVNAME, DEVTYPE, POSITION, BRAND, VERSION, DESCRIPTION, STATUS, USEFLAG, SPARE1, SPARE2, REMARK from tbl_device
+    </sql>
+
+    <select id="selectAmdeviceList" parameterType="Amdevice" resultMap="DeviceResult">
+        <include refid="selectAmdeviceVo"/>
+        <where>  
+            <if test="devname != null  and devname != ''"> and DEVNAME like concat('%', #{devname}, '%')</if>
+            <if test="devtype != null"> and DEVTYPE = #{devtype}</if>
+        </where>
+    </select>
+    
+    <select id="selectAmdeviceById" parameterType="Long" resultMap="DeviceResult">
+        <include refid="selectAmdeviceVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertAmdevice" parameterType="Amdevice" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="devid != null ">DEVID,</if>
+            <if test="devname != null  and devname != ''">DEVNAME,</if>
+            <if test="devtype != null ">DEVTYPE,</if>
+            <if test="position != null  and position != ''">POSITION,</if>
+            <if test="brand != null  and brand != ''">BRAND,</if>
+            <if test="version != null  and version != ''">VERSION,</if>
+            <if test="description != null  and description != ''">DESCRIPTION,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="useflag != null  and useflag != ''">USEFLAG,</if>
+            <if test="spare1 != null ">SPARE1,</if>
+            <if test="spare2 != null  and spare2 != ''">SPARE2,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="devid != null ">#{devid},</if>
+            <if test="devname != null  and devname != ''">#{devname},</if>
+            <if test="devtype != null ">#{devtype},</if>
+            <if test="position != null  and position != ''">#{position},</if>
+            <if test="brand != null  and brand != ''">#{brand},</if>
+            <if test="version != null  and version != ''">#{version},</if>
+            <if test="description != null  and description != ''">#{description},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="useflag != null  and useflag != ''">#{useflag},</if>
+            <if test="spare1 != null ">#{spare1},</if>
+            <if test="spare2 != null  and spare2 != ''">#{spare2},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAmdevice" parameterType="Amdevice">
+        update tbl_device
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="devid != null ">DEVID = #{devid},</if>
+            <if test="devname != null  and devname != ''">DEVNAME = #{devname},</if>
+            <if test="devtype != null ">DEVTYPE = #{devtype},</if>
+            <if test="position != null  and position != ''">POSITION = #{position},</if>
+            <if test="brand != null  and brand != ''">BRAND = #{brand},</if>
+            <if test="version != null  and version != ''">VERSION = #{version},</if>
+            <if test="description != null  and description != ''">DESCRIPTION = #{description},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="useflag != null  and useflag != ''">USEFLAG = #{useflag},</if>
+            <if test="spare1 != null ">SPARE1 = #{spare1},</if>
+            <if test="spare2 != null  and spare2 != ''">SPARE2 = #{spare2},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteAmdeviceById" parameterType="Long">
+        delete from tbl_device where ID = #{id}
+    </delete>
+
+    <delete id="deleteAmdeviceByIds" parameterType="String">
+        delete from tbl_device where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

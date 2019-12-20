@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('产品信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>产品类型：</p>
+								<select name="type" th:with="type=${@dict.getType('tbl_product_type')}">
+									<option value="">所有</option>
+									<option th:each="e : ${type}" th:text="${e['dictLabel']}" th:value="${e['dictValue']}"></option>
+								</select>
+                            </li>
+                            <li>
+                                <p>产品品名：</p>
+                                <input type="text" name="pdname"/>
+                            </li>
+							<li>
+								<p>状态：</p>
+								<select name="delFlag" th:with="type=${@dict.getType('tbl_list_status')}">
+									<option value="">所有</option>
+									<option th:each="e : ${type}" th:text="${e['dictLabel']}" th:value="${e['dictValue']}"></option>
+								</select>
+							</li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+		var detailFlag = [[${@permission.hasPermi('produce:product:detail')}]];
+        var editFlag = [[${@permission.hasPermi('produce:product:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('produce:product:remove')}]];
+        var prefix = ctx + "produce/product";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+    			detailUrl: prefix + "/detail/{id}",
+                modalName: "产品信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '序号',
+                    visible: false
+                },
+                {
+                    field : 'type', 
+                    title : '产品类型',
+                    formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_product_type')}]];
+            			return $.table.selectDictLabel(datas, row.type);
+                    }
+                },
+                {
+                    field : 'pdname', 
+                    title : '产品品名'
+                },
+                {
+                    field : 'pdcode', 
+                    title : '产品编码'
+                },
+//                 {
+//                     field : 'technology', 
+//                     title : '工艺'
+//                 },
+                {
+                    field : 'macode', 
+                    title : '原料名'
+                },
+                {
+                    field : 'maratio', 
+                    title : '原料比例%'
+                },
+                {
+                    field : 'recipe', 
+                    title : '配比'
+                },
+                {
+                    field : 'item1', 
+                    title : '名义线密度'
+                },
+                {
+                    field : 'item2', 
+                    title : '切断长度'
+                },
+//                 {
+//                     field : 'item3', 
+//                     title : '干断裂强度'
+//                 },
+//                 {
+//                     field : 'item4', 
+//                     title : '湿断 裂强度'
+//                 },
+//                 {
+//                     field : 'item5', 
+//                     title : '湿模量'
+//                 },
+//                 {
+//                     field : 'item6', 
+//                     title : '干断裂伸长率'
+//                 },
+//                 {
+//                     field : 'item7', 
+//                     title : '干断裂强力变异系数'
+//                 },
+//                 {
+//                     field : 'item8', 
+//                     title : '线密度偏差率'
+//                 },
+//                 {
+//                     field : 'item9', 
+//                     title : '长度偏差率'
+//                 },
+//                 {
+//                     field : 'item10', 
+//                     title : '超长纤维率'
+//                 },
+//                 {
+//                     field : 'item11', 
+//                     title : '倍长纤维含掀'
+//                 },
+//                 {
+//                     field : 'item12', 
+//                     title : '疵点含量'
+//                 },
+//                 {
+//                     field : 'item13', 
+//                     title : '油污黄纤维含量'
+//                 },
+                {
+                    field : 'item14', 
+                    title : '白度'
+                },
+                {
+                    field : 'item15', 
+                    title : '含油率'
+                },
+                {
+                    field : 'item16', 
+                    title : '回潮率'
+                },
+                {
+                    field : 'status',
+                    title : '操作状态',
+                    formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_list_status')}]];
+            			return $.table.selectDictLabel(datas, row.status);
+                    }
+                },
+                {
+                    field : 'delflag', 
+                    title : '状态',
+                    formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_status')}]];
+            			return $.table.selectDictLabel(datas, row.delFlag);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="#" onclick="addToOrder(\'' + row.pdcode +'\',\'' + row.pdname+'\')"><i class="fa fa-plus"></i>选择</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        //向订单传递参数
+        function addToOrder(data,name){
+//         	alert(data);
+//         	alert(name);
+            window.parent.$("#materialcode").val(data);
+            window.parent.$("#name").val(name);
+//             window.parent.$("#tagImg").val(str);
+            $.modal.close();
+        }
+    </script>
+</body>
+</html>

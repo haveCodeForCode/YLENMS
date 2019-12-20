@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+	<th:block th:include="include :: header('退审理由')" />
+</head>
+<body class="gray-bg">
+
+	<form class="form-horizontal m" id="form-product-add">
+		<input type="hidden" id="tblId"  th:value="${id}">
+		<input type="hidden" id="url" th:value="${url}">
+		<div class="form-group">
+			<label class="col-sm-3 control-label">相关建议：</label>
+		<div class="col-sm-8">
+			<textarea id="ression" class="form-control" rows="5" placeholder="请输入相关建议"></textarea>
+		</div>
+		</div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button onclick="submitRession();" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger"
+						type="button">关闭</button>
+				</div>
+			</div>
+	</form>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript">
+
+	function submitRession(){
+		var url = ctx + $('#url').val() +"/unaudit" ;
+		if($('#ression').val() == ''){
+			alert("请输入相关建议");
+			return
+		}
+		//$.operate.save(ctx + $('#url').val() +"/unaudit", $('#form-product-add').serialize());
+		$.ajax({
+			url : url,
+			type:'post',
+			data : {
+				"id" : $('#tblId').val(),
+				"ression" : $('#ression').val()
+			},
+			dataType : "json",
+			async : false,
+			success : function(result) {
+				if (result.code == web_status.SUCCESS) {
+					parent.location.reload(); 
+				}
+			},
+			error : function(data) {
+				$.modal.close();
+			}
+		}
+		)
+	}
+	</script>
+</body>
+</html>

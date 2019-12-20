@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ylenms.project.module.creatdispatch.mapper.CreatdispatchMapper">
+
+    <resultMap type="Creatdispatch" id="CreatdispatchResult">
+        <result property="id"    column="ID"    />
+        <result property="dispatchid"    column="DISPATCHID"    />
+        <result property="pdlineid"    column="PDLINEID"    />
+        <result property="pdname"    column="PDNAME"    />
+        <result property="actualweight"    column="ACTUALWEIGHT"    />
+        <result property="optag"    column="OPTAG"    />
+        <result property="status"    column="STATUS"    />
+        <result property="boundpdorderid"    column="BOUNDPDORDERID"    />
+        <result property="sortnum"    column="SORTNUM"    />
+        <result property="sortid"    column="SORTID"    />
+        <result property="distype"    column="DISTYPE"    />
+        <result property="begintime"    column="BEGINTIME"    />
+        <result property="endtime"    column="ENDTIME"    />
+        <result property="pdperiod"    column="PDPERIOD"    />
+        <result property="stopbegintime"    column="STOPBEGINTIME"    />
+        <result property="stopendtime"    column="STOPENDTIME"    />
+        <result property="planstoptime"    column="PLANSTOPTIME"    />
+        <result property="auditflag"    column="AUDITFLAG"    />
+        <result property="ression"    column="RESSION"    />
+        <result property="pdstatus"    column="PDSTATUS"    />
+        <result property="pdrate"    column="PDRATE"    />
+        <result property="ression"    column="RESSION"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="transflag"    column="TRANSFLAG"    />
+    </resultMap>
+
+    <select id="selectCreatdispatchById" parameterType="Integer" resultMap="CreatdispatchResult">
+        select ID, DISPATCHID, PDLINEID, PDNAME, ACTUALWEIGHT, OPTAG, STATUS,AUDITFLAG,RESSION, BOUNDPDORDERID, REMARK, TRANSFLAG,SORTNUM,SORTID,DISTYPE,BEGINTIME,ENDTIME,PDPERIOD,STOPBEGINTIME,STOPENDTIME,PLANSTOPTIME,PDSTATUS,RESSION
+         from TBL_CREATDISPATCH
+        where ID = #{id}
+    </select>
+    
+    <select id="selectCreatdispatchList" parameterType="Creatdispatch" resultMap="CreatdispatchResult">
+         select ID, DISPATCHID, PDLINEID, PDNAME, ACTUALWEIGHT, OPTAG, STATUS,AUDITFLAG,RESSION, BOUNDPDORDERID, REMARK, TRANSFLAG,SORTNUM,SORTID,DISTYPE,BEGINTIME,ENDTIME,PDPERIOD,STOPBEGINTIME,STOPENDTIME,PLANSTOPTIME,PDSTATUS,RESSION
+         from TBL_CREATDISPATCH
+        <where>
+            <if test="id != null and id != ''"> and ID = #{id}</if>
+             <if test="dispatchid != null and dispatchid != ''"> and DISPATCHID = #{dispatchid}</if>
+             <if test="pdlineid != null "> and PDLINEID = #{pdlineid}</if>
+             <if test="pdname != null and pdname != ''"> and PDNAME = #{pdname}</if>
+             <if test="optag != null "> and OPTAG = #{optag}</if>
+             <if test="status != null and status != ''"> and STATUS = #{status}</if>
+             <if test="auditflag != null and auditflag != ''"> and AUDITFLAG = #{auditflag}</if>
+             <if test="ression != null and ression != ''"> and RESSION = #{ression}</if>
+             <if test="boundpdorderid != null and boundpdorderid != ''"> and BOUNDPDORDERID = #{boundpdorderid}</if>
+             <if test="remark != null and remark != ''"> and REMARK = #{remark}</if>
+             <if test="transflag != null "> and TRANSFLAG = #{transflag}</if>
+             <if test="sortnum != null "> and SORTNUM = #{sortnum}</if>
+             <if test="pdstatus != null "> and PDSTATUS = #{pdstatus}</if>
+             <if test="statusm != null "> and (STATUS = 2 OR STATUS = 3 OR STATUS=4 or STATUS=5)</if>
+             <if test="sortid != null and sortid != ''"> and SORTID = #{sortid}</if>
+             <if test="masression != null and masression != ''"> and MASRESSION = #{masression}</if>
+             <if test="programme != null and programme != ''"> and PROGRAMME = #{programme}</if>
+             <if test="inputname != null and inputname != ''"> and INPUTNAME = #{inputname}</if>
+             <if test="inputtime != null"> and INPUTTIME = #{inputtime}</if>
+         </where>
+    </select>
+    <select id="selectCreatdispatchListByStatus" parameterType="Creatdispatch" resultMap="CreatdispatchResult">
+        select ID, DISPATCHID, PDLINEID, PDNAME, ACTUALWEIGHT, OPTAG, STATUS,AUDITFLAG,RESSION, BOUNDPDORDERID, REMARK, TRANSFLAG,SORTNUM,SORTID,DISTYPE,BEGINTIME,ENDTIME,PDPERIOD,STOPBEGINTIME,STOPENDTIME,PLANSTOPTIME,PDSTATUS,RESSION
+        from TBL_CREATDISPATCH
+        <where>
+            <if test="id != null and id != ''"> and ID = #{id}</if>
+             <if test="dispatchid != null and dispatchid != ''"> and DISPATCHID = #{dispatchid}</if>
+             <if test="pdlineid != null "> and PDLINEID = #{pdlineid}</if>
+             <if test="pdname != null and pdname != ''"> and PDNAME = #{pdname}</if>
+             <if test="actualweight != null "> and ACTUALWEIGHT = #{actualweight}</if>
+             <if test="optag != null "> and OPTAG = #{optag}</if>
+             <if test="auditflag != null and auditflag != ''"> and AUDITFLAG = #{auditflag}</if>
+             <if test="ression != null and ression != ''"> and RESSION = #{ression}</if>
+             <if test="boundpdorderid != null and boundpdorderid != ''"> and BOUNDPDORDERID = #{boundpdorderid}</if>
+             <if test="remark != null and remark != ''"> and REMARK = #{remark}</if>
+             <if test="transflag != null "> and TRANSFLAG = #{transflag}</if>
+             <if test="sortnum != null "> and SORTNUM = #{sortnum}</if>
+             <if test="pdstatus != null "> and PDSTATUS = #{pdstatus}</if>
+             <if test="pdrate != null "> and PDRATE = #{pdrate}</if>
+            <if test="status != null and status != ''"> and STATUS = #{status}</if>
+            <if test="statusm != null "> and (STATUS = 2 OR STATUS = 3 or STATUS=4 or STATUS=5)</if>
+             <if test="sortid != null and sortid != ''"> and SORTID = #{sortid}</if>
+             <if test="ression != null and ression != ''"> and RESSION = #{ression}</if>
+             <if test="programme != null and programme != ''"> and PROGRAMME = #{programme}</if>
+         </where>
+    </select>
+
+    <insert id="insertCreatdispatch" parameterType="Creatdispatch">
+        insert into TBL_CREATDISPATCH (
+			<if test="id != null and id != '' ">ID, </if>
+			<if test="dispatchid != null and dispatchid != '' ">DISPATCHID, </if>
+			<if test="pdlineid != null  ">PDLINEID, </if>
+			<if test="pdname != null and pdname != '' ">PDNAME, </if>
+			<if test="actualweight != null  ">ACTUALWEIGHT, </if>
+			<if test="optag != null  ">OPTAG, </if>
+			<if test="status != null and status != '' ">STATUS, </if>
+			<if test="auditflag != null and auditflag != '' ">AUDITFLAG, </if>
+			<if test="ression != null and ression != '' ">RESSION, </if>
+			<if test="boundpdorderid != null and boundpdorderid != '' ">BOUNDPDORDERID, </if>
+			<if test="remark != null and remark != '' ">REMARK, </if>
+			<if test="sortnum != null  ">SORTNUM,</if>
+			<if test="sortid != null  and sortid != ''">SORTID,</if>
+			<if test="distype != null  and distype != ''">DISTYPE,</if>
+        	<if test="begintime != null ">BEGINTIME,</if>
+        	<if test="endtime != null  ">ENDTIME,</if>
+        	<if test="pdperiod != null  and pdperiod != ''">PDPERIOD,</if>
+        	<if test="stopbegintime != null  ">STOPBEGINTIME,</if>
+        	<if test="stopendtime != null  ">STOPENDTIME,</if>
+        	<if test="planstoptime != null  and planstoptime != ''">PLANSTOPTIME,</if>
+        	<if test="pdstatus != null  ">PDSTATUS,</if>
+        	<if test="pdrate != null  ">PDRATE,</if>
+        	<if test="ression != null  ">RESSION,</if>
+        	<if test="programme != null  ">PROGRAMME,</if>
+        	<if test="transflag != null  ">TRANSFLAG</if>
+        )values(
+			<if test="id != null and id != '' ">#{id}, </if>
+			<if test="dispatchid != null and dispatchid != '' ">#{dispatchid}, </if>
+			<if test="pdlineid != null  ">#{pdlineid}, </if>
+			<if test="pdname != null and pdname != '' ">#{pdname}, </if>
+			<if test="actualweight != null  ">#{actualweight}, </if>
+			<if test="optag != null  ">#{optag}, </if>
+			<if test="status != null and status != '' ">#{status}, </if>
+			<if test="auditflag != null and auditflag != '' ">#{auditflag}, </if>
+			<if test="ression != null and ression != '' ">#{ression}, </if>
+			<if test="boundpdorderid != null and boundpdorderid != '' ">#{boundpdorderid}, </if>
+			<if test="remark != null and remark != '' ">#{remark}, </if>
+			<if test="sortnum != null  ">#{sortnum},</if>
+			<if test="sortid != null  and sortid != ''">#{sortid},</if>
+			<if test="distype != null  and distype != ''">#{distype},</if>
+        	<if test="begintime != null ">#{begintime},</if>
+        	<if test="endtime != null  ">#{endtime},</if>
+        	<if test="pdperiod != null  and pdperiod != ''">#{pdperiod},</if>
+        	<if test="stopbegintime != null  ">#{stopbegintime},</if>
+        	<if test="stopendtime != null  ">#{stopendtime},</if>
+        	<if test="planstoptime != null  and planstoptime != ''">#{planstoptime},</if>
+        	<if test="pdstatus != null  ">#{pdstatus},</if>
+        	<if test="pdrate != null  ">#{pdrate},</if>
+        	<if test="ression != null  ">#{ression},</if>
+        	<if test="programme != null  ">#{programme},</if>
+        	<if test="transflag != null  ">#{transflag}</if>
+		)
+    </insert>
+
+    <update id="updateCreatdispatch" parameterType="Creatdispatch">
+        update TBL_CREATDISPATCH
+        <set>
+            <if test="dispatchid != null and dispatchid != ''">DISPATCHID = #{dispatchid}, </if>
+            <if test="pdlineid != null ">PDLINEID = #{pdlineid}, </if>
+            <if test="pdname != null and pdname != ''">PDNAME = #{pdname}, </if>
+            <if test="actualweight !=0">ACTUALWEIGHT = #{actualweight}, </if>
+            <if test="optag != null ">OPTAG = #{optag}, </if>
+            <if test="status != null and status != ''">STATUS = #{status}, </if>
+            <if test="auditflag != null and auditflag != ''">AUDITFLAG = #{auditflag}, </if>
+            <if test="ression != null and ression != ''">RESSION = #{ression}, </if>
+            <if test="boundpdorderid != null and boundpdorderid != ''">BOUNDPDORDERID = #{boundpdorderid}, </if>
+            <if test="remark != null and remark != ''">REMARK = #{remark}, </if>
+            <if test="sortnum != null">SORTNUM = #{sortnum}, </if>
+            <if test="sortid != null and sortid != ''">SORTID = #{sortid}, </if>
+            <if test="distype != null and distype != ''">DISTYPE = #{distype}, </if>
+            <if test="begintime != null ">BEGINTIME = #{begintime},</if>
+            <if test="endtime != null  ">ENDTIME = #{endtime},</if>
+            <if test="pdperiod != null  and pdperiod != ''">PDPERIOD = #{pdperiod},</if>
+            <if test="stopbegintime != null  ">STOPBEGINTIME = #{stopbegintime},</if>
+            <if test="stopendtime != null  ">STOPENDTIME = #{stopendtime},</if>
+            <if test="planstoptime != null  and planstoptime != ''">PLANSTOPTIME = #{planstoptime},</if>
+            <if test="pdstatus != null  and pdstatus != ''">PDSTATUS = #{pdstatus},</if>
+            <if test="pdrate != null  and pdrate != ''">PDRATE = #{pdrate},</if>
+            <if test="masression != null  and masression != ''">MASRESSION = #{masression},</if>
+            <if test="transflag != null ">TRANSFLAG = #{transflag}</if>
+        </set>
+        where ID = #{id}
+    </update>
+	
+    <delete id="deleteCreatdispatchByIds" parameterType="Integer">
+        delete from TBL_CREATDISPATCH where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateAuditflag" parameterType="creatdispatch">
+        update TBL_CREATDISPATCH
+        <set>
+            <if test="auditflag != null and auditflag != ''">AUDITFLAG = #{auditflag}, </if>
+        </set>
+        where ID = #{id}
+    </update>
+
+    <select id="selectMaxDispatchid" parameterType="String" resultType="String">
+        select MAX(right(ISNULL(DISPATCHID,'00'), 2)) from TBL_CREATDISPATCH
+        where DISPATCHID like concat('%', #{dispatchid}, '%')
+    </select>
+</mapper>

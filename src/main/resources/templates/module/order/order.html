@@ -1,0 +1,874 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+<th:block th:include="include :: header('订单信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div" style="height:500px;width:100%">
+        <div class="row">
+        	<div class="col-sm-6 select-info" style="height: 500px;overflow:auto;">
+				<label class="h4">订单详情</label><br />
+				<span style="color: gray">*注：1.该表单中数据为订单系统数据，选择后进行2操作</span>
+            	<div class="col-sm-12 search-collapse">
+            	    <form id="formId">
+            	        <div class="select-list">
+							<ul>
+								<li class="col-sm-3">客户名称：
+									<input style="width: 55%;" type="text" name="fullname" />
+								</li>
+								<li class="col-sm-3">产品品名：
+									<input style="width: 55%;" type="text" name="name" />
+								</li>
+								<li class="col-sm-3">生产线：
+									<input style="width: 55%;" type="text" name="line" />
+								<li style="display: none">
+									<input name="type" value="1">
+								</li>
+								<li>
+                                	<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                	<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            	</li>
+<!-- 								<li class="col-sm-1"> -->
+<!-- 									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search($('form').attr('id'))"> -->
+<!-- 										<i class="fa fa-search" id="searchByOrder"></i>查询订单 -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+							</ul>
+						</div>
+					</form>
+				</div>
+				<table border="1" width="60%" height="50px">
+ 					<caption align="center">颜色与状态对照表</caption> 
+					<tr>
+						<td bgcolor="#bfbfff">&nbsp;</td>
+						<td bgcolor="#df90ff">&nbsp;</td>
+						<td bgcolor="#edba34">&nbsp;</td>
+						<td bgcolor="#00ff00">&nbsp;</td>
+						<td bgcolor="#faf50b">&nbsp;</td>
+						<td bgcolor="#31b0d5">&nbsp;</td>
+					</tr>
+					<tr>
+						<td align="center">已下单</td>
+						<td align="center">已核减</td>
+						<td align="center">已调度</td>
+						<td align="center">已排产</td>
+						<td align="center">已撤单</td>
+						<td align="center">已选择</td>
+					</tr>
+				</table>
+				<input type="hidden" id="oldpdorderid"> 
+				<input type="hidden" id="tagid"> 
+				<input type="hidden" id="line"> 
+				<input type="hidden" id="fullname"> 
+				<input type="hidden" id="qualityid"> 
+				<input type="hidden" id="rolength">
+				<input type="hidden" id="bagdia">
+				<div class="col-sm-16 select-table table-striped" >
+                	<table id="bootstrap-table"></table>
+            	</div>
+			</div>
+        	<div class="col-sm-6 select-info" style="height: 580px;overflow:auto;">
+				<label class="h4">核减信息(总)</label><br>
+				<span style="color: gray">*注：4.该数据为核减后的订单，重量可调节，注意重量变动后不可再次取消核减</span>
+				<div class="col-sm-6 select-table table-striped">
+					<table id="bootstrap-table-cutmsg">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+     <div class="container-div" style="height:580px;width:100%;">
+		<div class="row">
+        	<div class="col-sm-6 select-info" style="height: 580px;overflow:auto;">
+				<label class="h4">未核减库存</label><br /> 
+				<span style="color: gray">*注：2.该表单中数据为库存数据，选择产品后再选择下方条码信息，多选确认无误后点击确定保存核减信息</span>
+				<div class="form-group">
+					<a class="btn btn-info btn-rounded btn-sm pull-right" onclick="cut()">确认核减</a>
+				</div>
+				<div class="col-sm-6 select-table table-striped">
+					<table id="bootstrap-table-uncutstore">
+					</table>
+				</div>
+			</div>
+        	<div class="col-sm-6 select-info" style="height: 580px;overflow:auto;">
+				<label class="h4">已核减信息</label><br /> <span style="color: gray">*注：3.该表单中数据为已核减信息，多选条码信息后点击取消按钮取消核减</span>
+				<div class="form-group">
+					<a class="btn btn-danger btn-rounded btn-sm pull-right" onclick="uncut()">取消核减</a>
+				</div>
+				<div class="col-sm-6 select-table table-striped">
+					<table id="bootstrap-table-cutstore"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+    var	pdname;
+
+    var prefix = ctx + "module/order"
+
+    function queryParams(params) {
+        var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+            // limit: params.limit,   //页面大小
+            offset: params.offset,  //页码
+            pageSize:this.pageSize,
+            pageNumber:this.pageNumber,
+            projectId: $("#projectId").val(),
+            requirement_Id:$("#requirement_Id").val(),
+            length: 6
+        };
+        return temp;
+    };
+
+    $(function() {
+        var options = {
+            url: prefix + "/scheduling",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "订单",
+            queryParams :queryParams,
+            search:false,
+            columns: [
+                {
+                    field : 'id', 
+                    title : '序号',
+                    visible: false
+                },
+                {
+                    field : 'pdod', 
+                    title : '订单号'
+                },
+                {
+                    field : 'contractid', 
+                    title : '合同号',
+                    formatter: function(value, row, index) {
+                    	return '<a onclick="showContractDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'optime', 
+                    title : '合同日期'
+                },
+//                 {
+//                     field : 'type', 
+//                     title : '订单类型',
+//                     formatter: function(value, row, index) {
+//                         //alert(row.status);
+//         				var datas = [[${@dict.getType('tbl_order_type')}]];
+//                 		return $.table.selectDictLabel(datas, row.type);
+//                     }
+//                 }, 
+                {
+                    field : 'fullname', 
+                    title : '客户名称'
+                },
+                {
+                    field : 'materialcode', 
+                    title : '产品编码',
+                    formatter: function(value, row, index) {
+                    	return '<a onclick="showProductDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'name', 
+                    title : '产品品名'
+                },
+                {
+                    field : 'qualityid', 
+                    title : '质量ID',
+                    formatter: function(value, row, index) {
+                        return '<a onclick="showCpqsDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+				{
+                    field : 'tagid', 
+                    title : '标签ID',
+                    formatter: function(value, row, index) {
+                        return '<a onclick="showTagDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'line', 
+                    title : '生产线'
+                },
+                {
+                    field : 'weight', 
+                    title : '订单重量kg'
+                },
+                {
+                    field : 'sendtime', 
+                    title : '交货日期'
+                },
+                {
+                    field : 'status', 
+                    title : '订单状态',
+                    formatter: function(value, row, index) {
+                        //alert(row.status);
+        				var datas = [[${@dict.getType('tbl_order_status')}]];
+                		return $.table.selectDictLabel(datas, row.status);
+                    }
+                }]
+        };
+        $.table.init(options);
+        //搜索条件赋值
+        var	param={};
+        param["type"] = 1;//国内
+        param["status"] = 5;
+
+        _bootstrap_search_tablename("#bootstrap-table",param);
+    });
+
+    //通过id查询tag详细信息
+    function showTagDetails(data) {
+        var url = ctx + "basic/tag/tagLink/" + data;
+        $.modal.open("标签详情", url);
+    }
+    //通过id查询cpqs详细信息
+    function showCpqsDetails(data) {
+    	//alert(data);
+        var url = ctx + "standard/cpqs/cpqsLink/" + data;
+        $.modal.open("质量详情", url);
+    }
+
+    //通过id查询contract详细信息
+    function showContractDetails(data) {
+        var url = ctx + "sale/contract/contractLink/" + data;
+        $.modal.open("合同详情", url);
+    }
+
+    //通过id查询产品信息
+    function showProductDetails(data) {
+        var url = ctx + "produce/product/productLink/" + data;
+        $.modal.open("合同详情", url);
+    }
+    $("#bootstrap-table").on('load-success.bs.table',function(data){
+        getTdValue();
+    });
+
+    //将已批准的数据改变背景颜色
+    function getTdValue(){
+        var tableId = document.getElementById("bootstrap-table");
+        if(tableId.rows[1].cells.length>1){
+            for(var i = 1;i < tableId.rows.length;i++) {
+                if(tableId.rows[i].cells[11].innerHTML.indexOf("派单") != -1 ){
+                    //已下单
+                    tableId.rows[i].setAttribute("style","background: #bfbfff;");
+                }else if(tableId.rows[i].cells[11].innerHTML.indexOf("已核减") != -1 ){
+                    //已核减
+                    tableId.rows[i].setAttribute("style","background: #df90ff;");
+                }
+                else if(tableId.rows[i].cells[11].innerHTML.indexOf("已调度") != -1 ){
+                    //已调度
+                    tableId.rows[i].setAttribute("style","background: #edba34;");
+                }
+                else if(tableId.rows[i].cells[11].innerHTML.indexOf("已排产") != -1 ){
+                    //已排产
+                    tableId.rows[i].setAttribute("style","background: #00ff00;");
+                }
+                else if(tableId.rows[i].cells[11].innerHTML.indexOf("已撤单") != -1 ){
+                    //已撤单
+                    tableId.rows[i].setAttribute("style","background: #faf50b;");
+                }
+            }
+        }
+    }
+
+    $("#bootstrap-table").on("click-row.bs.table",function(e, row, $element){
+
+        $('.changeColor').removeClass('changeColor');
+        $($element).addClass('changeColor');
+
+        //搜索条件赋值
+        var	param={};
+        param["pdname"]=row.name;
+        pdname = row.name;
+        _bootstrap_search_tablename("#bootstrap-table-order",param);
+        param["status"]="已核减";
+        _bootstrap_search_tablename("#bootstrap-table-cutstore",param);
+        param["status"]="未核减";
+        _bootstrap_search_tablename("#bootstrap-table-uncutstore",param);
+//         alert(row.pdod);
+//         alert(row.tagid);
+//         alert(row.line);
+//         alert(row.fullname);
+//         alert(row.qualityid);
+        $('#oldpdorderid').val(row.pdod);
+        $('#tagid').val(row.tagid);
+        $('#line').val(row.line);
+        $('#fullname').val(row.fullname);
+        $('#qualityid').val(row.qualityid);
+    });
+    //根据库存订单号查询条码
+    $("#bootstrap-table-order").on("click-row.bs.table",function(e, row, $element){
+        $('.changeColorBlack').removeClass('changeColorBlack');
+        $($element).addClass('changeColorBlack');
+        //console.log($($element));
+        //搜索条件赋值
+        var	param={};
+        param["oldpdorderid"]=row.oldpdorderid;
+        _bootstrap_search_tablename("#bootstrap-table-uncutstore",param);
+    });
+
+    $("#bootstrap-table").on("check.bs.table",function(e, row, $element){
+        $('.changeColor').removeClass('changeColor');
+        $($element).addClass('changeColor');
+
+        console.log($element);
+        //搜索条件赋值
+        var	param={};
+        param["pdname"]=row.name;
+        pdname = row.name;
+
+        _bootstrap_search_tablename("#bootstrap-table-order",param);
+        _bootstrap_search_tablename("#bootstrap-table-cutstore",param);
+    });
+
+    //库存表字段
+    var barPrefix = ctx + "module/cutstoredetail"
+    var barOptions = "";
+    $(function() {
+        barOptions = {
+            url: barPrefix + "/showByOrder",
+            createUrl: barPrefix + "/add",
+            updateUrl: barPrefix + "/edit/{id}",
+            removeUrl: barPrefix + "/remove",
+            searchUrl: barPrefix + "/search",
+            modalName: "核减库存条码",
+            search : false,
+            columns: [
+                {
+                    field : 'id',
+                    title : '序号',
+                    visible : false
+                },
+                {
+                    field : 'oldpdorderid',
+                    title : '库存生产订单号'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号',
+                    visible : true,
+                    formatter: function(value, row, index) {
+                        if($('#line').val() == value){
+                            return '<span>' + value +'</span>' + '<br/>' +'<span style="color:#7F00FF">'+ $('#line').val() +'</span>'+'<br/>'+'<span style="color:#32CD99">' + '(√)' + '</span>';
+                        }else{
+                            return '<span>' + value+'</span>' + '<br/>'+'<span style="color:#7F00FF">' + $('#line').val()+'</span>' + '<br/>'+'<span style="color:#F00">' + '(X)' + '</span>';
+                        }
+                    }
+                },
+                {
+                    field : 'qualityid',
+                    title : '客户质量ID',
+                    visible : true,
+                    formatter: function(value, row, index) {
+
+
+                        if($('#qualityid').val() == value){
+                            return '<span>' + value +'</span>' + '<br/>' +'<span style="color:#7F00FF">'+ $('#qualityid').val() +'</span>'+'<br/>'+'<span style="color:#32CD99">' + '(√)' + '</span>';
+                        }else{
+                            return '<span>' + value+'</span>' + '<br/>'+'<span style="color:#7F00FF">' + $('#qualityid').val()+'</span>' + '<br/>'+'<span style="color:#F00">' + '(X)' + '</span>';
+                        }
+                    }
+                },
+                {
+                    field : 'tagid',
+                    title : '标签ID',
+                    visible : true,
+                    formatter: function(value, row, index) {
+
+
+                        if($('#tagid').val() == value){
+                            return '<span>' + value +'</span>' + '<br/>' +'<span style="color:#7F00FF">'+ $('#tagid').val() +'</span>'+'<br/>'+'<span style="color:#32CD99">' + '(√)' + '</span>';
+                        }else{
+                            return '<span>' + value+'</span>' + '<br/>'+'<span style="color:#7F00FF">' + $('#tagid').val()+'</span>' + '<br/>'+'<span style="color:#F00">' + '(X)' + '</span>';
+                        }
+
+                    }
+                },
+                {
+                    field : 'pdname',
+                    title : '产品品名',
+                    visible : true
+                },
+                {
+                    field : 'customer',
+                    title : '客户',
+                    visible : true,
+                    formatter: function(value, row, index) {
+
+
+                        if($('#line').val() == value){
+                            return '<span>' + value +'</span>' + '<br/>' +'<span style="color:#7F00FF">'+ $('#fullname').val() +'</span>'+'<br/>'+'<span style="color:#32CD99">' + '(√)' + '</span>';
+                        }else{
+                            return '<span>' + value+'</span>' + '<br/>'+'<span style="color:#7F00FF">' + $('#fullname').val()+'</span>' + '<br/>'+'<span style="color:#F00">' + '(X)' + '</span>';
+                        }
+                    }
+                },
+                {
+                    field : 'status',
+                    title : '状态'
+                }
+            ]};
+        //$.table.init(barOptions);
+        _bootstrap_show(barOptions,"bootstrap-table-order");
+        var	param={};
+        param["pdname"]='XXXXXX';
+
+        _bootstrap_search_tablename("#bootstrap-table-order",param);
+    });
+
+    //条码表字段
+    var barPrefix = ctx + "module/cutstoredetail"
+    var barOptions = "";
+    $(function() {
+        barOptions = {
+            url: barPrefix + "/showByStock",
+            createUrl: barPrefix + "/add",
+            updateUrl: barPrefix + "/edit/{id}",
+            removeUrl: barPrefix + "/remove",
+            searchUrl: barPrefix + "/search",
+            modalName: "核减库存条码",
+            search : false,
+            columns: [
+                {
+                    checkbox: true,
+                },
+                {
+                    field : 'id',
+                    title : '序号',
+                    visible : false
+                },
+                {
+                    field : 'oldpdorderid',
+                    title : '库存生产订单号',
+                    visible:false
+                },
+                {
+                    field : 'barcode',
+                    title : '条码号'
+                },
+                {
+                    field : 'entrytime',
+                    title : '入库时间'
+                },
+                {
+                    field : 'netweight',
+                    title : '净重'
+                },
+                {
+                    field : 'panperbale',
+                    title : '盘/包'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号',
+                    visible : true
+                },
+                {
+                    field : 'qualityid',
+                    title : '客户质量ID',
+                    visible : true
+                },
+                {
+                    field : 'tagid',
+                    title : '标签ID',
+                    visible : true
+                },
+
+                {
+                    field : 'pdname',
+                    title : '产品品名',
+                    visible : true
+                },
+
+                {
+                    field : 'customer',
+                    title : '客户',
+                    visible : true
+                },
+                {
+                    field : 'status',
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="#" onclick="detail(\'' + row.id  + '\')"><i class="fa fa-edit"></i>详情</a> ');
+                        /*                            actions.push('<a class="btn btn-danger btn-xs" href="#" onclick=""><i class="fa fa-remove"></i>删除</a>');*/
+                        return actions.join('');
+                    }
+                }
+            ]};
+        //$.table.init(barOptions);
+        _bootstrap_show(barOptions,"bootstrap-table-uncutstore");
+        var	param={};
+
+        param["pdname"]='XXXXXX';
+
+        _bootstrap_search_tablename("#bootstrap-table-uncutstore",param);
+    });
+
+    function detail(id){
+        var url = barPrefix + '/detail/' + id;
+        layer_showAuto("库存详情", url);
+    }
+
+
+    //核减
+    function cut() {
+        var ids = new Array();
+        var selected = $('#bootstrap-table-uncutstore').bootstrapTable('getSelections');
+        for(var i=0;i<selected.length;i++){
+            ids[i]=selected[i].id;
+        }
+        if($('#oldpdorderid').val()==''){
+            $.modal.alertWarning("请至少选择一条订单信息");
+            return
+        }
+        $.modal.confirm("确认要核减选中的数据吗?", function() {
+            var url = barPrefix + "/cut";
+            var orderid = $('#oldpdorderid').val();
+            //console.log(ids.join());
+            var data = {
+                "ids" : ids.join(),
+                "orderid" : orderid
+            };
+            _ajax(url, data, "post");
+            
+            var	 param={};
+            param["pdname"]=pdname;
+
+            //alert(pdname);
+            //刷新界面
+            _bootstrap_search_tablename("#bootstrap-table-order",param);
+            param["status"] = "未核减";
+            _bootstrap_search_tablename("#bootstrap-table-uncutstore",param);
+            param["status"] = "已核减";
+            _bootstrap_search_tablename("#bootstrap-table-cutstore",param);
+
+            param={};
+            param["type"] = 1;//国内
+            _bootstrap_search_tablename("#bootstrap-table",param);
+            param={};
+
+            _bootstrap_search_tablename("#bootstrap-table-cutmsg",param);
+        })
+    }
+
+    /*     $(document).ready(function(){
+            $('#searchByOrder').click();
+        }) */
+
+    var cutPrefix = ctx + "module/cutstoredetail"
+    var cutOptions = '';
+    $(function() {
+        cutOptions = {
+            url : cutPrefix + "/showCut",
+            createUrl : cutPrefix + "/add",
+            updateUrl : cutPrefix + "/edit/{id}",
+            removeUrl : cutPrefix + "/remove",
+            searchUrl : cutPrefix + "/search",
+            modalName : "已核减信息",
+            search : false,
+            columns: [
+                {
+                    checkbox: true,
+                    formatter : function(value, row, index) {
+
+                        if(row.status.trim() == '核减锁定'){
+                            return{
+                                disabled : true,//设置是否可用
+                                checked : false//设置选中
+                            }
+                        }
+                        return value;
+                    }
+                },
+                {
+                    field : 'id',
+                    title : '序号',
+                    visible : false
+                },
+                {
+                    field : 'barcode',
+                    title : '条码号'
+                },
+                {
+                    field : 'oldpdorderid',
+                    title : '库存生产订单号',
+                    visible:false
+                },
+                {
+                    field : 'barcode',
+                    title : '条码号',
+                    visible : false
+                },
+                {
+                    field : 'entrytime',
+                    title : '入库时间'
+                },
+                {
+                    field : 'netweight',
+                    title : '净重'
+                },
+                {
+                    field : 'panperbale',
+                    title : '盘/包'
+                },
+                {
+                    field : 'opman',
+                    title : '操作人',
+                    visible : false
+                },
+                {
+                    field : 'optime',
+                    title : '操作时间',
+                    visible : false
+                },
+                {
+                    field : 'opcomment',
+                    title : '反馈意见',
+                    visible : false
+                },
+                {
+                    field : 'process',
+                    title : '处理说明',
+                    visible : false
+                },
+                {
+                    field : 'remark',
+                    title : '备注',
+                    visible : false
+                },
+                {
+                    field : 'transflag',
+                    title : '传输标志',
+                    visible : false
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号',
+                    visible : true
+                },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述',
+                    visible:false
+                },
+                {
+                    field : 'qualityid',
+                    title : '客户质量ID',
+                    visible : true
+                },
+                {
+                    field : 'tagid',
+                    title : '标签ID',
+                    visible : true
+                },
+                {
+                    field : 'pdname',
+                    title : '产品品名',
+                    visible : true
+                },
+
+                {
+                    field : 'customer',
+                    title : '客户',
+                    visible : true
+                },
+                {
+                    field : 'status',
+                    title : '状态'
+                },
+                {
+                    title : '操作',
+                    align : 'center',
+                    formatter : function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="#" onclick="detail(\''
+                            + row.id+ '\')"><i class="fa fa-edit"></i>详情</a> ');
+                        /*                            actions.push('<a class="btn btn-danger btn-xs" href="#" onclick=""><i class="fa fa-remove"></i>删除</a>');*/
+                        return actions.join('');
+                    }
+                }
+            ]
+        };
+        _bootstrap_show(cutOptions, "bootstrap-table-cutstore");
+        var	param={};
+        param["pdname"]='XXXXXX';
+        _bootstrap_search_tablename("#bootstrap-table-cutstore",param);
+    });
+
+    function cutdetail(id) {
+        var url = cutPrefix + '/detail/' + id;
+        layer_showAuto("核减库存详情", url);
+    }
+
+    //取消核减
+    function uncut() {
+        var ids = new Array();
+        var selected = $('#bootstrap-table-cutstore').bootstrapTable('getSelections');
+        console.log(selected);
+        for(var i=0;i<selected.length;i++){
+            ids[i]=selected[i].id;
+        }
+        if($('#oldpdorderid').val()==''){
+            $.modal.alertWarning("请至少选择一条订单信息");
+            return
+        }
+        $.modal.confirm("确认要取消核减选中的数据吗?", function() {
+            var url = barPrefix + "/uncut";
+            var orderid = $('#oldpdorderid').val();
+            var data = {
+                "ids" : ids.join(),
+                "orderid" : orderid
+            };
+            _ajax(url, data, "post");
+//             $('#bootstrap-table-order').bootstrapTable('refresh');
+//             $('#bootstrap-table-uncutstore').bootstrapTable('refresh');
+//             $('#bootstrap-table-cutstore').bootstrapTable('refresh');
+//             $('#bootstrap-table').bootstrapTable('refresh');
+//             $('#bootstrap-table-cutmsg').bootstrapTable('refresh');
+
+            var	param={};
+            param["pdname"]=pdname;
+            //alert(pdname);
+            //刷新界面
+            _bootstrap_search_tablename("#bootstrap-table-order",param);
+            param["status"]="未核减";
+            _bootstrap_search_tablename("#bootstrap-table-uncutstore",param);
+            param["status"]="已核减";
+            _bootstrap_search_tablename("#bootstrap-table-cutstore",param);
+            param={};
+            param["type"] = 1;//国内
+            _bootstrap_search_tablename("#bootstrap-table",param);
+            _bootstrap_search_tablename("#bootstrap-table-cutmsg",param);
+        })
+    }
+
+    //核减后的信息
+    var afterPrefix = ctx + "module/cutstore"
+    var auditFlag = [[${@permission.hasPermi('module:cutstoredetail:audit')}]];
+    $(function() {
+        var afterOptions = {
+            url: afterPrefix + "/orderlist",
+            createUrl: afterPrefix + "/add",
+            updateUrl: afterPrefix + "/edit/{id}",
+            removeUrl: afterPrefix + "/remove",
+            modalName: "核减库存",
+            search:false,
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : '序号',
+                    visible : false
+                },
+
+                {
+                    field : 'newpdorderid',
+                    title : '新生产订单号'
+                },
+                {
+                    field : 'oldpdorderid',
+                    title : '库存生产订单号'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号',
+                    visible : false
+
+                },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述',
+                    visible:false
+                    
+                },
+                {
+                    field : 'customer',
+                    title : '客户'
+                },
+                {
+                    field : 'pdname',
+                    title : '品名'
+                },
+                {
+                    field : 'qualityid',
+                    title : '客户质量ID'
+                },
+                {
+                    field : 'tagid',
+                    title : '标签ID'
+                },
+                {
+                    field : 'cutweight',
+                    title : '核减库存重量',
+                    formatter : function(value, row, index) {
+                        if(auditFlag == 'hidden'){
+                            return '<span>'+value+'</span>';
+                        }else{
+                            return '<input class="form-control" id="cutweight" name="cutweight" value="'+value+'"><button onclick="changeWeight(this,'+row.id+')" class="btn btn-info">确认重量</button>';
+                        }
+                    }
+                },
+                {
+                    field : 'cutbaleno',
+                    title : '核减库存包数'
+                },
+                {
+                    field : 'optag',
+                    title : '操作标记',
+                    visible : false
+                },
+                {
+                    field : 'remark',
+                    title : '备注',
+                    visible : false
+                },
+                {
+                    field : 'transflag',
+                    title : '传输标志',
+                    visible : false
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        return actions.join('');
+                    },
+                    visible : false
+                }]
+        };
+        _bootstrap_show(afterOptions, "bootstrap-table-cutmsg");
+
+    });
+
+
+    //改变克重
+    function changeWeight(data,id){
+        var weight = data.parentNode.firstChild.value;
+//         alert(weight);
+        $.modal.confirm("确认要修改选中的数据吗?(修改后数据将不可取消)", function() {
+            var url = cutPrefix+'/changeWeight';
+            var data = {
+                "weight" : weight,
+                "id" : id
+            };
+            _ajax(url, data, "post");
+            document.getElementById("cutweight").disabled="disabled";
+        })
+    }
+
+</script>
+</body>
+</html>

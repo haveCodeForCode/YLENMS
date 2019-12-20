@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('合同详情')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-contract-edit" th:object="${Contract}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" th:field="*{name}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同编号：</label>
+                <div class="col-sm-8">
+                    <input name="codeid" th:field="*{codeid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方：</label>
+                <div class="col-sm-8">
+                    <input name="firstparty" th:field="*{firstparty}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方：</label>
+                <div class="col-sm-8">
+                    <input name="secondparty" th:field="*{secondparty}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方接收人：</label>
+                <div class="col-sm-8">
+                    <input name="receiver" th:field="*{receiver}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方电话：</label>
+                <div class="col-sm-8">
+                    <input name="recphone" th:field="*{recphone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方地址：</label>
+                <div class="col-sm-8">
+                    <input name="recaddress" th:field="*{recaddress}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方名称：</label>
+                <div class="col-sm-8">
+                    <input name="recname" th:field="*{recname}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">签订时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="optime" th:value="${#dates.format(Contract.optime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">签订地点：</label>
+                <div class="col-sm-8">
+                    <input name="position" th:field="*{position}" class="form-control" type="text">
+                </div>
+            </div>
+           	<div class="form-group">
+				<label class="col-sm-3 control-label">合同类型:</label>
+				<div class="col-sm-8" th:with="datas=${@dict.getType('tbl_contracttype')}">
+					<div th:each="dict : ${datas}">
+					     <input id="type" name="type" th:if="${dict.dictValue} == ${Contract.type}" th:value="${dict.dictLabel}"
+						class="form-control" type="text">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">合同类别:</label>
+				<div class="col-sm-8" th:with="datas=${@dict.getType('tbl_contractclass')}">
+					<div th:each="dict : ${datas}">
+					     <input id="category" name="category" th:if="${dict.dictValue} == ${Contract.category}" th:value="${dict.dictLabel}"
+						class="form-control" type="text">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">状态:</label>
+				<div class="col-sm-8" th:with="datas=${@dict.getType('tbl_contractstatus')}">
+					<div th:each="dict : ${datas}"><!--遍历查询集合数据  ，如果字典值和contract.status相等，则把名称赋值给value-->
+					     <input id="status" name="status" th:if="${dict.dictValue} == ${Contract.status}" th:value="${dict.dictLabel}"
+						class="form-control" type="text">
+					</div>
+				</div>
+			</div> 
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方法人代表：</label>
+                <div class="col-sm-8">
+                    <input name="firstaddress" th:field="*{firstaddress}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方法人代表：</label>
+                <div class="col-sm-8">
+                    <input name="secondaddress" th:field="*{secondaddress}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品编码：</label>
+                <div class="col-sm-8">
+                    <input name="productid" th:field="*{productid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">规格：</label>
+                <div class="col-sm-8">
+                    <input name="standard" th:field="*{standard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数量：</label>
+                <div class="col-sm-8">
+                    <input name="cnt" th:field="*{cnt}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单位：</label>
+                <div class="col-sm-8" th:with="datas=${@dict.getType('tbl_weight_unit')}">
+					<div th:each="dict : ${datas}">
+					     <input id="type" name="type" th:if="${dict.dictValue} == ${Contract.unit}" th:value="${dict.dictLabel}"
+						class="form-control" type="text">
+					</div>
+				</div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单价：</label>
+                <div class="col-sm-8">
+                    <input name="price" th:field="*{price}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">总价：</label>
+                <div class="col-sm-8">
+                    <input name="amount" th:field="*{amount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">质量标准：</label>
+                <div class="col-sm-8">
+                    <input name="quality" th:field="*{quality}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">履行地点及方式：</label>
+                <div class="col-sm-8">
+                    <input name="perform" th:field="*{perform}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">验收标准及异议期限：</label>
+                <div class="col-sm-8">
+                    <input name="confirm" th:field="*{confirm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">汇款条件：</label>
+                <div class="col-sm-8">
+                    <input name="payterm" th:field="*{payterm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方法人：</label>
+                <div class="col-sm-8">
+                    <input name="legal1" th:field="*{legal1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方委托人：</label>
+                <div class="col-sm-8">
+                    <input name="client" th:field="*{client}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方开户行：</label>
+                <div class="col-sm-8">
+                    <input name="bankname1" th:field="*{bankname1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方电话：</label>
+                <div class="col-sm-8">
+                    <input name="phone1" th:field="*{phone1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方传真：</label>
+                <div class="col-sm-8">
+                    <input name="fax1" th:field="*{fax1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方银行账号：</label>
+                <div class="col-sm-8">
+                    <input name="account1" th:field="*{account1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方税号：</label>
+                <div class="col-sm-8">
+                    <input name="taxcode1" th:field="*{taxcode1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方邮编：</label>
+                <div class="col-sm-8">
+                    <input name="zipcode1" th:field="*{zipcode1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方法人：</label>
+                <div class="col-sm-8">
+                    <input name="legal2" th:field="*{legal2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方甲方委托人：</label>
+                <div class="col-sm-8">
+                    <input name="column32" th:field="*{column32}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方开户行：</label>
+                <div class="col-sm-8">
+                    <input name="bankname2" th:field="*{bankname2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方电话：</label>
+                <div class="col-sm-8">
+                    <input name="phone2" th:field="*{phone2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方传真：</label>
+                <div class="col-sm-8">
+                    <input name="fax2" th:field="*{fax2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方银行账号：</label>
+                <div class="col-sm-8">
+                    <input name="account2" th:field="*{account2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方税号：</label>
+                <div class="col-sm-8">
+                    <input name="taxcode2" th:field="*{taxcode2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方邮编：</label>
+                <div class="col-sm-8">
+                    <input name="zipcode2" th:field="*{zipcode2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他：</label>
+                <div class="col-sm-8">
+                    <textarea name="other" class="form-control">[[*{other}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同文件：</label>
+                <div class="col-sm-8">
+                    <input name="filename" th:field="*{filename}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方客户编码：</label>
+                <div class="col-sm-8">
+                    <input name="recode" th:field="*{recode}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+		$(document).ready(
+			function() {
+				$('input,select,textarea,span',
+						$('form[id="form-contract-edit"]')).attr(
+						'readonly', true);
+			}
+		);
+        var prefix = ctx + "sale/contract";
+        $("#form-contract-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+//                 $.operate.save(prefix + "/edit", $('#form-contract-edit').serialize());
+            }
+        }
+
+        $("input[name='optime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

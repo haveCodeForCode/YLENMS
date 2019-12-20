@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+
+    <div class="row">
+        <div class="wrapper wrapper-content">
+
+            <div class="col-sm-12 select-info">
+                <label class="h4">调度单号</label><br/>
+                <span style="color:gray">*注：该表单中数据为已拼接或装柜数据，单击可在下方表单查询详细订单信息，如需增加特殊订单可点击新增按钮增加（此处可修改具体卷数及包数）</span>
+                <div class="form-group">
+<!--                    <a class="btn btn-outline btn-success btn-rounded" onclick="add();" shiro:hasPermission="module:creatdispatch:add">
+                        <i class="fa fa-plus"></i> 新增
+                    </a>-->
+                    <!--                    <a class="btn btn-outline btn-danger btn-rounded" onclick="$.operate.batRemove()" shiro:hasPermission="module:cutstoredetail:remove">
+                                            <i class="fa fa-trash-o"></i> 删除
+                                        </a>-->
+                </div>
+            </div>
+            <div class="col-sm-12 select-info " style="height: 350px">
+                <table id="bootstrap-table" class="table table-striped bottom col-sm-6" data-height="350" data-mobile-responsive="true">
+                </table>
+            </div>
+            <div class="col-sm-12 select-info">
+                <label class="h4">订单详细信息</label>
+            </div>
+            <div class="col-sm-12 select-info " style="height: 350px;">
+                <table id="bootstrap-table-order" class="table table-striped bottom col-sm-6" data-use-row-attr-func="true" data-height="350" data-reorderable-rows="true">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+</body>
+</html>
+<script th:inline="javascript">
+    var editFlag = [[${@permissionService.hasPermi('module:creatdispatch:edit')}]];
+    var removeFlag = [[${@permissionService.hasPermi('module:creatdispatch:remove')}]];
+    var prefix = ctx + "module/creatdispatch"
+
+    $(function() {
+        var options = {
+            url: prefix + "/detaillist",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "生产调度",
+            columns: [
+                {
+                    field : 'id',
+                    title : '序号'
+                },
+                {
+                    field : 'dispatchid',
+                    title : '生产调度单号'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号',
+                    visible : false
+                },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述'
+                },
+                {
+                    field : 'pdname',
+                    title : '品名'
+                },
+                {
+                    field : 'actualweight',
+                    title : '生产重量kg'
+                },
+                {
+                    field : 'actualreel',
+                    title : '生产卷数'
+                },
+                {
+                    field : 'pdlength',
+                    title : '卷长'
+                },
+                {
+                    field : 'pddiameter',
+                    title : '卷径'
+                },
+                {
+                    field : 'totalwidth',
+                    title : '总幅宽'
+                },
+
+                {
+                    field : 'boundpdorderid',
+                    title : '关联生产订单号'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
+                },
+                {
+                    field : 'disflag',
+                    title : '调度单类型' ,
+
+                    formatter: function(value, row, index) {
+                        var a = '';
+                        if(value == null || value == '' || value == 1){
+                            a = '<span class="badge badge-primary">' + '正常' + '</span>';
+                        }else{
+                            a = _ajax_dict('tbl_creatdispatch_type',value.trim());
+                        }
+                        return a;
+
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        if(row.disflag != null && row.disflag != 0 && row.optag.trim() != 2){
+
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }
+                        if(row.status.trim() != 4){
+                            actions.push('<a class="btn btn-success btn-xs" href="#" onclick="addTarget(\'' + row.id + '\')"><i class="fa fa-edit"></i>添加目标值</a> ');
+                        }
+
+                        return actions.join('');
+                    }
+                }]
+        };
+        //搜索条件赋值
+        _bootstrap_show(options, "bootstrap-table");
+        var	param={};
+        param["pd"] = '2';
+        _bootstrap_search_tablename("#bootstrap-table",param);
+    });
+
+    //清空排序数据
+    $("#bootstrap-table").on("click-row.bs.table",function(e, row, $element) {
+        var	param={};
+        param["boundnumber"] = row.boundpdorderid;
+        _bootstrap_search_tablename("#bootstrap-table-order",param);
+
+    })
+
+
+
+
+    //完成核减订单--li
+    var finishedWdcomfix = ctx + "module/wdcom"
+    var readywdcomOptions = "";
+    $(function() {
+        finishedWdcomOptions = {
+            url : finishedWdcomfix + "/list",
+            createUrl : finishedWdcomfix + "/add",
+            updateUrl : finishedWdcomfix + "/edit/{id}",
+            removeUrl : finishedWdcomfix + "/remove",
+            modalName : "完成拼幅宽的订单",
+            search : false,
+            columns : [ {
+                checkbox : false
+            }, {
+                field : 'id',
+                title : '序号'
+            }, {
+                field : 'boundnumber',
+                title : '关联号'
+            }, {
+                field : 'pdorderid',
+                title : '生产订单号'
+            }, {
+                field : 'pdlineid',
+                title : '生产线号',
+                visible : false
+            },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述'
+                },
+                {
+                field : 'maxwidth',
+                title : '幅宽上限'
+            }, {
+                field : 'customer',
+                title : '客户'
+            }, {
+                field : 'pdname',
+                title : '品名'
+            },
+                {
+                    field : 'printpdname',
+                    title : '打印品名',
+                    formatter : function(value, row, index) {
+                        return '<input class="form-control" id = "slitnoInput1" style="width:60px;text-align:center" value ="' + row.printpdname
+                            + '" onchange="pdnameInputOnChange(this,\''+row.id+'\',\''+row.boundnumber+'\')">';
+                    }
+                },
+                {
+                    field : 'pdwidth',
+                    title : '幅宽cm'
+                }, {
+                    field : 'slitno',
+                    title : '分切数'
+                }, {
+                    field : 'originweight',
+                    title : '订单重量kg'
+                }, {
+                    field : 'wdcomweight',
+                    title : '拼幅宽重量kg'
+                },
+                {
+                    field : 'volomenum',
+                    title : '卷数',
+                    formatter : function(value, row, index) {
+                        return '<input class="form-control" oninput = "value=value.replace(/[^\\d]/g,\'\')" id = "slitnoInput1" style="width:60px;text-align:center" value ="' + value
+                            + '" onchange="volomenumInputOnChange(this,\''+row.id+'\',\''+row.boundnumber+'\')">';
+                    }
+                },
+                {
+                    field : 'packagenum',
+                    title : '包数'
+                },
+                {
+                    field : 'status',
+                    title : '状态',
+                    formatter : function(value, row, index) {
+                        var a = _ajax_dict('tbl_wdcom_status', value);
+                        return a;
+                    }
+
+
+                }, {
+                    field : 'pdlength',
+                    title : '卷长(m)'
+                }, {
+                    field : 'pddiameter',
+                    title : '卷径(cm)'
+                }, {
+                    field : 'remark',
+                    title : '备注',
+                    visible : true
+                }, {
+                    field : 'transflag',
+                    title : '传输标志',
+                    visible : false
+                } ]
+        };
+        _bootstrap_show(finishedWdcomOptions,
+            "bootstrap-table-order");
+        var param12 = {};
+        param12["status"] = "-2";
+        _bootstrap_search_tablename(
+            "#bootstrap-table-order", param12);
+    });
+
+    function volomenumInputOnChange(data,id,boundnumber){
+        if(id == 0){
+            $.modal.alertWarning("请至少选择一条订单信息");
+            return
+        }
+        $.modal.confirm("确认要修改卷数吗?",
+            function() {
+                var url = finishedWdcomfix + "/updateVolome";
+                var data1 = {
+                    "id" : id,
+                    "volomenum": data.value
+                };
+                _ajax(url, data1, "post");
+                var	param={};
+                param["boundnumber"] = boundnumber;
+                _bootstrap_search_tablename(
+                    "#bootstrap-table-order", param);
+            });
+    }
+
+    function pdnameInputOnChange(data,id,boundnumber){
+        if(id == 0){
+            $.modal.alertWarning("请至少选择一条订单信息");
+            return
+        }
+        $.modal.confirm("确认要修改卷数吗?",
+            function() {
+                var url = finishedWdcomfix + "/updatePrintPdname";
+                var data1 = {
+                    "id" : id,
+                    "printpdname": data.value
+                };
+                _ajax(url, data1, "post");
+                var	param={};
+                param["boundnumber"] = boundnumber;
+                _bootstrap_search_tablename(
+                    "#bootstrap-table-order", param);
+            });
+    }
+
+    function addTarget(id) {
+        var url = prefix + "/addTarget/"+id;
+        layer_showAuto("添加目标值", url);
+    }
+
+    $("#bootstrap-table-order").on("click-row.bs.table",function(e, row, $element) {
+        $('.changeColorBlack').removeClass('changeColorBlack');
+        $($element).addClass('changeColorBlack');
+    })
+
+    function add(){
+        $.modal.open("添加" + $.table._option.modalName, url);
+    }
+
+</script>

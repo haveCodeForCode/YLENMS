@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改合同')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-contract-edit" th:object="${Contract}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同名称：</label>
+                <div class="col-sm-8">
+                    <input name="name" th:field="*{name}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同编号：</label>
+                <div class="col-sm-8">
+                    <input name="codeid" th:field="*{codeid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方：</label>
+                <div class="col-sm-8">
+                    <input name="firstparty" th:field="*{firstparty}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方：</label>
+                <div class="col-sm-8">
+                    <input name="secondparty" th:field="*{secondparty}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方接收人：</label>
+                <div class="col-sm-8">
+                    <input name="receiver" th:field="*{receiver}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方电话：</label>
+                <div class="col-sm-8">
+                    <input name="recphone" th:field="*{recphone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方地址：</label>
+                <div class="col-sm-8">
+                    <input name="recaddress" th:field="*{recaddress}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方名称：</label>
+                <div class="col-sm-8">
+                    <input name="recname" th:field="*{recname}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">签订时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="optime" th:value="${#dates.format(Contract.optime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">签订地点：</label>
+                <div class="col-sm-8">
+                    <input name="position" th:field="*{position}" class="form-control" type="text">
+                </div>
+            </div>
+             <div class="form-group">	
+                <label class="col-sm-3 control-label">合同类型:</label>
+                <div class="col-sm-8"
+					th:with="datas=${@dict.getType('tbl_contracttype')}">
+					<select class="form-control" id="type" name="type">
+						<option th:each="dict : ${datas}" th:value="${dict.dictValue}"
+							th:text="${dict.dictLabel}" th:selected="${dict.dictValue} == ${Contract.type}"
+							></option>
+					</select>
+				</div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">合同类别:</label>
+                <div class="col-sm-8"
+					th:with="datas=${@dict.getType('tbl_contractclass')}">
+					<select class="form-control" id="category" name="category">
+						<option th:each="dict : ${datas}" th:value="${dict.dictValue}"
+							th:text="${dict.dictLabel}" th:selected="${dict.dictValue} == ${Contract.category}"></option>
+					</select>
+				</div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8"
+					th:with="datas=${@dict.getType('tbl_contractstatus')}">
+					<select class="form-control" id="status" name="status">
+						<option th:each="dict : ${datas}" th:value="${dict.dictValue}"
+							th:text="${dict.dictLabel}" th:selected="${dict.dictValue} == ${Contract.status}"></option>
+					</select>
+				</div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方法人代表：</label>
+                <div class="col-sm-8">
+                    <input name="firstaddress" th:field="*{firstaddress}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方法人代表：</label>
+                <div class="col-sm-8">
+                    <input name="secondaddress" th:field="*{secondaddress}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品编码：</label>
+                <div class="col-sm-8">
+                    <input name="productid" th:field="*{productid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">规格：</label>
+                <div class="col-sm-8">
+                    <input name="standard" th:field="*{standard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数量：</label>
+                <div class="col-sm-8">
+                    <input name="cnt" th:field="*{cnt}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单位1:G2:KG3:T::L：</label>
+                <div class="col-sm-8">
+                    <input name="unit" th:field="*{unit}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单价：</label>
+                <div class="col-sm-8">
+                    <input name="price" th:field="*{price}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">总价：</label>
+                <div class="col-sm-8">
+                    <input name="amount" th:field="*{amount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">质量标准：</label>
+                <div class="col-sm-8">
+                    <input name="quality" th:field="*{quality}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">履行地点及方式：</label>
+                <div class="col-sm-8">
+                    <input name="perform" th:field="*{perform}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">验收标准及异议期限：</label>
+                <div class="col-sm-8">
+                    <input name="confirm" th:field="*{confirm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">汇款条件：</label>
+                <div class="col-sm-8">
+                    <input name="payterm" th:field="*{payterm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方法人：</label>
+                <div class="col-sm-8">
+                    <input name="legal1" th:field="*{legal1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方委托人：</label>
+                <div class="col-sm-8">
+                    <input name="client" th:field="*{client}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方开户行：</label>
+                <div class="col-sm-8">
+                    <input name="bankname1" th:field="*{bankname1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方电话：</label>
+                <div class="col-sm-8">
+                    <input name="phone1" th:field="*{phone1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方传真：</label>
+                <div class="col-sm-8">
+                    <input name="fax1" th:field="*{fax1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方银行账号：</label>
+                <div class="col-sm-8">
+                    <input name="account1" th:field="*{account1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方税号：</label>
+                <div class="col-sm-8">
+                    <input name="taxcode1" th:field="*{taxcode1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">甲方邮编：</label>
+                <div class="col-sm-8">
+                    <input name="zipcode1" th:field="*{zipcode1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方法人：</label>
+                <div class="col-sm-8">
+                    <input name="legal2" th:field="*{legal2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方甲方委托人：</label>
+                <div class="col-sm-8">
+                    <input name="column32" th:field="*{column32}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方开户行：</label>
+                <div class="col-sm-8">
+                    <input name="bankname2" th:field="*{bankname2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方电话：</label>
+                <div class="col-sm-8">
+                    <input name="phone2" th:field="*{phone2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方传真：</label>
+                <div class="col-sm-8">
+                    <input name="fax2" th:field="*{fax2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方银行账号：</label>
+                <div class="col-sm-8">
+                    <input name="account2" th:field="*{account2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方税号：</label>
+                <div class="col-sm-8">
+                    <input name="taxcode2" th:field="*{taxcode2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">乙方邮编：</label>
+                <div class="col-sm-8">
+                    <input name="zipcode2" th:field="*{zipcode2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他：</label>
+                <div class="col-sm-8">
+                    <textarea name="other" class="form-control">[[*{other}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合同文件：</label>
+                <div class="col-sm-8">
+                    <input name="filename" th:field="*{filename}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">送达方客户编码：</label>
+                <div class="col-sm-8">
+                    <input name="recode" th:field="*{recode}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        $("input[name='optime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+        
+		 $("select#firstparty").change(function() {
+			 var theString = $('#firstparty option:selected').attr('id');//选中的文本
+			 var arr=theString.split("|");
+			 if(arr[0] == $('#secondparty option:selected').val()){
+				 alert('甲方与乙方不能相同');
+			 document.getElementById("firstaddress").value = '';//甲方地址
+			 document.getElementById("legal1").value = '';//甲方法人
+			 document.getElementById("client").value = '';//甲方委托人
+			 
+			 document.getElementById("phone1").value = '';//甲方电话
+			 document.getElementById("fax1").value = '';//甲方传真
+			  
+			 document.getElementById("taxcode1").value = '';//甲方税号
+			 document.getElementById("account1").value = '';//甲方账号
+			 document.getElementById("bankname1").value = '';//甲方开户行
+			 document.getElementById("zipcode1").value = '';//甲方邮编
+				 return
+			 }
+			 $('#firstparty option:selected').text(arr[0]);
+			 document.getElementById("firstaddress").value = arr[9];//甲方地址
+			 document.getElementById("legal1").value = arr[1];//甲方法人
+			 document.getElementById("client").value = arr[4];//甲方委托人
+			 
+			 document.getElementById("phone1").value = arr[2];//甲方电话
+			 document.getElementById("fax1").value = arr[3];//甲方传真
+			  
+			 document.getElementById("taxcode1").value = arr[5];//甲方税号
+			 document.getElementById("account1").value = arr[6];//甲方账号
+			 document.getElementById("bankname1").value = arr[7];//甲方开户行
+			 document.getElementById("zipcode1").value = arr[8];//甲方邮编
+			/*  if(theString == "销售人员")
+			{
+				 $('#firstparty option:selected').text($('#temp').val());
+				 $('#firstparty option:selected').val($('#temp').val());
+				// document.getElementById("firstparty").value = $('#temp').val();
+			}else{
+				
+			} */
+		
+		});
+		$("select#secondparty").change(function() {
+			 var theString = $('#secondparty option:selected').attr('id');//选中的文本
+			 var arr=theString.split("|");
+			 if(arr[0] == $('#firstparty option:selected').val()){
+				 alert('甲方与乙方不能相同');
+				 document.getElementById("secondaddress").value = '';//乙方法人代表
+				 document.getElementById("legal2").value = '';//乙方法人
+				 document.getElementById("column32").value = '';//乙方委托人
+				 
+				 document.getElementById("phone2").value = '';//乙方电话
+				 document.getElementById("fax2").value = '';//乙方传真
+				  
+				 document.getElementById("taxcode2").value = '';//乙方税号
+				 document.getElementById("account2").value = '';//乙方账号
+				 document.getElementById("bankname2").value = '';//乙方开户行
+				 document.getElementById("zipcode2").value = '';//乙方邮编
+				 return
+			 }
+			 $('#secondparty option:selected').text(arr[0]);
+			 document.getElementById("secondaddress").value = arr[9];//乙方法人代表
+			 document.getElementById("legal2").value = arr[1];//乙方法人
+			 document.getElementById("column32").value = arr[4];//乙方委托人
+			 
+			 document.getElementById("phone2").value = arr[2];//乙方电话
+			 document.getElementById("fax2").value = arr[3];//乙方传真
+			  
+			 document.getElementById("taxcode2").value = arr[5];//乙方税号
+			 document.getElementById("account2").value = arr[6];//乙方账号
+			 document.getElementById("bankname2").value = arr[7];//乙方开户行
+			 document.getElementById("zipcode2").value = arr[8];//乙方邮编
+			
+			
+		});
+		
+		$("#cnt").change(function(){
+			
+			if($("#cnt").val() != "" && $("#price").val() != "")
+		    {
+				if($("#unit").val()=="2"){
+					
+					$("#amount").val($("#cnt").val()*$("#price").val() * 1000);
+				}
+				if($("#unit").val()=="1"){
+					
+					$("#amount").val($("#cnt").val()*$("#price").val());
+				}
+			}
+			
+		});
+		
+		 $("#unit").change(function(){
+	        	
+	        	if($("#cnt").val() != "" && $("#price").val() != "")
+			    {
+					if($("#unit").val()=="2"){
+						
+						$("#amount").val($("#cnt").val()*$("#price").val() * 1000);
+					}
+					if($("#unit").val()=="1"){
+						
+						$("#amount").val($("#cnt").val()*$("#price").val());
+					}
+				}
+		});
+		
+        $("#price").change(function(){
+        	if($("#cnt").val() != "" && $("#price").val() != "")
+		    {
+				if($("#unit").val()=="2"){
+					
+					$("#amount").val($("#cnt").val()*$("#price").val() * 1000);
+				}
+				if($("#unit").val()=="1"){
+					
+					$("#amount").val($("#cnt").val()*$("#price").val());
+				}
+			}
+		});
+    </script>
+    <script type="text/javascript">
+		var prefix = ctx + "sale/contract"
+
+    	$("#form-contract-edit").validate({
+			rules : {
+				name:{
+					required:true,
+					minlength:0,
+					maxlength:255
+				},
+				codeid:{
+					required:true,
+					minlength:0,
+					maxlength:50
+				},
+				firstparty:{
+					required:true,
+					minlength:0,
+					maxlength:100
+				},
+				secondparty:{
+					required:true,
+					minlength:0,
+					maxlength:100
+				},
+				position:{
+					required:true,
+					minlength:0,
+					maxlength:20
+				},
+				type:{
+					required:true,
+					digits:true,
+				},
+				category:{
+					required:true,
+					digits:true,
+				},
+				status:{
+					required:true,
+					digits:true,
+				},
+				firstaddress:{
+					required:true,
+					minlength:0,
+					maxlength:100
+				},
+				secondaddress:{
+					required:true,
+					minlength:0,
+					maxlength:100
+				},
+				productid:{
+					required:true,
+					//digits:true,
+				},
+				standard:{
+					required:true,
+					minlength:0,
+					maxlength:50
+				},
+				cnt:{
+					required:true,
+					digits:true,
+				},
+				unit:{
+					required:true,
+					//digits:true,
+					number:true
+				},
+				price:{
+					required:true,
+					number:true,
+					minlength:0,
+					maxlength:18
+				},
+				amount:{
+					required:true,
+					number:true,
+					minlength:0,
+					maxlength:18
+				},
+				payterm:{
+					required:true,
+					minlength:0,
+					maxlength:200
+				},
+				legal1:{
+					required:true,
+					minlength:0,
+					maxlength:30
+				},
+				client:{
+					required:true,
+					minlength:0,
+					maxlength:10
+				},
+				bankname1:{
+					required:true,
+					minlength:0,
+					maxlength:50
+				},
+				phone1:{
+					required:true,
+					minlength:0,
+					maxlength:20
+				},
+				fax1:{
+					required:true,
+					minlength:0,
+					maxlength:20
+				},
+				account1:{
+					required:true,
+					minlength:0,
+					maxlength:50
+				},
+				taxcode1:{
+					required:true,
+					minlength:0,
+					maxlength:50
+				},
+				zipcode1:{
+					required:true,
+					minlength:0,
+					maxlength:10
+				},
+				legal2:{
+					required:true,
+					minlength:0,
+					maxlength:30
+				},
+				bankname2:{
+					required:true,
+					minlength:0,
+					maxlength:50
+				},
+				phone2:{
+					required:true,
+					minlength:0,
+					maxlength:20
+				},
+				fax2:{
+					required:true,
+					minlength:0,
+					maxlength:20
+				},
+				account2:{
+					required:true,
+					minlength:0,
+					maxlength:50
+				},
+				taxcode2:{
+					required:true,
+					minlength:0,
+					maxlength:50
+				},
+				zipcode2:{
+					required:true,
+					minlength:0,
+					maxlength:10
+				},
+				other:{
+					required:true,
+					minlength:0,
+					maxlength:500
+				},
+				filename:{
+					required:true,
+					minlength:0,
+					maxlength:100
+				},
+				remark:{
+//					required:true,
+					minlength:0,
+					maxlength:255
+				},
+			},	
+			messages: {
+		        "codeid": {
+		        	remote: "合同编号已经存在"
+		        },
+			},
+		    focusCleanup: true
+		});
+		
+     	function submitHandler() {
+        	if ($.validate.form()) {
+             $.operate.save(prefix + "/edit", $('#form-contract-edit').serialize());
+        	}
+     	}
+	</script>
+</body>
+</html>

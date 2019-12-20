@@ -1,0 +1,452 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-order-edit" th:object="${order}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">合同号：</label>
+                <div class="col-sm-8">
+                    <input id="contractid" name="contractid" th:field="*{contractid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">合同日期：</label>
+                <div class="col-sm-8">
+                    <input id="optime" name="optime" th:field="*{optime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">销售订单号：</label>
+                <div class="col-sm-8">
+                    <input id="saleod" name="saleod" th:field="*{saleod}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产订单号：</label>
+                <div class="col-sm-8">
+                    <input id="pdod" name="pdod" th:field="*{pdod}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">订单类型(销售生产)：</label>
+                <div class="col-sm-8">
+                    <input id="orderClass" name="orderClass" th:field="*{orderClass}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">国内订单、出口订单：</label>
+                <div class="col-sm-8">
+                    <input id="type" name="type" th:field="*{type}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">：</label>
+                <div class="col-sm-8">
+                    <input id="sample" name="sample" th:field="*{sample}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">客户名称：</label>
+                <div class="col-sm-8">
+                    <input id="fullname" name="fullname" th:field="*{fullname}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">产品品名：</label>
+                <div class="col-sm-8">
+                    <input id="name" name="name" th:field="*{name}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">克重g：</label>
+                <div class="col-sm-8">
+                    <input id="gsm" name="gsm" th:field="*{gsm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">幅宽mm：</label>
+                <div class="col-sm-8">
+                    <input id="width" name="width" th:field="*{width}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">卷长m：</label>
+                <div class="col-sm-8">
+                    <input id="rolength" name="rolength" th:field="*{rolength}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">卷径cm：</label>
+                <div class="col-sm-8">
+                    <input id="bagdia" name="bagdia" th:field="*{bagdia}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">质量ID：</label>
+                <div class="col-sm-8">
+                    <input id="qualityid" name="qualityid" th:field="*{qualityid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">货柜id：</label>
+                <div class="col-sm-8">
+                    <input id="containerid" name="containerid" th:field="*{containerid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">托盘id：</label>
+                <div class="col-sm-8">
+                    <input id="palletid" name="palletid" th:field="*{palletid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">缠绕膜层数：</label>
+                <div class="col-sm-8">
+                    <input id="plynum" name="plynum" th:field="*{plynum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">纸管类型：</label>
+                <div class="col-sm-8">
+                    <input id="tubetype" name="tubetype" th:field="*{tubetype}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">永信默认、客户指定：</label>
+                <div class="col-sm-8">
+                    <input id="tagid" name="tagid" th:field="*{tagid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">质量要求：</label>
+                <div class="col-sm-8">
+                    <input id="quality" name="quality" th:field="*{quality}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">每包最大盘数：</label>
+                <div class="col-sm-8">
+                    <input id="maxrollnum" name="maxrollnum" th:field="*{maxrollnum}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">包装形式：</label>
+                <div class="col-sm-8">
+                    <input id="packing" name="packing" th:field="*{packing}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">编织袋颜色：</label>
+                <div class="col-sm-8">
+                    <input id="bagcolor" name="bagcolor" th:field="*{bagcolor}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">是否带托盘：</label>
+                <div class="col-sm-8">
+                    <input id="pallet" name="pallet" th:field="*{pallet}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">生产线：</label>
+                <div class="col-sm-8">
+                    <input id="line" name="line" th:field="*{line}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">单价(元)：</label>
+                <div class="col-sm-8">
+                    <input id="price" name="price" th:field="*{price}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">汇率：</label>
+                <div class="col-sm-8">
+                    <input id="exchrate" name="exchrate" th:field="*{exchrate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">包数(包)：</label>
+                <div class="col-sm-8">
+                    <input id="totalcnt" name="totalcnt" th:field="*{totalcnt}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">订单重量kg：</label>
+                <div class="col-sm-8">
+                    <input id="weight" name="weight" th:field="*{weight}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">计价方式：</label>
+                <div class="col-sm-8">
+                    <input id="priceterm" name="priceterm" th:field="*{priceterm}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">美元总价($)：</label>
+                <div class="col-sm-8">
+                    <input id="doamount" name="doamount" th:field="*{doamount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">人民币总价(元)：</label>
+                <div class="col-sm-8">
+                    <input id="rmbamount" name="rmbamount" th:field="*{rmbamount}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">付款方式：</label>
+                <div class="col-sm-8">
+                    <input id="payment" name="payment" th:field="*{payment}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">预付款比例：</label>
+                <div class="col-sm-8">
+                    <input id="prepayratio" name="prepayratio" th:field="*{prepayratio}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">预付款金额：</label>
+                <div class="col-sm-8">
+                    <input id="prepay" name="prepay" th:field="*{prepay}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">交货日期：</label>
+                <div class="col-sm-8">
+                    <input id="sendtime" name="sendtime" th:field="*{sendtime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">是否自提：</label>
+                <div class="col-sm-8">
+                    <input id="selfdli" name="selfdli" th:field="*{selfdli}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">船运公司：</label>
+                <div class="col-sm-8">
+                    <input id="shipcorp" name="shipcorp" th:field="*{shipcorp}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">船运费用：</label>
+                <div class="col-sm-8">
+                    <input id="shipcost" name="shipcost" th:field="*{shipcost}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">货运公司：</label>
+                <div class="col-sm-8">
+                    <input id="transcorp" name="transcorp" th:field="*{transcorp}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">货运始发地：</label>
+                <div class="col-sm-8">
+                    <input id="transtartpl" name="transtartpl" th:field="*{transtartpl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">货运目的地：</label>
+                <div class="col-sm-8">
+                    <input id="transendpl" name="transendpl" th:field="*{transendpl}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">物流里程暂估：</label>
+                <div class="col-sm-8">
+                    <input id="transdis" name="transdis" th:field="*{transdis}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">物流单价暂估：</label>
+                <div class="col-sm-8">
+                    <input id="transprice" name="transprice" th:field="*{transprice}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">物流费用暂估：</label>
+                <div class="col-sm-8">
+                    <input id="transcost" name="transcost" th:field="*{transcost}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">提货地点：</label>
+                <div class="col-sm-8">
+                    <input id="dliplace" name="dliplace" th:field="*{dliplace}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">装船港口：</label>
+                <div class="col-sm-8">
+                    <input id="loadport" name="loadport" th:field="*{loadport}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">到货港口：</label>
+                <div class="col-sm-8">
+                    <input id="destport" name="destport" th:field="*{destport}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">是否跟单：</label>
+                <div class="col-sm-8">
+                    <input id="documentary" name="documentary" th:field="*{documentary}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">跟单日期：</label>
+                <div class="col-sm-8">
+                    <input id="docdate" name="docdate" th:field="*{docdate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">是否轧车：</label>
+                <div class="col-sm-8">
+                    <input id="padder" name="padder" th:field="*{padder}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">指定原料：</label>
+                <div class="col-sm-8">
+                    <input id="material" name="material" th:field="*{material}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">订单状态：</label>
+                <div class="col-sm-8">
+                    <input id="status" name="status" th:field="*{status}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">审核人：</label>
+                <div class="col-sm-8">
+                    <input id="auditname" name="auditname" th:field="*{auditname}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">审核时间：</label>
+                <div class="col-sm-8">
+                    <input id="audittime" name="audittime" th:field="*{audittime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">签订日期：</label>
+                <div class="col-sm-8">
+                    <input id="deliverytime" name="deliverytime" th:field="*{deliverytime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">业务员：</label>
+                <div class="col-sm-8">
+                    <input id="salesman" name="salesman" th:field="*{salesman}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">签订日期：</label>
+                <div class="col-sm-8">
+                    <input id="signtime" name="signtime" th:field="*{signtime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">录入人：</label>
+                <div class="col-sm-8">
+                    <input id="inputname" name="inputname" th:field="*{inputname}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">录入时间：</label>
+                <div class="col-sm-8">
+                    <input id="inputtime" name="inputtime" th:field="*{inputtime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">启用状态：</label>
+                <div class="col-sm-8">
+                    <input id="delFlag" name="delFlag" th:field="*{delFlag}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">退审理由：</label>
+                <div class="col-sm-8">
+                    <input id="ression" name="ression" th:field="*{ression}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">是否装柜：</label>
+                <div class="col-sm-8">
+                    <input id="container" name="container" th:field="*{container}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">是否拼柜：</label>
+                <div class="col-sm-8">
+                    <input id="containercom" name="containercom" th:field="*{containercom}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">拼柜生产订单号：</label>
+                <div class="col-sm-8">
+                    <input id="conpdod" name="conpdod" th:field="*{conpdod}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">装柜数：</label>
+                <div class="col-sm-8">
+                    <input id="conno" name="conno" th:field="*{conno}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">是否拼幅宽：</label>
+                <div class="col-sm-8">
+                    <input id="wdcom" name="wdcom" th:field="*{wdcom}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">拼幅宽生产订单号：</label>
+                <div class="col-sm-8">
+                    <input id="wdpdod" name="wdpdod" th:field="*{wdpdod}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="remark" name="remark" th:field="*{remark}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">	
+                <label class="col-sm-3 control-label">传输标志：</label>
+                <div class="col-sm-8">
+                    <input id="transflag" name="transflag" th:field="*{transflag}" class="form-control" type="text">
+                </div>
+            </div>
+			<div class="form-group">
+				<div class="form-control-static col-sm-offset-9">
+					<button type="submit" class="btn btn-primary">提交</button>
+					<button onclick="$.modal.close()" class="btn btn-danger" type="button">关闭</button>
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "module/order"
+		$("#form-order-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			submitHandler: function(form) {
+				$.operate.save(prefix + "/save", $('#form-order-edit').serialize());
+			}
+		});
+	</script>
+</body>
+</html>

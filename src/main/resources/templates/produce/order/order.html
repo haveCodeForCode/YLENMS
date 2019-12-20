@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('订单信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+<!--                             <li> -->
+<!--                                 <p>订单类别：</p> -->
+<!--                                 <select name="orderClass" th:with="type=${@dict.getType('tbl_order_class')}"> -->
+<!--                                     <option value="">所有</option> -->
+<!--                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option> -->
+<!--                                 </select> -->
+<!--                             </li> -->
+                            <li>
+                                <p>订单类型：</p>
+                                <select name="type" th:with="type=${@dict.getType('tbl_order_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="fullname"/>
+                            </li>
+                            <li class="select-time">
+                                <p>交货日期：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSendtime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSendtime]"/>
+                            </li>
+                            <li>
+                                <p>订单状态：</p>
+                               <select name="status" th:with="type=${@dict.getType('tbl_order_status')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="produce:order:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="produce:order:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="produce:order:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="produce:order:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('produce:order:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('produce:order:remove')}]];
+        
+        var auditFlag = [[${@permission.hasPermi('produce:order:audit')}]];
+        var submitFlag = [[${@permission.hasPermi('produce:order:submit')}]];
+        var delFlag = [[${@permission.hasPermi('produce:order:del')}]];
+        var dispatchFlag = [[${@permission.hasPermi('produce:order:dispatch')}]];
+        var prefix = ctx + "produce/order";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                
+                submitUrl: prefix + "/submit",
+                delUrl: prefix + "/remain",
+                auditUrl: prefix + "/audit", 
+                modalName: "订单信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '序号',
+                    visible: false
+                },
+                {
+                    field : 'pdod', 
+                    title : '订单号'
+                },
+                {
+                    field : 'contractid', 
+                    title : '合同号',
+                    formatter: function(value, row, index) {
+                    	return '<a onclick="showContractDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'optime', 
+                    title : '合同日期'
+                },
+//                 {
+//                     field : 'saleod', 
+//                     title : '销售订单号'
+//                 },
+//                 {
+//                     field : 'orderClass', 
+//                     title : '订单种类'
+//                 },
+                {
+                    field : 'type', 
+                    title : '订单类型',
+                    formatter: function(value, row, index) {
+                        //alert(row.status);
+        				var datas = [[${@dict.getType('tbl_order_type')}]];
+                		return $.table.selectDictLabel(datas, row.type);
+                    }
+                },
+                {
+                    field : 'fullname', 
+                    title : '客户名称'
+                },
+                {
+                    field : 'materialcode', 
+                    title : '产品编码',
+                    formatter: function(value, row, index) {
+                    	return '<a onclick="showProductDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'name', 
+                    title : '产品品名'
+                },
+                {
+                    field : 'qualityid', 
+                    title : '质量ID',
+                    formatter: function(value, row, index) {
+                        return '<a onclick="showCpqsDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'tagid', 
+                    title : '标签ID',
+                    formatter: function(value, row, index) {
+                        return '<a onclick="showTagDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+//                 {
+//                     field : 'quality', 
+//                     title : '质量要求'
+//                 },
+                {
+                    field : 'line', 
+                    title : '生产线'
+                },
+//                 {
+//                     field : 'price', 
+//                     title : '单价(元)'
+//                 },
+//                 {
+//                     field : 'totalcnt', 
+//                     title : '包数(包)'
+//                 },
+//                 {
+//                     field : 'weight', 
+//                     title : '订单重量KG'
+//                 },
+//                 {
+//                     field : 'rmbamount', 
+//                     title : '人民币总价(元)'
+//                 },
+                {
+                    field : 'sendtime', 
+                    title : '交货日期'
+                },
+                {
+                    field : 'status', 
+                    title : '订单状态',
+                    formatter: function(value, row, index) {
+                        //alert(row.status);
+        				var datas = [[${@dict.getType('tbl_order_status')}]];
+                		return $.table.selectDictLabel(datas, row.status);
+                    }
+                },
+//                 {
+//                     field : 'cusremark', 
+//                     title : '客户特殊要求'
+//                 },
+//                 {
+//                     field : 'produceremark', 
+//                     title : '生产特殊要求'
+//                 },
+//                 {
+//                     field : 'delFlag', 
+//                     title : '启用状态'
+//                 },
+//                 {
+//                     field : 'remark', 
+//                     title : '备注'
+//                 },
+//                 {
+//                     field : 'transflag', 
+//                     title : '传输标志'
+//                 },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+
+                        if(row.status == 1 || row.status == 4){
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + submitFlag + '" href="#" onclick="submit(\'' + row.id + '\')"><i class="fa fa-edit"></i>申请</a> ');
+                        }else if(row.status == 2 ){
+                            actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="#" onclick="audit(\'' + row.id + '\')"><i class="fa fa-edit"></i>审核</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + auditFlag + '" href="#" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-edit"></i>退审</a> ');
+                        }else if(row.status == 3){
+                            actions.push('<a class="btn btn-success btn-xs ' + dispatchFlag + '" href="#" onclick="dispatch(\'' + row.id + '\')"><i class="fa fa-edit"></i>派单</a> ');
+                        }else if(row.status == 5){
+                            actions.push('<a class="btn btn-success btn-xs ' + dispatchFlag + '" href="#" onclick="undispatch(\'' + row.id + '\')"><i class="fa fa-edit"></i>取消</a> ');
+                        }
+//                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+//                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        
+        //通过id查询tag详细信息
+        function showTagDetails(data) {
+            var url = ctx + "basic/tag/tagLink/" + data;
+            $.modal.open("标签详情", url);
+        }
+        //通过id查询cpqs详细信息
+        function showCpqsDetails(data) {
+        	//alert(data);
+            var url = ctx + "standard/cpqs/cpqsLink/" + data;
+            $.modal.open("质量详情", url);
+        }
+
+        //通过id查询contract详细信息
+        function showContractDetails(data) {
+            var url = ctx + "sale/contract/contractLink/" + data;
+            $.modal.open("合同详情", url);
+        }
+
+        //通过id查询产品信息
+        function showProductDetails(data) {
+            var url = ctx + "produce/product/productLink/" + data;
+            $.modal.open("合同详情", url);
+        }
+        
+        // 退审
+        function unaudit(id){
+        	//alert(id);
+            $.modal.confirm("确定要退审选中订单吗？", function() {
+                _ajax(prefix + "/unaudit/" + id, "", "post");
+                location.reload();
+            })
+        }
+
+        //派单
+        function dispatch(id){
+            $.modal.confirm("确定要派出选中订单吗？", function() {
+                _ajax(prefix + "/dispatch/" + id, "", "post");
+                location.reload();
+            })
+        }
+
+        // 取消派单
+        function undispatch(id) {
+            $.modal.confirm("确定要取消选中订单吗？", function() {
+                _ajax(prefix + "/audit/" + id, "", "post");
+                location.reload();
+            })
+        }
+
+        // 审核
+        function audit(id) {
+            $.modal.confirm("确定要审核选中订单吗？", function() {
+                _ajax(prefix + "/audit/" + id, "", "post");
+                location.reload();
+            })
+        }
+        // 申请-单个
+        function submit(id) {
+            $.modal.confirm("将选中的订单标记为申请状态？", function() {
+
+                _ajax(prefix + "/submit/" + id, "", "post");
+                location.reload();
+            })
+        }
+    </script>
+</body>
+</html>

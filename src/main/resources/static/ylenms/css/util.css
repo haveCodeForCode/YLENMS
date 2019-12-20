@@ -1,0 +1,12 @@
+.changeColor {
+	background-color: #31b0d5 !important;
+	color: white;
+}
+.changeColorBlack {
+	background: #31b0d5 !important;
+	color: black;
+}
+.changeColorRed {
+	background: #31b0d5 !important;
+	color: red;
+}

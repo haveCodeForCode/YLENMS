@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('订单信息列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+<!--                             <li> -->
+<!--                                 <p>订单类别：</p> -->
+<!--                                 <select name="orderClass" th:with="type=${@dict.getType('tbl_order_class')}"> -->
+<!--                                     <option value="">所有</option> -->
+<!--                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option> -->
+<!--                                 </select> -->
+<!--                             </li> -->
+                            <li>
+                                <p>订单类型：</p>
+                                <select name="type" th:with="type=${@dict.getType('tbl_order_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>客户名称：</p>
+                                <input type="text" name="fullname"/>
+                            </li>
+                            <li class="select-time">
+                                <p>交货日期：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSendtime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endSendtime]"/>
+                            </li>
+                            <li>
+                                <p>订单状态：</p>
+                               <select name="status" th:with="type=${@dict.getType('tbl_order_status')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "produce/orderlog";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",	
+                modalName: "订单信息",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '序号',
+                    visible: false
+                },
+                {
+                    field : 'pdod', 
+                    title : '订单号'
+                },
+                {
+                    field : 'contractid', 
+                    title : '合同号',
+                    formatter: function(value, row, index) {
+                    	return '<a onclick="showContractDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'optime', 
+                    title : '合同日期'
+                },
+//                 {
+//                     field : 'saleod', 
+//                     title : '销售订单号'
+//                 },
+//                 {
+//                     field : 'orderClass', 
+//                     title : '订单种类'
+//                 },
+                {
+                    field : 'type', 
+                    title : '订单类型',
+                    formatter: function(value, row, index) {
+                        //alert(row.status);
+        				var datas = [[${@dict.getType('tbl_order_type')}]];
+                		return $.table.selectDictLabel(datas, row.type);
+                    }
+                },
+                {
+                    field : 'fullname', 
+                    title : '客户名称'
+                },
+                {
+                    field : 'materialcode', 
+                    title : '产品编码',
+                    formatter: function(value, row, index) {
+                    	return '<a onclick="showProductDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'name', 
+                    title : '产品品名'
+                },
+                {
+                    field : 'qualityid', 
+                    title : '质量ID',
+                    formatter: function(value, row, index) {
+                        return '<a onclick="showCpqsDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+                {
+                    field : 'tagid', 
+                    title : '标签ID',
+                    formatter: function(value, row, index) {
+                        return '<a onclick="showTagDetails(\'' + value + '\')">'+value+'</a>';
+                    }
+                },
+//                 {
+//                     field : 'quality', 
+//                     title : '质量要求'
+//                 },
+                {
+                    field : 'line', 
+                    title : '生产线'
+                },
+//                 {
+//                     field : 'price', 
+//                     title : '单价(元)'
+//                 },
+//                 {
+//                     field : 'totalcnt', 
+//                     title : '包数(包)'
+//                 },
+//                 {
+//                     field : 'weight', 
+//                     title : '订单重量KG'
+//                 },
+//                 {
+//                     field : 'rmbamount', 
+//                     title : '人民币总价(元)'
+//                 },
+                {
+                    field : 'sendtime', 
+                    title : '交货日期'
+                },
+                {
+                    field : 'status', 
+                    title : '订单状态',
+                    formatter: function(value, row, index) {
+                        //alert(row.status);
+        				var datas = [[${@dict.getType('tbl_order_status')}]];
+                		return $.table.selectDictLabel(datas, row.status);
+                    }
+                },
+//                 {
+//                     field : 'cusremark', 
+//                     title : '客户特殊要求'
+//                 },
+//                 {
+//                     field : 'produceremark', 
+//                     title : '生产特殊要求'
+//                 },
+//                 {
+//                     field : 'delFlag', 
+//                     title : '启用状态'
+//                 },
+//                 {
+//                     field : 'remark', 
+//                     title : '备注'
+//                 },
+//                 {
+//                     field : 'transflag', 
+//                     title : '传输标志'
+//                 },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                    	actions.push('<a class="btn btn-success btn-xs" href="#" onclick="details(\'' + row.id + '\')"><i class="fa fa-edit"></i>详情</a> ');                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        
+        /*订单-详情*/
+        function details(orderid) {
+            var url = prefix + '/details/' + orderid;
+            $.modal.openFull("订单详情",url);
+        }
+    </script>
+</body>
+</html>

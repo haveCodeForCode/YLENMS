@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head>
+<th:block th:include="include :: header('生成调度')" />
+</head>
+<link th:href="@{/ajax/libs/bootstrap-table/rows/bootstrap-table-reorder-rows.css}" rel="stylesheet"/>
+<body class="gray-bg">
+     <div class="container-div">
+       	<div class="col-sm-12 select-info">
+			<div class="col-sm-12 select-info">
+				<label class="h4">调度单号</label><br/>
+				<span style="color:gray">*注：该表单数据为已核减数据，点击需排序数据到生成调度单模块，可上下调动顺序，编辑好时间信息后确认排序即可保存排序</span>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" ></table>
+            </div>
+			<div class="col-sm-12 select-info">
+				<label class="h4">生成调度单</label>
+				<div class="form-group">
+					<a class="btn btn-info btn-rounded btn-sm pull-right" onclick="sort()">确认排序</a>
+					<a class="btn btn-danger btn-rounded btn-sm pull-right" onclick="rmdata()">取消数据</a>
+				</div>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table-dispatch" class="table table-striped bottom col-sm-6" data-use-row-attr-func="true" data-reorderable-rows="true">
+				</table>
+			</div>
+		</div>
+	</div>
+<div th:include="include :: footer"></div>
+<!-- <script th:src="@{/ajax/libs/bootstrap-table/rows/bootstrap-table-reorder-rows.js}"></script> -->
+<!-- <script th:src="@{/ajax/libs/bootstrap-table/rows/jquery.tablednd.js}"></script> -->
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('module:creatdispatch:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('module:creatdispatch:remove')}]];
+    var prefix = ctx + "module/creatdispatch"
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "生产调度",
+            columns: [
+                {
+                    field : 'id',
+                    title : '序号'
+                },
+                {
+                    field : 'dispatchid',
+                    title : '生产调度单号'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号'
+                },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述',
+                    visible:false
+                },
+                {
+                    field : 'pdname',
+                    title : '品名'
+                },
+                {
+                    field : 'actualweight',
+                    title : '生产重量kg'
+                },
+                {
+                    field : 'status',
+                    title : '状态' ,
+                    formatter: function(value, row, index) {
+						var datas = [[${@dict.getType('tbl_dispatch_status')}]];
+		            	return $.table.selectDictLabel(datas, row.status);
+                    }
+                },
+                {
+                    field : 'boundpdorderid',
+                    title : '关联生产订单号'
+                },
+                {
+                    field : 'remark',
+                    title : '备注'
+                }]
+        };
+        _bootstrap_show(options, "bootstrap-table");
+        var	param={};
+        param["optag"] = 0;
+        param["status"] = '1';
+        _bootstrap_search_tablename("#bootstrap-table",param);
+    });
+    var disprefix = ctx + "module/creatdispatch"
+    var disoptions = '';
+    $(function() {
+        disoptions = {
+            reorderableRows: true,
+            //当选中行，拖拽时的哪行数据，并且可以获取这行数据的上一行数据和下一行数据
+            onReorderRowsDrag: function(table, row) {
+                //取索引号
+                dragbeforeidx = $(row).attr("data-index");
+                console.log(dragbeforeidx);
+            },
+            //拖拽完成后的这条数据，并且可以获取这行数据的上一行数据和下一行数据
+            onReorderRowsDrop: function (table, row) {
+                //取索引号
+                draglateridx = $(row).attr("data-index");
+            },
+            //当拖拽结束后，整个表格的数据
+            onReorderRow: function (newData) {
+                console.log(newData);
+                /*                //这里的newData是整个表格数据，数组形式
+                                if (dragbeforeidx != draglateridx) {//这是我其他地方需要的，你们可不必要这个
+                                    //console.log(newData); 调试用代码
+                                    $.post("Sort",
+                                        { jsondata: JSON.stringify(newData) },//将整张表数据Post，当然，先序列化成Json
+                                        function(data) {
+                                            if (data == "success") {
+                                                $table.bootstrapTable('refresh');
+                                            }
+                                        });
+                                }*/
+            },
+            url: disprefix + "/list",
+            createUrl: disprefix + "/add",
+            updateUrl: disprefix + "/edit/{id}",
+            removeUrl: disprefix + "/remove",
+            modalName: "生产调度",
+            columns: [{
+                checkbox: true,
+                formatter:function(value,row,index){
+                    return {
+                        checked : true,//设置选中
+                        disabled : true
+                    }
+                }
+            },
+                {
+                    field : 'id',
+                    title : '序号'
+                },
+                {
+                    field : 'dispatchid',
+                    title : '生产调度单号'
+                },
+                {
+                    field : 'pdlineid',
+                    title : '生产线号'
+                },
+                {
+                    field : 'lineStr',
+                    title : '生产线描述'
+                },
+                {
+                    field : 'pdname',
+                    title : '品名'
+                },
+                {
+                    field : 'status',
+                    title : '状态',
+                    visible : false ,
+                    formatter: function(value, row, index) {
+                        var a = _ajax_dict('tbl_creatdispatch_status',value.trim());
+                        return a;
+                    }
+                },
+                {
+                    field : 'boundpdorderid',
+                    title : '关联生产订单号',
+                    visible : false
+                },
+                {
+                    field : 'begintime',
+                    title : '计划开始时间'
+                },
+                {
+                    field : 'endtime',
+                    title : '计划结束时间'
+                },
+                {
+                    field : 'pdperiod',
+                    title : '生产时间'
+                },
+                {
+                    field : 'stopbegintime',
+                    title : '停车开始时间'
+
+                },
+                {
+                    field : 'stopendtime',
+                    title : '停车结束时间'
+                },
+                {
+                    field : 'planstoptime',
+                    title : '预计停车时间'
+                },
+                {
+                    field : 'remark',
+                    title : '备注',
+                    visible : false
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="#" onclick="editTime(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑时间</a> ');
+                        return actions.join('');
+                    }
+                }
+
+            ]
+        };
+
+        _bootstrap_show(disoptions, "bootstrap-table-dispatch");
+        var	param={};
+        param["optag"] = '1';
+        param["status"] = '1';
+        _bootstrap_search_tablename("#bootstrap-table-dispatch",param);
+    });
+</script>
+<script>
+    var rmid = 0;
+    //清空排序数据
+    $("#bootstrap-table-dispatch").on("click-row.bs.table",function(e, row, $element) {
+        $('.changeColorRed').removeClass('changeColorRed');
+        console.log($element);
+        $($element).addClass('changeColorRed');
+        $element.bgColor = '31b0d5';
+        console.log($element);
+        rmid = row.id;
+
+    })
+    function rmdata(){
+        var url = prefix + "/updateOptag";
+        if(rmid == 0){
+            $.modal.alertWarning("请至少选择一条记录")
+            return;
+        }
+        var data = {
+            "id": rmid,
+            "optag": 0//取消排序
+        };
+        _ajax(url, data, "post");
+        var param = {};
+        param["optag"]='0';
+        param["status"] = '1';
+        _bootstrap_search_tablename("#bootstrap-table",param);
+        param["optag"]='1';
+        _bootstrap_search_tablename("#bootstrap-table-dispatch",param);
+    }
+
+    $("#bootstrap-table").on("click-row.bs.table",function(e, row, $element) {
+
+        $('.changeColor').removeClass('changeColor');
+        $($element).addClass('changeColor');
+
+        var url = prefix + "/updateOptag";
+        var data = {
+            "id" : row.id,
+            "optag":1//正在排序
+        };
+        _ajax(url, data, "post");
+        var	param={};
+        param["optag"]='0';
+        param["status"] = '1';
+        _bootstrap_search_tablename("#bootstrap-table",param);
+        param["optag"]='1';
+        _bootstrap_search_tablename("#bootstrap-table-dispatch",param);
+    })
+
+
+
+
+
+    function up(data){
+        //点击上移
+        var $tr = $(this).parent().parents("tr");
+        console.log($tr.attr('data-index'));
+        if ($tr.index() == 0||$tr.index() == 1){
+            $.modal.alertWarning("此数据为最上方")
+        }else{
+            $tr.fadeOut().fadeIn();
+            $tr.prev().before($tr);
+        }
+    }
+    function down(data){
+        var $tr = $(this).parents("tr");
+        if ($tr.index() != len - 1) {
+            $tr.fadeOut().fadeIn();
+            $tr.next().after($tr);
+        }
+    }
+    var upEvents = {
+        'click .up': function (e, value, row, index) {
+            //点击上移
+            var $tr = $(this).parents("tr");
+            console.log($tr.index());
+            if ($tr.index() == 0||$tr.index() == 1){
+                alert("首行数据不可上移");
+            }else{
+                $tr.fadeOut().fadeIn();
+                $tr.prev().before($tr);
+            }
+            //下移
+            /*var $tr = $(this).parents("tr");
+            if ($tr.index() != len - 1) {
+                $tr.fadeOut().fadeIn();
+                $tr.next().after($tr);
+            } */
+        }
+    }
+    /*    var operateEvents = {
+            'click .up': function (e, value, row, index) {
+            //点击上移
+            var $tr = $(this).parents("tr");
+            if ($tr.index() == 0||$tr.index() == 1){
+                alert("首行数据不可上移");
+            }else{
+                $tr.fadeOut().fadeIn();
+                $tr.prev().before($tr);
+            }
+            //下移
+            /!*var $tr = $(this).parents("tr");
+            if ($tr.index() != len - 1) {
+                $tr.fadeOut().fadeIn();
+                $tr.next().after($tr);
+            } *!/
+        }
+        }*/
+
+    //排序保存
+    function sort() {
+        var ids = new Array();
+        var selected = $('#bootstrap-table-dispatch').bootstrapTable('getSelections');
+        var success = true;
+        if(selected.length == 0){
+            $.modal.alertWarning("请至少选择一条调度单信息");
+            return
+        }
+        for (var i = 0; i < selected.length; i++) {
+            ids[i] = selected[i].id;
+            if(selected[i].begintime == null || selected[i].begintime == '' || selected[i].endtime == null || selected[i].endtime == ''){
+                $.modal.alertWarning("该调度单信息缺失，请输入后保存");
+                success = false;
+                return
+            }
+        }
+        if(success == true){
+            $.modal.confirm("确认要以此顺序排列调度单么？", function() {
+
+                var url = prefix + "/sort";
+                var data = {
+                    "ids": ids.join(),
+                    "optag": 2//排序完成
+                };
+                _ajax(url, data, "post");
+                var param = {};
+                param["optag"] = 0;
+                param["status"] = '1';
+                _bootstrap_search_tablename("#bootstrap-table", param);
+                param["optag"] = '1';
+                _bootstrap_search_tablename("#bootstrap-table-dispatch", param);
+            })
+        }
+
+    }
+
+
+    //编辑时间
+    function editTime(id){
+        var url = disprefix + '/editTime/' + id;
+        layer_showAuto("调度单时间编辑", url);
+    }
+</script>
+</body>
+</html>
